@@ -1,0 +1,3437 @@
+<script>
+// GLOBAL VARIABLES - CLEAN VERSION
+let currentStory = null;
+let comicPages = [];
+let uploadedCharacters = [];
+let selectedCharacters = [];
+let recognition = null;
+let currentUtterance = null;
+
+// Agent data
+const agents = [
+    ["Story Generator", "pending", 0, "<i class=\"fas fa-pen-fancy\"></i>"],
+    ["Script Director", "pending", 0, "<i class=\"fas fa-video\"></i>"],
+    ["Panel Generator", "pending", 0, "<i class=\"fas fa-paint-brush\"></i>"]
+];
+// Ensure generateStory exists
+window.generateStory = window.generateStory || function() {
+    console.log("📝 Generate story called");
+};
+</script>
+<script>
+// GLOBAL VARIABLES - CLEAN VERSION
+let currentStory = null;
+let comicPages = [];
+let uploadedCharacters = [];
+let selectedCharacters = [];
+let recognition = null;
+let currentUtterance = null;
+
+// Agent data
+const agents = [
+    ["Story Generator", "pending", 0, "<i class=\"fas fa-pen-fancy\"></i>"],
+    ["Script Director", "pending", 0, "<i class=\"fas fa-video\"></i>"],
+    ["Panel Generator", "pending", 0, "<i class=\"fas fa-paint-brush\"></i>"]
+];
+// FORCE AGENT RESET ON PAGE LOAD
+(function() {
+    console.log('🔄 Forcing agents to pending state');
+    if (typeof agents !== 'undefined') {
+        agents[0][1] = 'pending';
+        agents[0][2] = 0;
+        agents[1][1] = 'pending';
+        agents[1][2] = 0;
+        agents[2][1] = 'pending';
+        agents[2][2] = 0;
+        if (typeof updateAgentDisplay === 'function') {
+            setTimeout(updateAgentDisplay, 10);
+        }
+    }
+})();
+</script>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎨 Multi-Agent Comic Generator</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* ==================== GLOBAL STYLES ==================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* ==================== HEADER SECTION ==================== */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .gde-badge {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: white;
+            padding: 8px 20px;
+            border-radius: 40px;
+            color: #333;
+            font-size: 0.9rem;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .gde-badge span:nth-child(1) { color: #4285f4; }
+        .gde-badge span:nth-child(2) { color: #ea4335; }
+        .gde-badge span:nth-child(3) { color: #fbbc05; }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+        }
+
+        .creator-line {
+            font-size: 1rem;
+            margin-top: 5px;
+            opacity: 0.9;
+        }
+
+        .badge-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .badge {
+            background: rgba(255,255,255,0.15);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            backdrop-filter: blur(5px);
+        }
+
+        /* ==================== OPTIONS BAR ==================== */
+        .options-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .option-group {
+            min-width: 140px;
+        }
+
+        .option-group label {
+            display: block;
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+            opacity: 0.8;
+        }
+
+        .option-group select {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: none;
+            font-size: 0.9rem;
+            background: white;
+            cursor: pointer;
+        }
+
+        /* ==================== UPLOAD SECTION ==================== */
+        .upload-section {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .upload-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .upload-area {
+            border: 2px dashed rgba(255,255,255,0.3);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: border 0.3s;
+        }
+
+        .upload-area:hover {
+            border-color: #ffd700;
+        }
+
+        .upload-label span {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .character-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .character-card {
+            background: white;
+            border-radius: 8px;
+            padding: 8px;
+            text-align: center;
+            color: #333;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .character-card.selected {
+            border-color: #ffd700;
+            transform: scale(1.05);
+        }
+
+        .character-card img {
+            width: 100%;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        /* ==================== CONTROLS SECTION ==================== */
+        .controls {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            font-size: 0.9rem;
+            resize: vertical;
+            min-height: 80px;
+            margin-bottom: 15px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .extra-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            background: white;
+            color: #667eea;
+            transition: transform 0.2s;
+            min-width: 90px;
+        }
+
+        .btn-primary {
+            background: #ffd700;
+            color: #333;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #voiceBtn { background: #4a90e2; color: white; }
+        #narrateBtn { background: #9b59b6; color: white; }
+        #stopNarrateBtn { background: #f44336; color: white; display: none; }
+        #storyboardToggle { background: #8e44ad; color: white; }
+        #storyboardToggle.active { background: #ffaa00; color: #000; }
+
+        /* ==================== AGENT PIPELINE ==================== */
+        .pipeline {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .pipeline h2 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .agent-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .agent-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            color: #333;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .agent-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .agent-icon {
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .agent-info h3 {
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        .agent-status {
+            font-size: 0.8rem;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            transition: width 0.3s;
+        }
+
+        .agent-card.active .progress-fill { background: #4a90e2; }
+        .agent-card.completed .progress-fill { background: #27ae60; }
+
+        /* ==================== STORY RESULT ==================== */
+        .story-box {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .story-title {
+            font-size: 1.3rem;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .character-tag {
+            background: #f0f0f0;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin: 2px;
+        }
+
+        /* ==================== COMIC GALLERY ==================== */
+        .comic-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .comic-page {
+            background: white;
+            border-radius: 10px;
+            padding: 10px;
+            color: #333;
+            transition: transform 0.2s;
+        }
+
+        .comic-page:hover {
+            transform: translateY(-5px);
+        }
+
+        .comic-page img {
+            width: 100%;
+            border-radius: 5px;
+        }
+
+        .download-section {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        /* ==================== SOCIAL SECTION ==================== */
+        .social-section {
+            text-align: center;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .social-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 15px 0;
+        }
+
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 20px;
+            border-radius: 25px;
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: transform 0.2s;
+        }
+
+        .social-link:hover {
+            transform: translateY(-3px);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            margin-top: 30px;
+        }
+
+        .gde-gradient {
+            background: linear-gradient(135deg, #4285f4, #ea4335, #fbbc05, #34a853);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+        }
+
+        /* ==================== LOADING OVERLAY ==================== */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .loading-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            color: #333;
+        }
+
+        .spinner {
+            border: 4px solid #f0f0f0;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ==================== STORYBOARD MODE ==================== */
+        .storyboard-active .comic-page {
+            border: 4px dashed #ffaa00 !important;
+            position: relative;
+        }
+
+        .storyboard-active .comic-page::before {
+            content: "🎬 STORYBOARD";
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background: #ffaa00;
+            color: #000;
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-size: 10px;
+        }
+
+        /* ==================== BUBBLE EDITOR ==================== */
+        #bubbleEditor {
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        
+        #bubbleToolbar {
+            animation: fadeIn 0.5s ease;
+            transition: transform 0.2s;
+        }
+        
+        #bubbleToolbar:hover {
+            transform: scale(1.05);
+        }
+        
+        .bubble-preview {
+            transition: all 0.3s;
+        }
+        
+        .bubble-preview:hover {
+            transform: scale(1.02);
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -40%);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* ==================== RESPONSIVE DESIGN ==================== */
+        @media (max-width: 768px) {
+            .agent-grid, .comic-grid {
+                grid-template-columns: 1fr;
+            }
+            .button-group, .extra-buttons {
+                flex-direction: column;
+            }
+            .btn {
+                width: 100%;
+            }
+            .gde-badge {
+                position: static;
+                margin-bottom: 15px;
+                display: inline-block;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<script>
+// GLOBAL VARIABLES - CLEAN VERSION
+let currentStory = null;
+let comicPages = [];
+let uploadedCharacters = [];
+let selectedCharacters = [];
+let recognition = null;
+let currentUtterance = null;
+
+// Agent data
+const agents = [
+    ["Story Generator", "pending", 0, "<i class=\"fas fa-pen-fancy\"></i>"],
+    ["Script Director", "pending", 0, "<i class=\"fas fa-video\"></i>"],
+    ["Panel Generator", "pending", 0, "<i class=\"fas fa-paint-brush\"></i>"]
+];
+// ==================== VOICE STATE TRACKER ====================
+let isVoiceActive = false;
+let activeVoiceRecognition = null;
+
+function forceStopVoice() {
+    if (isVoiceActive || activeVoiceRecognition) {
+        console.log("🛑 Force stopping active voice recognition");
+        try {
+            if (activeVoiceRecognition) {
+                activeVoiceRecognition.stop();
+                activeVoiceRecognition = null;
+            }
+        } catch (e) {}
+        isVoiceActive = false;
+        const btn = document.getElementById("voiceBtn");
+        if (btn) {
+            btn.style.background = "#4a90e2";
+            btn.textContent = "🎤 Voice Input";
+            btn.disabled = false;
+        }
+    }
+}
+</script>
+
+    <div class="container">
+        <!-- ==================== HEADER ==================== -->
+        <div class="header">
+            <div class="gde-badge">
+                👩‍💻 <strong>Robina Mirbahar</strong> · 
+                <span>G</span><span>D</span><span>E</span>
+            </div>
+            <h1>🎨 Multi-Agent Comic Generator</h1>
+            <p class="creator-line">by <strong>Robina Mirbahar</strong> · Google Developer Expert in Machine Learning</p>
+            <p>Powered by Nano Banana 2 · 3 Specialized Agents · 9 Languages</p>
+            <div class="badge-container">
+                <span class="badge">📝 Story Generator</span>
+                <span class="badge">🎯 Script Director</span>
+                <span class="badge">🖼️ Panel Generator</span>
+                <span class="badge">🌐 9 Languages</span>
+                <span class="badge">🎨 4 Styles</span>
+                <span class="badge">📐 6 Panel Options</span>
+                <span class="badge">🔊 TTS</span>
+                <span class="badge">💬 Dialogue Editor</span>
+            </div>
+        </div>
+
+        <!-- ==================== OPTIONS BAR ==================== -->
+        <div class="options-bar">
+            <div class="option-group">
+                <label>🌐 Language</label>
+                <select id="language">
+                    <option value="en">🇺🇸 English</option>
+                    <option value="es">🇪🇸 Spanish</option>
+                    <option value="fr">🇫🇷 French</option>
+                    <option value="de">🇩🇪 German</option>
+                    <option value="ja">🇯🇵 Japanese</option>
+                    <option value="ar">🇸🇦 Arabic</option>
+                </select>
+            </div>
+            <div class="option-group">
+                <label>🎨 Style</label>
+                <select id="style">
+                    <option value="manga">🇯🇵 Manga</option>
+                    <option value="western">🇺🇸 Western</option>
+                    <option value="anime">✨ Anime</option>
+                    <option value="watercolor">🎨 Watercolor</option>
+                    <option value="sketch">✏️ Sketch</option>
+                    <option value="vintage">📰 Vintage</option>
+                </select>
+            </div>
+            <div class="option-group">
+                <label>📐 Panels</label>
+                <select id="panels">
+                    <option value="1">1 Panel</option>
+                    <option value="2">2 Panels</option>
+                    <option value="3">3 Panels</option>
+                    <option value="4">4 Panels</option>
+                    <option value="6">6 Panels</option>
+                    <option value="9">9 Panels</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- ==================== UPLOAD SECTION ==================== -->
+        <div class="upload-section">
+            <h3>🎭 Upload Your Characters</h3>
+            <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                <input type="file" id="fileInput" accept="image/*" onchange="handleFileUpload(this.files[0])" hidden>
+                <div class="upload-label">
+                    <span>📸</span>
+                    Click to upload<br><small>PNG, JPG, GIF up to 5MB</small>
+                </div>
+            </div>
+            <div class="character-grid" id="characterGrid"></div>
+        </div>
+
+        <!-- ==================== CONTROLS ==================== -->
+        <div class="controls">
+            <textarea id="prompt" placeholder="Enter your comic idea... (e.g., 'A friendly robot on Mars')"></textarea>
+            
+            <div class="button-group">
+                <button class="btn" onclick="generateStory()" id="storyBtn">1. Generate Story</button>
+                <button class="btn btn-primary" onclick="generateComic()" id="comicBtn" disabled>2. Generate Comic</button>
+            </div>
+            
+            <div class="extra-buttons">
+                <button class="btn" onclick="startVoiceInput()" id="voiceBtn">🎤 Voice Input</button>
+                <button class="btn" onclick="regenerateStory()" style="background:#ffd700;color:#333;">🔄 New Story</button>
+                <button class="btn" onclick="narrateStory()" id="narrateBtn">🔊 Read Aloud</button>
+                <button class="btn" onclick="stopNarration()" id="stopNarrateBtn">⏹️ Stop</button>
+                <button class="btn" onclick="shareComic()" style="background:#27ae60;color:white;">🔗 Share</button>
+                <button class="btn" onclick="toggleStoryboard()" id="storyboardToggle">🎬 Storyboard</button>
+                <button class="btn" onclick="downloadPage(0)" style="background:#4a90e2;color:white;">📥 Download Page</button>
+                <button class="btn" onclick="openBubbleEditor()" style="background:#ff69b4;color:white;">💬 Add Bubbles</button>
+            </div>
+        </div>
+
+        <!-- ==================== AGENT PIPELINE ==================== -->
+        <div class="pipeline">
+            <h2>🤖 Agent Pipeline</h2>
+            <div class="agent-grid" id="agentGrid"></div>
+        </div>
+
+        <!-- ==================== STORY RESULT ==================== -->
+        <div id="storyResult" style="display: none;">
+            <div class="story-box">
+                <h2>📖 Generated Story</h2>
+                <div class="story-content" id="storyContent"></div>
+            </div>
+        </div>
+
+        <!-- ==================== COMIC GALLERY ==================== -->
+        <div id="comicResult" style="display: none;">
+            <div class="comic-gallery">
+                <h2>🎨 Your Comic</h2>
+                <div class="comic-grid" id="comicGrid"></div>
+            </div>
+            <div class="download-section" id="downloadSection" style="display: none;">
+                <button class="btn" onclick="downloadAsZip()" style="background:#4a90e2;color:white;">📦 ZIP</button>
+                <button class="btn" onclick="downloadAsPDF()" style="background:#27ae60;color:white;">📄 PDF</button>
+                <button class="btn" onclick="downloadAsBooklet()" style="background:#e67e22;color:white;">📚 Booklet</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== LOADING OVERLAY ==================== -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <h3 id="loadingMessage">Generating...</h3>
+        </div>
+    </div>
+
+    <!-- ==================== SOCIAL LINKS ==================== -->
+    <div class="social-section">
+        <p style="margin-bottom: 10px;">Connect with the creator:</p>
+        <div class="social-links">
+            <a href="https://twitter.com/robinamirbahar" target="_blank" class="social-link" style="background:#1DA1F2;">🐦 Twitter</a>
+            <a href="https://linkedin.com/in/robinamirbahar" target="_blank" class="social-link" style="background:#0077B5;">🔗 LinkedIn</a>
+            <a href="https://github.com/robinamirbahar" target="_blank" class="social-link" style="background:#333;">🐙 GitHub</a>
+            <a href="https://instagram.com/robinamirbahar" target="_blank" class="social-link" style="background:linear-gradient(45deg,#f09433,#d62976,#962fbf,#4f5bd5);">📷 Instagram</a>
+        </div>
+    </div>
+
+    <!-- ==================== FOOTER ==================== -->
+    <div class="footer">
+        <p>✨ Created by <strong>Robina Mirbahar</strong> · <span class="gde-gradient">Google Developer Expert</span></p>
+        <p style="font-size:0.8rem; opacity:0.7; margin-top:10px;">
+            Multi-Agent Comic Generator · 3 Specialized Agents · 9 Languages · Voice Input · TTS
+        </p>
+    </div>
+
+    <!-- ==================== BUBBLE EDITOR MODAL ==================== -->
+    <div id="bubbleEditor" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:white; padding:30px; border-radius:20px; color:#333; z-index:2000; width:500px; max-width:90%; box-shadow:0 10px 40px rgba(0,0,0,0.3);">
+        <h2 style="margin-bottom:20px; color:#667eea;">💬 Dialogue Editor</h2>
+        
+        <!-- Instructions -->
+        <div style="background:#e3f2fd; padding:15px; border-radius:10px; margin-bottom:20px;">
+            <p style="color:#1976d2; margin:0;">📝 <strong>How to use:</strong></p>
+            <ol style="color:#1976d2; margin-top:5px; padding-left:20px;">
+                <li>Choose bubble type and emotion</li>
+                <li>Enter dialogue or click "AI Suggest"</li>
+                <li>Click "Apply" for current panel</li>
+                <li>Click "All" for all panels</li>
+            </ol>
+        </div>
+        
+        <!-- Bubble Type Selection -->
+        <div style="margin-bottom:15px;">
+            <label style="display:block; margin-bottom:5px; font-weight:bold;">Bubble Style:</label>
+            <select id="bubbleType" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc;">
+                <option value="speech">🗣️ Speech Bubble</option>
+                <option value="thought">💭 Thought Bubble</option>
+                <option value="shout">📢 Shout/Exclamation</option>
+                <option value="whisper">🤫 Whisper</option>
+                <option value="narration">📖 Narration Box</option>
+                <option value="sfx">💥 Sound Effect (SFX)</option>
+            </select>
+        </div>
+        
+        <!-- Character Selection -->
+        <div style="margin-bottom:15px;">
+            <label style="display:block; margin-bottom:5px; font-weight:bold;">Character:</label>
+            <select id="bubbleCharacter" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc;">
+                <option value="auto">🤖 AI Suggest</option>
+                <option value="custom">✏️ Custom</option>
+            </select>
+        </div>
+        
+        <!-- Emotion -->
+        <div style="margin-bottom:15px;">
+            <label style="display:block; margin-bottom:5px; font-weight:bold;">Emotion:</label>
+            <select id="bubbleEmotion" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc;">
+                <option value="neutral">😐 Neutral</option>
+                <option value="happy">😊 Happy</option>
+                <option value="sad">😢 Sad</option>
+                <option value="angry">😠 Angry</option>
+                <option value="excited">🤩 Excited</option>
+                <option value="scared">😨 Scared</option>
+            </select>
+        </div>
+        
+        <!-- Position -->
+        <div style="margin-bottom:15px;">
+            <label style="display:block; margin-bottom:5px; font-weight:bold;">Position:</label>
+        
+        <!-- Panel Selection -->
+        <div style="margin-bottom:15px;">
+            <label style="display:block; margin-bottom:5px; font-weight:bold;">Select Panel:</label>
+            <select id="bubblePanel" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc;">
+                <option value="1">📄 Panel 1</option>
+                <option value="2">📄 Panel 2</option>
+                <option value="3">📄 Panel 3</option>
+                <option value="4">📄 Panel 4</option>
+            </select>
+        </div>
+            <select id="bubblePosition" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc;">
+                <option value="top">📐 Top</option>
+                <option value="bottom">📐 Bottom</option>
+                <option value="left">📐 Left</option>
+                <option value="right">📐 Right</option>
+                <option value="auto">🤖 Auto (AI places it)</option>
+            </select>
+        </div>
+        
+        <!-- Dialogue Text -->
+        <div style="margin-bottom:20px;">
+            <label style="display:block; margin-bottom:5px; font-weight:bold;">Dialogue:</label>
+            <textarea id="bubbleText" rows="3" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc;" placeholder="Enter dialogue or leave empty for AI to generate..."></textarea>
+        </div>
+        
+        <!-- AI Suggest Button -->
+        <div style="margin-bottom:20px;">
+            <button onclick="suggestDialogue()" style="background:#9b59b6; color:white; padding:10px; border:none; border-radius:8px; width:100%; cursor:pointer;">🤖 AI Suggest Dialogue</button>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div style="display:flex; gap:10px;">
+            <button onclick="applyBubble()" style="flex:2; background:#27ae60; color:white; padding:12px; border:none; border-radius:8px; cursor:pointer;">💾 Apply to Panel</button>
+            <button onclick="applyToAll()" style="flex:1; background:#f39c12; color:white; padding:12px; border:none; border-radius:8px; cursor:pointer;">📑 All</button>
+            <button onclick="closeBubbleEditor()" style="flex:1; background:#f44336; color:white; padding:12px; border:none; border-radius:8px; cursor:pointer;">✖ Close</button>
+        </div>
+        
+        <!-- Preview -->
+        <div style="margin-top:20px; padding:15px; background:#f8f9fa; border-radius:8px;">
+            <p style="font-weight:bold; margin-bottom:10px;">Preview:</p>
+            <div id="bubblePreview" style="min-height:80px; background:white; border:1px dashed #ccc; border-radius:8px; padding:15px; text-align:center;">
+                Click apply to see bubble on your comic
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== FLOATING BUBBLE TOOLBAR ==================== -->
+    <div id="bubbleToolbar" style="position:fixed; bottom:20px; left:20px; background:rgba(255,255,255,0.9); padding:10px; border-radius:30px; box-shadow:0 2px 10px rgba(0,0,0,0.2); z-index:1500;">
+        <button onclick="openBubbleEditor()" style="background:#ff69b4; color:white; border:none; border-radius:50%; width:50px; height:50px; font-size:24px; cursor:pointer;" title="Add Speech Bubble">💬</button>
+        <button onclick="quickBubble('speech')" style="background:#4a90e2; color:white; border:none; border-radius:50%; width:40px; height:40px; margin-left:5px; cursor:pointer;" title="Quick Speech">🗣️</button>
+        <button onclick="quickBubble('thought')" style="background:#9b59b6; color:white; border:none; border-radius:50%; width:40px; height:40px; margin-left:5px; cursor:pointer;" title="Quick Thought">💭</button>
+        <button onclick="quickBubble('shout')" style="background:#f39c12; color:white; border:none; border-radius:50%; width:40px; height:40px; margin-left:5px; cursor:pointer;" title="Quick Shout">📢</button>
+    </div>
+
+    <script>
+// GLOBAL VARIABLES - CLEAN VERSION
+let currentStory = null;
+let comicPages = [];
+let uploadedCharacters = [];
+let selectedCharacters = [];
+let recognition = null;
+let currentUtterance = null;
+
+// Agent data
+const agents = [
+    ["Story Generator", "pending", 0, "<i class=\"fas fa-pen-fancy\"></i>"],
+    ["Script Director", "pending", 0, "<i class=\"fas fa-video\"></i>"],
+    ["Panel Generator", "pending", 0, "<i class=\"fas fa-paint-brush\"></i>"]
+];
+        // =========================================================================
+        // SECTION 1: GLOBAL VARIABLES
+        // =========================================================================
+        let currentStory = null;
+        let comicPages = [];
+        let uploadedCharacters = [];
+        let recognition = null;
+        let currentUtterance = null;
+
+        // Agent data with Font Awesome icons
+        const agents = [
+            ['Story Generator', 'pending', 0, '<i class="fas fa-pen-fancy"></i>'],
+            ['Script Director', 'pending', 0, '<i class="fas fa-video"></i>'],
+            ['Panel Generator', 'pending', 0, '<i class="fas fa-paint-brush"></i>']
+        ];
+
+        // =========================================================================
+        // SECTION 2: HELPER FUNCTIONS
+        // =========================================================================
+        function safeGetElement(id) {
+            const el = document.getElementById(id);
+            if (!el) console.warn(`Element ${id} not found`);
+            return el;
+        }
+
+        // =========================================================================
+        // SECTION 3: AGENT PIPELINE DISPLAY
+        // =========================================================================
+        function updateAgentDisplay() {
+            const grid = safeGetElement('agentGrid');
+            if (!grid) return;
+            
+            let html = '';
+            for (let i = 0; i < agents.length; i++) {
+                const [name, status, progress, icon] = agents[i];
+                let statusText = status === 'active' ? '⚡ Working...' : status === 'completed' ? '✅ Complete' : '⏳ Pending';
+                let statusColor = status === 'active' ? '#4a90e2' : status === 'completed' ? '#27ae60' : '#95a5a6';
+                
+                html += `<div class="agent-card ${status}">
+                    <div class="agent-header">
+                        <span class="agent-icon">${icon}</span>
+                        <div class="agent-info">
+                            <h3>${name}</h3>
+                            <span class="agent-status" style="color:${statusColor}">${statusText}</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width:${progress}%; background:${statusColor}"></div>
+                    </div>
+                </div>`;
+            }
+            grid.innerHTML = html;
+        }
+
+        // =========================================================================
+        // SECTION 4: CHARACTER UPLOAD FUNCTIONS
+        // =========================================================================
+        async function handleFileUpload(file) {
+            if (!file) {
+                alert('No file selected');
+                return;
+            }
+            
+            if (file.size > 5 * 1024 * 1024) {
+                alert('File too large (max 5MB)');
+                return;
+            }
+
+            // For demo purposes, create a local preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const charId = 'char_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                uploadedCharacters.push({
+                    id: charId,
+                    name: file.name,
+                    preview: e.target.result
+                });
+                updateCharacterGrid();
+                // Character uploaded successfully
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function updateCharacterGrid() {
+            const grid = safeGetElement('characterGrid');
+            if (!grid) return;
+            
+            let html = '';
+            for (let char of uploadedCharacters) {
+                let selected = selectedCharacters.includes(char.id) ? 'selected' : '';
+                html += `<div class="character-card ${selected}" onclick="document.getElementById('fileInput').click()">
+                    <img src="${char.preview}" alt="${char.name}">
+                    <p>${char.name.substring(0,15)}</p>
+                </div>`;
+            }
+            grid.innerHTML = html;
+        }
+
+        function toggleChar(id) {
+            const idx = selectedCharacters.indexOf(id);
+            if (idx === -1) {
+                selectedCharacters.push(id);
+            } else {
+                selectedCharacters.splice(idx, 1);
+            }
+            updateCharacterGrid();
+        }
+
+                // =========================================================================
+        // SECTION 5: STORY GENERATION FUNCTIONS (FIXED)
+        // =========================================================================
+        const voiceBtn = document.getElementById("voiceBtn");
+        if (voiceBtn) {
+            voiceBtn.style.background = "#4a90e2";
+            voiceBtn.textContent = "🎤 Voice Input";
+            voiceBtn.disabled = false;
+        }
+    }
+    // Force stop any active voice recognition
+    const voiceBtn = document.getElementById("voiceBtn");
+    if (voiceBtn && voiceBtn.style.background === "rgb(255, 68, 68)") {
+        console.log("🎤 Voice was active - stopping it");
+        voiceBtn.style.background = "#4a90e2";
+        voiceBtn.textContent = "🎤 Voice Input";
+        voiceBtn.disabled = false;
+        if (window.activeRecognition) {
+            try { window.activeRecognition.stop(); } catch(e) {}
+        }
+    }
+    forceStopVoice();
+            const prompt = safeGetElement('prompt');
+            if (!prompt || !prompt.value.trim()) {
+                alert('Please enter a prompt (at least 3 characters)');
+                return;
+            }
+
+            const userPrompt = prompt.value.trim();
+            if (userPrompt.length < 3) {
+                alert('Prompt must be at least 3 characters long');
+                return;
+            }
+
+            const storyResult = safeGetElement('storyResult');
+            const comicResult = safeGetElement('comicResult');
+            const comicBtn = safeGetElement('comicBtn');
+            
+            if (storyResult) storyResult.style.display = 'none';
+            if (comicResult) comicResult.style.display = 'none';
+            if (comicBtn) comicBtn.disabled = true;
+
+            agents.forEach(a => { a[1] = 'pending'; a[2] = 0; });
+            agents[0][1] = "pending"; agents[0][2] = 0;
+            updateAgentDisplay();
+
+            // Show loading
+            const loadingOverlay = safeGetElement('loadingOverlay');
+            const loadingMessage = safeGetElement('loadingMessage');
+            if (loadingOverlay) {
+                if (loadingMessage) loadingMessage.textContent = 'Generating story...';
+                loadingOverlay.style.display = 'flex';
+            }
+
+            try {
+                // Call the backend API with the user's prompt
+                const response = await fetch('/generate-story', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        topic: userPrompt,
+                        language: safeGetElement('language')?.value || 'en'
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to generate story');
+                }
+
+                currentStory = await response.json();
+                
+                // If backend fails, generate a story based on prompt
+                if (!currentStory || !currentStory.title) {
+                    // Fallback: Generate story from prompt
+                    currentStory = {
+                        title: userPrompt.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') + " Adventure",
+                        characters: ["Hero", "Guide", "Friend"],
+                        plot: [
+                            `Once upon a time, there was a ${userPrompt}...`,
+                            "They went on an amazing journey.",
+                            "They faced many challenges.",
+                            "They learned valuable lessons.",
+                            "In the end, they succeeded."
+                        ]
+                    };
+                }
+                
+                // Display the story
+                const storyContent = safeGetElement('storyContent');
+                if (storyContent) {
+                    let chars = currentStory.characters ? currentStory.characters.map(c => `<span class="character-tag">${c}</span>`).join('') : '';
+                    let plots = currentStory.plot ? currentStory.plot.map(p => `<li>${p}</li>`).join('') : '';
+                    
+                    storyContent.innerHTML = 
+                        `<div class="story-title">${currentStory.title || 'Adventure'}</div>
+                         <div class="characters">${chars}</div>
+                         <ol class="plot-points">${plots}</ol>`;
+                }
+                
+                if (storyResult) storyResult.style.display = 'block';
+                agents[0][1] = 'completed'; agents[0][2] = 100;
+                updateAgentDisplay();
+                if (comicBtn) comicBtn.disabled = false;
+                
+            } catch (error) {
+                console.error('Error generating story:', error);
+                alert('Failed to generate story. Using fallback.');
+                
+                // Fallback story based on prompt
+                currentStory = {
+                    title: userPrompt.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') + " Adventure",
+                    characters: ["Hero", "Guide", "Friend"],
+                    plot: [
+                        `Once upon a time, there was a ${userPrompt}...`,
+                        "They went on an amazing journey.",
+                        "They faced many challenges.",
+                        "They learned valuable lessons.",
+                        "In the end, they succeeded."
+                    ]
+                };
+                
+                const storyContent = safeGetElement('storyContent');
+                if (storyContent) {
+                    storyContent.innerHTML = 
+                        `<div class="story-title">${currentStory.title}</div>
+                         <div class="characters">${currentStory.characters.map(c => `<span class="character-tag">${c}</span>`).join('')}</div>
+                         <ol class="plot-points">${currentStory.plot.map(p => `<li>${p}</li>`).join('')}</ol>`;
+                }
+                
+                if (storyResult) storyResult.style.display = 'block';
+                agents[0][1] = 'completed'; agents[0][2] = 100;
+                updateAgentDisplay();
+                if (comicBtn) comicBtn.disabled = false;
+            } finally {
+                // Hide loading
+                if (loadingOverlay) loadingOverlay.style.display = 'none';
+            }
+        }
+
+        function regenerateStory() {
+            console.log('🔄 New Story button clicked');
+            
+            // Stop any ongoing speech
+            if (window.speechSynthesis) {
+                window.speechSynthesis.cancel();
+            }
+            
+            // Reset state
+            currentStory = null;
+            comicPages = [];
+            
+            // Hide results
+            const storyResult = document.getElementById('storyResult');
+            const comicResult = document.getElementById('comicResult');
+            const downloadSection = document.getElementById('downloadSection');
+            const comicBtn = document.getElementById('comicBtn');
+            const storyContent = document.getElementById('storyContent');
+            const comicGrid = document.getElementById('comicGrid');
+            const promptInput = document.getElementById('prompt');
+            const narrateBtn = document.getElementById('narrateBtn');
+            const stopBtn = document.getElementById('stopNarrateBtn');
+            
+            if (storyResult) storyResult.style.display = 'none';
+            if (comicResult) comicResult.style.display = 'none';
+            if (downloadSection) downloadSection.style.display = 'none';
+            if (comicBtn) comicBtn.disabled = true;
+            if (narrateBtn) narrateBtn.style.background = '#9b59b6';
+            if (stopBtn) stopBtn.style.display = 'none';
+            
+            // Clear content
+            if (storyContent) storyContent.innerHTML = '';
+            if (comicGrid) comicGrid.innerHTML = '';
+            if (promptInput) promptInput.value = '';
+            
+            // Reset agents
+            if (typeof agents !== 'undefined') {
+                agents[0][1] = 'pending'; agents[0][2] = 0;
+                agents[1][1] = 'pending'; agents[1][2] = 0;
+                agents[2][1] = 'pending'; agents[2][2] = 0;
+                if (typeof updateAgentDisplay === 'function') {
+                    updateAgentDisplay();
+                }
+            }
+            
+            // Force icon refresh after everything is cleared
+            setTimeout(function() {
+                if (typeof updateAgentDisplay === "function") {
+                    updateAgentDisplay();
+                    console.log('✅ Icons refreshed');
+                }
+            }, 50);
+            
+            console.log('✅ Ready for new story');
+        }
+    }
+    forceStopVoice();
+            console.log("🔄 New Story button clicked");
+            
+            // Stop any narration
+            if (window.speechSynthesis) {
+                window.speechSynthesis.cancel();
+            }
+            
+            // Reset state
+            currentStory = null;
+            comicPages = [];
+            
+            // Hide results
+            const storyResult = document.getElementById("storyResult");
+            const comicResult = document.getElementById("comicResult");
+            const downloadSection = document.getElementById("downloadSection");
+            const comicBtn = document.getElementById("comicBtn");
+            const storyContent = document.getElementById("storyContent");
+            const comicGrid = document.getElementById("comicGrid");
+            const promptInput = document.getElementById("prompt");
+            const narrateBtn = document.getElementById("narrateBtn");
+            const stopBtn = document.getElementById("stopNarrateBtn");
+            
+            if (storyResult) storyResult.style.display = "none";
+            if (comicResult) comicResult.style.display = "none";
+            if (downloadSection) downloadSection.style.display = "none";
+            if (comicBtn) comicBtn.disabled = true;
+            if (narrateBtn) narrateBtn.style.background = "#9b59b6";
+            if (stopBtn) stopBtn.style.display = "none";
+            
+            // Clear content
+            if (storyContent) storyContent.innerHTML = "";
+            if (comicGrid) comicGrid.innerHTML = "";
+            
+            // Reset agents
+            if (agents && agents.length) {
+                agents.forEach(a => { a[1] = "pending"; a[2] = 0; });
+                updateAgentDisplay();
+            }
+            
+            // Clear prompt
+            if (promptInput) {
+                promptInput.value = "";
+                promptInput.focus();
+            }
+            
+            console.log("✅ New story ready");
+        }
+        
+        // =========================================================================
+        // SECTION 6: COMIC GENERATION FUNCTIONS (FIXED)
+        // =========================================================================
+        async function generateComic() {
+            console.log("🎨 Generate Comic clicked - WORKING");
+            
+            if (!currentStory) {
+                alert('Please generate a story first');
+                return;
+            }
+            
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const loadingMessage = document.getElementById('loadingMessage');
+            if (loadingOverlay) {
+                if (loadingMessage) loadingMessage.textContent = 'Generating comic...';
+                loadingOverlay.style.display = 'flex';
+            }
+            
+            if (typeof agents !== 'undefined') {
+                agents[1][1] = 'active';
+                agents[1][2] = 30;
+                agents[2][1] = 'pending';
+                agents[2][2] = 0;
+                if (typeof updateAgentDisplay === 'function') {
+                    updateAgentDisplay();
+                }
+            }
+            
+            try {
+                const prompt = document.getElementById('prompt')?.value || '';
+                const language = document.getElementById('language')?.value || 'en';
+                const style = document.getElementById('style')?.value || 'manga';
+                const panels = parseInt(document.getElementById('panels')?.value || '4');
+                
+                console.log("📤 Sending request with prompt:", prompt);
+                
+                const response = await fetch('/generate-pages-with-characters', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        story: currentStory,
+                        language: language,
+                        style: style,
+                        panels: panels,
+                        character_ids: (typeof selectedCharacters !== 'undefined' ? selectedCharacters : []) || [],
+                        prompt: prompt
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const pages = await response.json();
+                console.log("✅ Received pages:", pages);
+                
+                comicPages = pages;
+                
+                if (typeof agents !== 'undefined') {
+                    agents[1][1] = 'completed';
+                    agents[1][2] = 100;
+                    agents[2][1] = 'active';
+                    agents[2][2] = 50;
+                    if (typeof updateAgentDisplay === 'function') {
+                        updateAgentDisplay();
+                    }
+                }
+                
+                const grid = document.getElementById('comicGrid');
+                if (grid) {
+                    if (pages && pages.length > 0) {
+                        grid.innerHTML = pages.map((url, i) => 
+                            `<div class="comic-page">
+                                <img src="${url}?t=${Date.now()}" alt="Page ${i+1}" 
+                                     style="max-width:100%; border-radius:5px; box-shadow:0 2px 8px rgba(0,0,0,0.2);"
+                                     onerror="this.onerror=null; this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=Page+${i+1}';">
+                                <h3>Page ${i+1}</h3>
+                            </div>`
+                        ).join('');
+                    }
+                }
+                
+                const comicResult = document.getElementById('comicResult');
+                const downloadSection = document.getElementById('downloadSection');
+                
+                if (comicResult) comicResult.style.display = 'block';
+                if (downloadSection) downloadSection.style.display = 'flex';
+                
+                if (typeof agents !== 'undefined') {
+                    agents[2][1] = 'completed';
+                    agents[2][2] = 100;
+                    if (typeof updateAgentDisplay === 'function') {
+                        updateAgentDisplay();
+                    }
+                }
+                
+            } catch (error) {
+                console.error('❌ Error:', error);
+                alert('Failed to generate comic. Please try again.');
+            } finally {
+                if (loadingOverlay) loadingOverlay.style.display = 'none';
+            }
+        }
+    }
+    forceStopVoice();
+            if (!currentStory) {
+                alert('Please generate a story first');
+                return;
+            }
+
+            const loadingOverlay = safeGetElement('loadingOverlay');
+            const loadingMessage = safeGetElement('loadingMessage');
+            
+            if (loadingOverlay) {
+                if (loadingMessage) loadingMessage.textContent = 'Generating comic...';
+                loadingOverlay.style.display = 'flex';
+            }
+            
+            agents[1][1] = 'active'; agents[1][2] = 30;
+            agents[2][1] = 'pending'; agents[2][2] = 0;
+            updateAgentDisplay();
+
+            try {
+                console.log('Calling backend to generate comic...');
+                
+                const response = await fetch('/generate-pages-with-characters', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        story: currentStory,
+                        language: document.getElementById('language').value,
+                        style: document.getElementById('style').value,
+                        panels: parseInt(document.getElementById('panels').value),
+                        character_ids: (typeof selectedCharacters !== 'undefined' ? selectedCharacters : []),
+                        prompt: document.getElementById('prompt').value
+                    })
+                });
+                
+                const pages = await response.json();
+                console.log('Received pages from backend:', pages);
+                
+                comicPages = pages;
+                
+                agents[1][1] = 'completed'; agents[1][2] = 100;
+                agents[2][1] = 'active'; agents[2][2] = 50;
+                updateAgentDisplay();
+
+                const grid = safeGetElement('comicGrid');
+                if (grid) {
+                    grid.innerHTML = comicPages.map((url, i) => 
+                        `<div class="comic-page">
+                            <img src="${url}?t=${Date.now()}" alt="Page ${i+1}" 
+                                 style="max-width:100%; border-radius:5px; box-shadow:0 2px 8px rgba(0,0,0,0.2);"
+                                 onerror="this.onerror=null; console.log('Failed to load:', '${url}');">
+                            <h3>Page ${i+1}</h3>
+                        </div>`
+                    ).join('');
+                }
+                
+                const comicResult = safeGetElement('comicResult');
+                const downloadSection = safeGetElement('downloadSection');
+                
+                if (comicResult) comicResult.style.display = 'block';
+                if (downloadSection) downloadSection.style.display = 'flex';
+                
+                agents[2][1] = 'completed'; agents[2][2] = 100;
+                updateAgentDisplay();
+                
+            } catch (error) {
+                console.error('Error generating comic:', error);
+                alert('Failed to generate comic: ' + error.message);
+            } finally {
+                if (loadingOverlay) loadingOverlay.style.display = 'none';
+            }
+        }
+
+        // =========================================================================
+        // SECTION 7: VOICE INPUT FUNCTIONS
+        // =========================================================================
+        function initVoiceRecognition() {
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SR();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = 'en-US';
+            }
+        }
+
+// Single, clean voice input function
+function startVoiceInput() {
+    forceStopVoice();
+    // Check for browser support
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    
+    if (!SpeechRecognition) {
+        alert('Your browser does not support voice recognition. Please use Chrome, Edge, or Safari.');
+        return;
+    }
+    
+    // Create recognition instance
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US';
+    recognition.maxAlternatives = 1;
+    
+    // Get button and prompt
+    const voiceBtn = document.getElementById('voiceBtn');
+    const promptInput = document.getElementById('prompt');
+    
+    // Debug: Check if prompt exists
+    console.log('🔍 Prompt element:', promptInput);
+    if (!promptInput) {
+        console.error('❌ Prompt element not found!');
+        alert('Error: Prompt input not found');
+        return;
+    }
+    
+    // Update button UI
+    if (voiceBtn) {
+        voiceBtn.style.background = '#ff4444';
+        voiceBtn.textContent = '🎤 Listening...';
+        voiceBtn.disabled = true;
+    }
+    
+    console.log('🎤 Voice recognition started - speak now...');
+    
+    // Start listening
+    try {
+        recognition.start();
+        isVoiceActive = true;
+        activeVoiceRecognition = recognition;
+    } catch (e) {
+        console.error('Failed to start:', e);
+        resetButton();
+        return;
+    }
+    
+    // Handle result
+    recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        console.log('🎤 Recognized:', transcript);
+        
+        // Set the prompt value
+        if (promptInput) {
+            promptInput.value = transcript;
+            console.log('✅ Prompt updated to:', promptInput.value);
+            // Trigger any events that might be needed
+            promptInput.dispatchEvent(new Event('input', { bubbles: true }));
+            promptInput.dispatchEvent(new Event('change', { bubbles: true }));
+        } else {
+            console.error('❌ Cannot update prompt - element missing');
+        }
+        
+        resetButton();
+    };
+    
+    // Handle end
+    recognition.onend = () => {
+        console.log('🎤 Voice recognition ended');
+        resetButton();
+    };
+    
+    // Handle errors
+    recognition.onerror = (event) => {
+        console.error('🎤 Error:', event.error);
+        
+        let message = 'Voice recognition failed. ';
+        if (event.error === 'no-speech') message += 'No speech detected.';
+        else if (event.error === 'not-allowed') message += 'Microphone access denied.';
+        else message += 'Please try again.';
+        
+        alert(message);
+        resetButton();
+    };
+    
+    // Reset button function
+    function resetButton() {
+        if (voiceBtn) {
+            voiceBtn.style.background = '#4a90e2';
+            voiceBtn.textContent = '🎤 Voice Input';
+            voiceBtn.disabled = false;
+        }
+    }
+}
+    
+    // Create recognition instance
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US';
+    recognition.maxAlternatives = 1;
+    
+    // Get button
+    const voiceBtn = document.getElementById('voiceBtn');
+    
+    // Update button UI
+    if (voiceBtn) {
+        voiceBtn.style.background = '#ff4444';
+        voiceBtn.textContent = '🎤 Listening...';
+        const transcript = event.results[0][0].transcript;
+        console.log('🎤 Recognized:', transcript);
+        
+        const promptInput = document.getElementById('prompt');
+        if (promptInput) {
+            promptInput.value = transcript;
+        }
+        
+        resetButton();
+    };
+    
+    // Handle end
+    recognition.onend = () => {
+        console.log('🎤 Voice recognition ended');
+        resetButton();
+    };
+    
+    // Handle errors
+    recognition.onerror = (event) => {
+        console.error('🎤 Error:', event.error);
+        
+        let message = 'Voice recognition failed. ';
+        if (event.error === 'no-speech') message += 'No speech detected.';
+        else if (event.error === 'not-allowed') message += 'Microphone access denied.';
+        else message += 'Please try again.';
+        
+        alert(message);
+        resetButton();
+    };
+    
+    // Reset button function
+    function resetButton() {
+        if (voiceBtn) {
+            voiceBtn.style.background = '#4a90e2';
+            voiceBtn.textContent = '🎤 Voice Input';
+            voiceBtn.disabled = false;
+        }
+    }
+}
+
+// Ensure button is connected
+document.addEventListener('DOMContentLoaded', function() {
+    const btn = document.getElementById('voiceBtn');
+    if (btn) {
+        btn.onclick = function(e) {
+            e.preventDefault();
+            startVoiceInput();
+        };
+    }
+    console.log('✅ Voice button ready');
+});
+</script>
+
+<script>
+// GLOBAL VARIABLES - CLEAN VERSION
+let currentStory = null;
+let comicPages = [];
+let uploadedCharacters = [];
+let selectedCharacters = [];
+let recognition = null;
+let currentUtterance = null;
+
+// Agent data
+const agents = [
+    ["Story Generator", "pending", 0, "<i class=\"fas fa-pen-fancy\"></i>"],
+    ["Script Director", "pending", 0, "<i class=\"fas fa-video\"></i>"],
+    ["Panel Generator", "pending", 0, "<i class=\"fas fa-paint-brush\"></i>"]
+];
+// Simple, working voice input function
+function startVoiceInput() {
+    forceStopVoice();
+    // Check for browser support
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    
+    if (!SpeechRecognition) {
+        alert('Your browser does not support voice recognition. Please use Chrome, Edge, or Safari.');
+        return;
+    }
+    
+    // Get elements
+    const voiceBtn = document.getElementById('voiceBtn');
+    const promptInput = document.getElementById('prompt');
+    
+    if (!promptInput) {
+        alert('Error: Prompt input not found');
+        return;
+    }
+    
+    // Create recognition instance
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US';
+    
+    // Update button UI
+    if (voiceBtn) {
+        voiceBtn.style.background = '#ff4444';
+        voiceBtn.textContent = '🎤 Listening...';
+        voiceBtn.disabled = true;
+    }
+    
+    // Start listening
+    try {
+        recognition.start();
+        isVoiceActive = true;
+        activeVoiceRecognition = recognition;
+        console.log('🎤 Voice recognition started');
+    } catch (e) {
+        console.error('Failed to start:', e);
+        resetButton();
+        return;
+    }
+    
+    // Handle result
+    recognition.onresult = function(event) {
+            isVoiceActive = false;
+            activeVoiceRecognition = null;
+        const transcript = event.results[0][0].transcript;
+        console.log('🎤 Recognized:', transcript);
+        
+        // Set the prompt value
+        promptInput.value = transcript;
+        console.log('✅ Prompt updated to:', promptInput.value);
+        
+        resetButton();
+    };
+    
+    // Handle end
+    recognition.onend = function() {
+        isVoiceActive = false;
+        activeVoiceRecognition = null;
+        console.log('🎤 Voice recognition ended');
+        resetButton();
+    };
+    
+    // Handle errors
+    recognition.onerror = function(event) {
+        isVoiceActive = false;
+        activeVoiceRecognition = null;
+        console.error('🎤 Error:', event.error);
+        
+        let message = 'Voice recognition failed. ';
+        if (event.error === 'no-speech') {
+            message += 'No speech detected. Please try again.';
+        } else if (event.error === 'not-allowed') {
+            message += 'Microphone access denied. Please allow microphone access.';
+        } else {
+            message += 'Please try again.';
+        }
+        
+        alert(message);
+        resetButton();
+    };
+    
+    // Reset button function
+    function resetButton() {
+        if (voiceBtn) {
+            voiceBtn.style.background = '#4a90e2';
+            voiceBtn.textContent = '🎤 Voice Input';
+            voiceBtn.disabled = false;
+        }
+    }
+}
+
+// Ensure button is connected
+document.addEventListener('DOMContentLoaded', function() {
+    const btn = document.getElementById('voiceBtn');
+    if (btn) {
+        btn.onclick = function(e) {
+            e.preventDefault();
+            startVoiceInput();
+        };
+    }
+    console.log('✅ Voice button ready');
+});
+</script>
+
+<style>
+/* Force agent icons to be visible */
+.agent-icon {
+    font-size: 1.5rem !important;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    width: 45px !important;
+    height: 45px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: white !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2) !important;
+}
+
+.agent-icon i, .agent-icon svg {
+    display: inline-block !important;
+    font-size: 1.5rem !important;
+    color: white !important;
+}
+
+.agent-card {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    color: #333;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.agent-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.agent-info h3 {
+    font-size: 1rem;
+    margin: 0;
+}
+
+.progress-bar {
+    height: 4px;
+    background: #e0e0e0;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    transition: width 0.3s;
+}
+</style>
+
+<!-- ==================== PERMANENT FIX FOR AGENT ICONS ==================== -->
+<style>
+/* FORCE AGENT ICONS TO BE VISIBLE - PERMANENT FIX */
+.agent-icon {
+    font-size: 1.5rem !important;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    width: 45px !important;
+    height: 45px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: white !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2) !important;
+    min-width: 45px !important;
+    min-height: 45px !important;
+}
+
+.agent-icon i, .agent-icon svg, .agent-icon .fas, .agent-icon .fa-* {
+    display: inline-block !important;
+    font-size: 1.5rem !important;
+    color: white !important;
+    width: auto !important;
+    height: auto !important;
+    line-height: 1 !important;
+}
+
+/* Force all icon containers to show */
+.agent-card .agent-header {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+}
+
+/* Debug border to see if container exists */
+.agent-card {
+    background: white !important;
+    border-radius: 10px !important;
+    padding: 15px !important;
+    color: #333 !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    min-height: 100px !important;
+}
+
+/* Force text to be visible */
+.agent-info h3 {
+    font-size: 1rem !important;
+    margin: 0 !important;
+    color: #333 !important;
+}
+
+.agent-status {
+    font-size: 0.8rem !important;
+    color: #666 !important;
+}
+</style>
+
+<!-- ==================== PERMANENT FIX FOR AGENT DATA ==================== -->
+<script>
+// GLOBAL VARIABLES - CLEAN VERSION
+let currentStory = null;
+let comicPages = [];
+let uploadedCharacters = [];
+let selectedCharacters = [];
+let recognition = null;
+let currentUtterance = null;
+
+// Agent data
+const agents = [
+    ["Story Generator", "pending", 0, "<i class=\"fas fa-pen-fancy\"></i>"],
+    ["Script Director", "pending", 0, "<i class=\"fas fa-video\"></i>"],
+    ["Panel Generator", "pending", 0, "<i class=\"fas fa-paint-brush\"></i>"]
+];
+// Force agent data to be properly initialized
+(function() {
+    console.log('🔧 Agent icon fix running...');
+    
+    // Ensure agents array exists with proper icons
+    if (typeof agents === 'undefined') {
+        console.log('Creating agents array');
+        window.agents = [
+            ['Story Generator', 'pending', 0, '<i class="fas fa-pen-fancy"></i>'],
+            ['Script Director', 'pending', 0, '<i class="fas fa-video"></i>'],
+            ['Panel Generator', 'pending', 0, '<i class="fas fa-paint-brush"></i>']
+        ];
+    }
+    
+    // Override updateAgentDisplay to ensure icons are HTML
+    window.updateAgentDisplay = function() {
+        const grid = document.getElementById('agentGrid');
+        if (!grid) return;
+        
+        let html = '';
+        for (let i = 0; i < window.agents.length; i++) {
+            const [name, status, progress, icon] = window.agents[i];
+            let statusText = status === 'active' ? '⚡ Working...' : status === 'completed' ? '✅ Complete' : '⏳ Pending';
+            let statusColor = status === 'active' ? '#4a90e2' : status === 'completed' ? '#27ae60' : '#95a5a6';
+            
+            html += `<div class="agent-card ${status}">
+                <div class="agent-header">
+                    <span class="agent-icon">${icon}</span>
+                    <div class="agent-info">
+                        <h3>${name}</h3>
+                        <span class="agent-status" style="color:${statusColor}">${statusText}</span>
+                    </div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:${progress}%; background:${statusColor}"></div>
+                </div>
+            </div>`;
+        }
+        grid.innerHTML = html;
+        console.log('✅ Agent display updated with icons');
+    };
+    
+    // Run on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof window.updateAgentDisplay === 'function') {
+            window.updateAgentDisplay();
+        }
+    });
+    
+    console.log('✅ Agent icon fix applied');
+})();
+</script>
+
+<!-- ==================== FIX FOR VOICE RECOGNITION ==================== -->
+<script>
+// GLOBAL VARIABLES - CLEAN VERSION
+let currentStory = null;
+let comicPages = [];
+let uploadedCharacters = [];
+let selectedCharacters = [];
+let recognition = null;
+let currentUtterance = null;
+
+// Agent data
+const agents = [
+    ["Story Generator", "pending", 0, "<i class=\"fas fa-pen-fancy\"></i>"],
+    ["Script Director", "pending", 0, "<i class=\"fas fa-video\"></i>"],
+    ["Panel Generator", "pending", 0, "<i class=\"fas fa-paint-brush\"></i>"]
+];
+// Ensure any active voice recognition is stopped
+function stopVoiceRecognition() {
+    console.log('🛑 Stopping any active voice recognition');
+    const voiceBtn = document.getElementById('voiceBtn');
+    if (voiceBtn) {
+        voiceBtn.style.background = '#4a90e2';
+        voiceBtn.textContent = '🎤 Voice Input';
+        voiceBtn.disabled = false;
+    }
+}
+
+// Override generateStory to stop voice first
+generateStory = function() {
+    console.log('📝 Generate story called - stopping voice first');
+    stopVoiceRecognition();
+    return originalGenerateStory.apply(this, arguments);
+};
+
+// Override regenerateStory to stop voice first
+const originalRegenerateStory = regenerateStory;
+regenerateStory = function() {
+    console.log('🔄 Regenerate story called - stopping voice first');
+    stopVoiceRecognition();
+    return originalRegenerateStory.apply(this, arguments);
+};
+
+// Override generateComic to stop voice first
+generateComic = function() {
+    console.log('🎨 Generate comic called - stopping voice first');
+    stopVoiceRecognition();
+    return originalGenerateComic.apply(this, arguments);
+};
+
+console.log('✅ Voice cleanup handlers installed');
+</script>
+
+<script>
+// GLOBAL VARIABLES - CLEAN VERSION
+let currentStory = null;
+let comicPages = [];
+let uploadedCharacters = [];
+let selectedCharacters = [];
+let recognition = null;
+let currentUtterance = null;
+
+// Agent data
+const agents = [
+    ["Story Generator", "pending", 0, "<i class=\"fas fa-pen-fancy\"></i>"],
+    ["Script Director", "pending", 0, "<i class=\"fas fa-video\"></i>"],
+    ["Panel Generator", "pending", 0, "<i class=\"fas fa-paint-brush\"></i>"]
+];
+// Enhanced voice function with auto-timeout
+function startVoiceInput() {
+    forceStopVoice();
+    // Check for browser support
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    
+    if (!SpeechRecognition) {
+        alert('Your browser does not support voice recognition. Please use Chrome, Edge, or Safari.');
+        return;
+    }
+    
+    // Get elements
+    const voiceBtn = document.getElementById('voiceBtn');
+    const promptInput = document.getElementById('prompt');
+    
+    if (!promptInput) {
+        alert('Error: Prompt input not found');
+        return;
+    }
+    
+    // Stop any existing recognition
+    if (window.activeRecognition) {
+        try {
+            window.activeRecognition.stop();
+        } catch (e) {}
+    }
+    
+    // Create recognition instance
+    const recognition = new SpeechRecognition();
+    window.activeRecognition = recognition;
+    
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US';
+    recognition.maxAlternatives = 1;
+    
+    // Set a timeout to auto-stop after 5 seconds
+    let timeoutId = setTimeout(() => {
+        console.log('⏰ Voice recognition timeout');
+        if (window.activeRecognition) {
+            try {
+                window.activeRecognition.stop();
+            } catch (e) {}
+        }
+        resetButton();
+    }, 5000);
+    
+    // Update button UI
+    if (voiceBtn) {
+        voiceBtn.style.background = '#ff4444';
+        voiceBtn.textContent = '🎤 Listening... (5s)';
+        voiceBtn.disabled = true;
+    }
+    
+    console.log('🎤 Voice recognition started - speak now...');
+    
+    // Start listening
+    try {
+        recognition.start();
+        isVoiceActive = true;
+        activeVoiceRecognition = recognition;
+    } catch (e) {
+        console.error('Failed to start:', e);
+        clearTimeout(timeoutId);
+        resetButton();
+        return;
+    }
+    
+    // Handle result
+    recognition.onresult = function(event) {
+            isVoiceActive = false;
+            activeVoiceRecognition = null;
+        clearTimeout(timeoutId);
+        const transcript = event.results[0][0].transcript;
+        console.log('🎤 Recognized:', transcript);
+        
+        // Set the prompt value
+        promptInput.value = transcript;
+        console.log('✅ Prompt updated to:', promptInput.value);
+        
+        resetButton();
+        window.activeRecognition = null;
+    };
+    
+    // Handle end
+    recognition.onend = function() {
+        isVoiceActive = false;
+        activeVoiceRecognition = null;
+        clearTimeout(timeoutId);
+        console.log('🎤 Voice recognition ended');
+        resetButton();
+        window.activeRecognition = null;
+    };
+    
+    // Handle errors
+    recognition.onerror = function(event) {
+        isVoiceActive = false;
+        activeVoiceRecognition = null;
+        clearTimeout(timeoutId);
+        console.error('🎤 Error:', event.error);
+        
+        // Don't show alert for no-speech if it's just a timeout
+        if (event.error !== 'no-speech') {
+            let message = 'Voice recognition failed. ';
+            if (event.error === 'not-allowed') {
+                message += 'Microphone access denied. Please allow microphone access.';
+                alert(message);
+            }
+        }
+        
+        resetButton();
+        window.activeRecognition = null;
+    };
+    
+    // Reset button function
+    function resetButton() {
+        if (voiceBtn) {
+            voiceBtn.style.background = '#4a90e2';
+            voiceBtn.textContent = '🎤 Voice Input';
+            voiceBtn.disabled = false;
+        }
+    }
+}
+</script>
+
+<script>
+// GLOBAL VARIABLES - CLEAN VERSION
+let currentStory = null;
+let comicPages = [];
+let uploadedCharacters = [];
+let selectedCharacters = [];
+let recognition = null;
+let currentUtterance = null;
+
+// Agent data
+const agents = [
+    ["Story Generator", "pending", 0, "<i class=\"fas fa-pen-fancy\"></i>"],
+    ["Script Director", "pending", 0, "<i class=\"fas fa-video\"></i>"],
+    ["Panel Generator", "pending", 0, "<i class=\"fas fa-paint-brush\"></i>"]
+];
+// Safety wrapper for voice input - prevents accidental triggering
+startVoiceInput = function() {
+    // Check if this was called by a user click
+    if (!event || event.type !== 'click') {
+        console.log('⚠️ Voice input blocked - must be triggered by user click');
+        return;
+    }
+    return originalStartVoice.apply(this, arguments);
+};
+console.log('✅ Voice input safety wrapper installed');
+</script>
+
+<script>
+// GLOBAL VARIABLES - CLEAN VERSION
+let currentStory = null;
+let comicPages = [];
+let uploadedCharacters = [];
+let selectedCharacters = [];
+let recognition = null;
+let currentUtterance = null;
+
+// Agent data
+const agents = [
+    ["Story Generator", "pending", 0, "<i class=\"fas fa-pen-fancy\"></i>"],
+    ["Script Director", "pending", 0, "<i class=\"fas fa-video\"></i>"],
+    ["Panel Generator", "pending", 0, "<i class=\"fas fa-paint-brush\"></i>"]
+];
+// WORKING GENERATE STORY FUNCTION
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("✅ Story received:", data);
+        currentStory = data;
+        
+        // Display the story
+        const storyContent = document.getElementById('storyContent');
+        if (storyContent) {
+            let chars = currentStory.characters ? currentStory.characters.map(c => `<span class="character-tag">${c}</span>`).join('') : '';
+            let plots = currentStory.plot ? currentStory.plot.map(p => `<li>${p}</li>`).join('') : '';
+            
+            storyContent.innerHTML = `
+                <div class="story-title">${currentStory.title || 'Adventure'}</div>
+                <div class="characters">${chars}</div>
+                <ol class="plot-points">${plots}</ol>
+            `;
+        }
+        
+        document.getElementById('storyResult').style.display = 'block';
+        document.getElementById('comicBtn').disabled = false;
+        
+        // Update agents
+        if (typeof agents !== 'undefined') {
+            agents[0][1] = 'completed';
+            updateAgentDisplay();
+        }
+        
+        loadingOverlay.style.display = 'none';
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to generate story');
+        loadingOverlay.style.display = 'none';
+    });
+}
+</script>
+
+<style>
+/* PERMANENT AGENT ICON FIX */
+.agent-icon {
+    font-size: 1.5rem !important;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    width: 45px !important;
+    height: 45px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: white !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2) !important;
+}
+
+.agent-icon i, .agent-icon svg {
+    display: inline-block !important;
+    font-size: 1.5rem !important;
+    color: white !important;
+}
+
+.agent-card {
+    background: white !important;
+    border-radius: 10px !important;
+    padding: 15px !important;
+    color: #333 !important;
+}
+</style>
+
+<script>
+// GLOBAL VARIABLES - CLEAN VERSION
+let currentStory = null;
+let comicPages = [];
+let uploadedCharacters = [];
+let selectedCharacters = [];
+let recognition = null;
+let currentUtterance = null;
+
+// Agent data
+const agents = [
+    ["Story Generator", "pending", 0, "<i class=\"fas fa-pen-fancy\"></i>"],
+    ["Script Director", "pending", 0, "<i class=\"fas fa-video\"></i>"],
+    ["Panel Generator", "pending", 0, "<i class=\"fas fa-paint-brush\"></i>"]
+];
+// Force agent icons to update
+function forceUpdateIcons() {
+    if (typeof updateAgentDisplay === 'function') {
+        updateAgentDisplay();
+    }
+}
+
+// Run on page load
+document.addEventListener('DOMContentLoaded', forceUpdateIcons);
+</script>
+
+<style>
+/* Ensure agent icons always visible */
+.agent-icon {
+    font-size: 1.5rem !important;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    width: 45px !important;
+    height: 45px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: white !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2) !important;
+    transition: all 0.3s ease !important;
+}
+
+.agent-icon i, .agent-icon svg {
+    display: inline-block !important;
+    font-size: 1.5rem !important;
+    color: white !important;
+}
+
+.agent-card {
+    background: white !important;
+    border-radius: 10px !important;
+    padding: 15px !important;
+    color: #333 !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    min-height: 100px !important;
+}
+</style>
+
+<!-- ==================== EMERGENCY ICON FIX ==================== -->
+<style>
+/* ULTIMATE ICON FIX - FORCES ICONS TO BE VISIBLE */
+.agent-card {
+    display: block !important;
+    background: white !important;
+    border-radius: 10px !important;
+    padding: 15px !important;
+    margin-bottom: 10px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    min-height: 100px !important;
+}
+
+.agent-header {
+    display: flex !important;
+    align-items: center !important;
+    gap: 15px !important;
+    margin-bottom: 15px !important;
+}
+
+.agent-icon {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 45px !important;
+    height: 45px !important;
+    background: linear-gradient(135deg, #667eea, #764ba2) !important;
+    border-radius: 50% !important;
+    color: white !important;
+    font-size: 24px !important;
+    flex-shrink: 0 !important;
+}
+
+.agent-icon i, .agent-icon svg, .agent-icon .fas, .agent-icon .fa-* {
+    display: inline-block !important;
+    font-size: 24px !important;
+    color: white !important;
+    width: auto !important;
+    height: auto !important;
+}
+
+.agent-info {
+    flex: 1 !important;
+}
+
+.agent-info h3 {
+    margin: 0 0 5px 0 !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    color: #333 !important;
+}
+
+.agent-status {
+    font-size: 14px !important;
+    color: #666 !important;
+}
+
+.progress-bar {
+    height: 6px !important;
+    background: #e0e0e0 !important;
+    border-radius: 3px !important;
+    overflow: hidden !important;
+    margin-top: 10px !important;
+}
+
+.progress-fill {
+    height: 100% !important;
+    transition: width 0.3s ease !important;
+}
+
+.agent-card.active .progress-fill {
+    background: #4a90e2 !important;
+}
+
+.agent-card.completed .progress-fill {
+    background: #27ae60 !important;
+}
+
+.agent-card.pending .progress-fill {
+    background: #95a5a6 !important;
+    width: 0% !important;
+}
+</style>
+
+<script>
+// GLOBAL VARIABLES - CLEAN VERSION
+let currentStory = null;
+let comicPages = [];
+let uploadedCharacters = [];
+let selectedCharacters = [];
+let recognition = null;
+let currentUtterance = null;
+
+// Agent data
+const agents = [
+    ["Story Generator", "pending", 0, "<i class=\"fas fa-pen-fancy\"></i>"],
+    ["Script Director", "pending", 0, "<i class=\"fas fa-video\"></i>"],
+    ["Panel Generator", "pending", 0, "<i class=\"fas fa-paint-brush\"></i>"]
+];
+// Force agent icons to initialize properly
+(function() {
+    console.log('🔧 Running emergency icon fix');
+    
+    function fixAgentIcons() {
+        const agentGrid = document.getElementById('agentGrid');
+        if (!agentGrid) return;
+        
+        // Make sure agents array exists
+        if (typeof window.agents === 'undefined') {
+            window.agents = [
+                ['Story Generator', 'pending', 0, '<i class="fas fa-pen-fancy"></i>'],
+                ['Script Director', 'pending', 0, '<i class="fas fa-video"></i>'],
+                ['Panel Generator', 'pending', 0, '<i class="fas fa-paint-brush"></i>']
+            ];
+        }
+        
+        // Force update display
+        if (typeof window.updateAgentDisplay === 'function') {
+            window.updateAgentDisplay();
+        } else {
+            // Create update function if missing
+            window.updateAgentDisplay = function() {
+                const grid = document.getElementById('agentGrid');
+                if (!grid) return;
+                
+                let html = '';
+                for (let i = 0; i < window.agents.length; i++) {
+                    const [name, status, progress, icon] = window.agents[i];
+                    let statusText = status === 'active' ? '⚡ Working...' : 
+                                    status === 'completed' ? '✅ Complete' : '⏳ Pending';
+                    let statusColor = status === 'active' ? '#4a90e2' : 
+                                    status === 'completed' ? '#27ae60' : '#95a5a6';
+                    
+                    html += `<div class="agent-card ${status}">
+                        <div class="agent-header">
+                            <span class="agent-icon">${icon}</span>
+                            <div class="agent-info">
+                                <h3>${name}</h3>
+                                <span class="agent-status" style="color:${statusColor}">${statusText}</span>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width:${progress}%; background:${statusColor}"></div>
+                        </div>
+                    </div>`;
+                }
+                grid.innerHTML = html;
+            };
+        }
+        
+        // Run now and on any state changes
+        window.updateAgentDisplay();
+    }
+    
+    // Run on page load
+    document.addEventListener('DOMContentLoaded', fixAgentIcons);
+    
+    // Also run after a short delay to catch any late loads
+    setTimeout(fixAgentIcons, 500);
+    
+    // Hook into existing functions
+    if (originalGenerateStory) {
+        window.generateStory = function() {
+            const result = originalGenerateStory.apply(this, arguments);
+            setTimeout(fixAgentIcons, 100);
+            return result;
+        };
+    }
+    
+    if (originalGenerateComic) {
+        window.generateComic = function() {
+            const result = originalGenerateComic.apply(this, arguments);
+            setTimeout(fixAgentIcons, 100);
+            return result;
+        };
+    }
+    
+    console.log('✅ Emergency icon fix applied');
+})();
+</script>
+
+<!-- ==================== BLUE PROGRESS BAR FIX ==================== -->
+<style>
+/* Force blue progress bar for active state */
+.agent-card.active .progress-fill {
+    background: #4a90e2 !important;
+    width: 30% !important; /* Default width for active state */
+    display: block !important;
+    height: 6px !important;
+}
+
+.agent-card.completed .progress-fill {
+    background: #27ae60 !important;
+    width: 100% !important;
+    display: block !important;
+    height: 6px !important;
+}
+
+.agent-card.pending .progress-fill {
+    background: #95a5a6 !important;
+    width: 0% !important;
+    display: block !important;
+    height: 6px !important;
+}
+
+/* Ensure progress bar container is visible */
+.progress-bar {
+    height: 6px !important;
+    background: #e0e0e0 !important;
+    border-radius: 3px !important;
+    overflow: hidden !important;
+    margin-top: 10px !important;
+    width: 100% !important;
+    display: block !important;
+}
+
+.progress-fill {
+    height: 100% !important;
+    transition: width 0.3s ease !important;
+    display: block !important;
+}
+</style>
+
+<script>
+// GLOBAL VARIABLES - CLEAN VERSION
+let currentStory = null;
+let comicPages = [];
+let uploadedCharacters = [];
+let selectedCharacters = [];
+let recognition = null;
+let currentUtterance = null;
+
+// Agent data
+const agents = [
+    ["Story Generator", "pending", 0, "<i class=\"fas fa-pen-fancy\"></i>"],
+    ["Script Director", "pending", 0, "<i class=\"fas fa-video\"></i>"],
+    ["Panel Generator", "pending", 0, "<i class=\"fas fa-paint-brush\"></i>"]
+];
+// Force update agent states to show blue bar
+(function() {
+    console.log('🔧 Fixing blue progress bar');
+    
+    function updateAgentStates() {
+        if (typeof window.agents === 'undefined') return;
+        
+        // Make sure Story Generator is active to show blue
+        if (window.agents[0] && window.agents[0][1] === 'active') {
+            window.agents[0][2] = 30; // Set progress to 30%
+        }
+        
+        // Force update display
+        if (typeof window.updateAgentDisplay === 'function') {
+            window.updateAgentDisplay();
+        }
+    }
+    
+    // Run after any story generation
+    if (originalGenerateStory) {
+        window.generateStory = function() {
+            // Set Story Generator to active
+            if (window.agents && window.agents[0]) {
+                window.agents[0][1] = "pending";
+                window.agents[0][2] = 30;
+            }
+            const result = originalGenerateStory.apply(this, arguments);
+            setTimeout(updateAgentStates, 100);
+            return result;
+        };
+    }
+    
+    // Run after any comic generation
+    if (originalGenerateComic) {
+        window.generateComic = function() {
+            // Set Panel Generator to active
+            if (window.agents && window.agents[2]) {
+                window.agents[2][1] = 'active';
+                window.agents[2][2] = 50;
+            }
+            const result = originalGenerateComic.apply(this, arguments);
+            setTimeout(updateAgentStates, 100);
+            return result;
+        };
+    }
+    
+    console.log('✅ Blue progress bar fix applied');
+})();
+</script>
+
+<script>
+// GLOBAL VARIABLES - CLEAN VERSION
+let currentStory = null;
+let comicPages = [];
+let uploadedCharacters = [];
+let selectedCharacters = [];
+let recognition = null;
+let currentUtterance = null;
+
+// Agent data
+const agents = [
+    ["Story Generator", "pending", 0, "<i class=\"fas fa-pen-fancy\"></i>"],
+    ["Script Director", "pending", 0, "<i class=\"fas fa-video\"></i>"],
+    ["Panel Generator", "pending", 0, "<i class=\"fas fa-paint-brush\"></i>"]
+];
+// Direct override for updateAgentDisplay to ensure blue bar shows
+(function() {
+    const originalUpdate = window.updateAgentDisplay;
+    
+    window.updateAgentDisplay = function() {
+        console.log('📊 Updating agent display with blue bar');
+        const grid = document.getElementById('agentGrid');
+        if (!grid) return;
+        
+        let html = '';
+        for (let i = 0; i < window.agents.length; i++) {
+            const [name, status, progress, icon] = window.agents[i];
+            let statusText = status === 'active' ? '⚡ Working...' : 
+                            status === 'completed' ? '✅ Complete' : '⏳ Pending';
+            let statusColor = status === 'active' ? '#4a90e2' : 
+                            status === 'completed' ? '#27ae60' : '#95a5a6';
+            
+            // Force progress for active states to show blue
+            let displayProgress = progress;
+            if (status === 'active' && progress === 0) {
+                displayProgress = 30; // Show some blue if active
+            }
+            
+            html += `<div class="agent-card ${status}">
+                <div class="agent-header">
+                    <span class="agent-icon">${icon}</span>
+                    <div class="agent-info">
+                        <h3>${name}</h3>
+                        <span class="agent-status" style="color:${statusColor}">${statusText}</span>
+                    </div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:${displayProgress}%; background:${statusColor}"></div>
+                </div>
+            </div>`;
+        }
+        grid.innerHTML = html;
+        console.log('✅ Agent display updated with blue bar');
+    };
+    
+    // Test with a sample update
+    setTimeout(() => {
+        if (window.agents) {
+            window.agents[0][1] = "pending";
+            window.agents[0][2] = 30;
+            window.updateAgentDisplay();
+        }
+    }, 1000);
+})();
+</script>
+
+<script>
+// GLOBAL VARIABLES - CLEAN VERSION
+let currentStory = null;
+let comicPages = [];
+let uploadedCharacters = [];
+let selectedCharacters = [];
+let recognition = null;
+let currentUtterance = null;
+
+// Agent data
+const agents = [
+    ["Story Generator", "pending", 0, "<i class=\"fas fa-pen-fancy\"></i>"],
+    ["Script Director", "pending", 0, "<i class=\"fas fa-video\"></i>"],
+    ["Panel Generator", "pending", 0, "<i class=\"fas fa-paint-brush\"></i>"]
+];
+// FRESH WORKING GENERATE COMIC FUNCTION
+async function generateComic() {
+    console.log("🎨 Generate Comic clicked - FRESH FUNCTION");
+    
+    if (!currentStory) {
+        alert('Please generate a story first');
+        return;
+    }
+    
+    // Show loading
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const loadingMessage = document.getElementById('loadingMessage');
+    if (loadingOverlay) {
+        if (loadingMessage) loadingMessage.textContent = 'Generating comic...';
+        loadingOverlay.style.display = 'flex';
+    }
+    
+    // Update agents
+    if (typeof agents !== 'undefined') {
+        agents[1][1] = 'active';
+        agents[1][2] = 30;
+        agents[2][1] = 'pending';
+        agents[2][2] = 0;
+        if (typeof updateAgentDisplay === 'function') {
+            updateAgentDisplay();
+        }
+    }
+    
+    try {
+        // Get values
+        const prompt = document.getElementById('prompt')?.value || '';
+        const language = document.getElementById('language')?.value || 'en';
+        const style = document.getElementById('style')?.value || 'manga';
+        const panels = parseInt(document.getElementById('panels')?.value || '4');
+        
+        console.log("📤 Sending comic request:", { prompt, style });
+        
+        // Call backend
+        const response = await fetch('/generate-pages-with-characters', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                story: currentStory,
+                language: language,
+                style: style,
+                panels: panels,
+                character_ids: (typeof selectedCharacters !== 'undefined' ? selectedCharacters : []) || [],
+                prompt: prompt
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const pages = await response.json();
+        console.log("✅ Received pages:", pages);
+        
+        // Store pages
+        comicPages = pages;
+        
+        // Update agents - Script Director complete
+        if (typeof agents !== 'undefined') {
+            agents[1][1] = 'completed';
+            agents[1][2] = 100;
+            agents[2][1] = 'active';
+            agents[2][2] = 50;
+            if (typeof updateAgentDisplay === 'function') {
+                updateAgentDisplay();
+            }
+        }
+        
+        // Display comics
+        const grid = document.getElementById('comicGrid');
+        if (grid && pages && pages.length > 0) {
+            grid.innerHTML = pages.map((url, i) => 
+                `<div class="comic-page">
+                    <img src="${url}?t=${Date.now()}" alt="Page ${i+1}" 
+                         style="max-width:100%; border-radius:5px; box-shadow:0 2px 8px rgba(0,0,0,0.2);"
+                         onerror="this.onerror=null; this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=Page+${i+1}';">
+                    <h3>Page ${i+1}</h3>
+                </div>`
+            ).join('');
+        }
+        
+        // Show results
+        const comicResult = document.getElementById('comicResult');
+        const downloadSection = document.getElementById('downloadSection');
+        
+        if (comicResult) comicResult.style.display = 'block';
+        if (downloadSection) downloadSection.style.display = 'flex';
+        
+        // Final agent update
+        if (typeof agents !== 'undefined') {
+            agents[2][1] = 'completed';
+            agents[2][2] = 100;
+            if (typeof updateAgentDisplay === 'function') {
+                updateAgentDisplay();
+            }
+        }
+        
+    } catch (error) {
+        console.error('❌ Error:', error);
+        alert('Failed to generate comic: ' + error.message);
+        
+        // Reset agents on error
+        if (typeof agents !== 'undefined') {
+            agents[1][1] = 'pending';
+            agents[1][2] = 0;
+            agents[2][1] = 'pending';
+            agents[2][2] = 0;
+            if (typeof updateAgentDisplay === 'function') {
+                updateAgentDisplay();
+            }
+        }
+    } finally {
+        // Hide loading
+        if (loadingOverlay) loadingOverlay.style.display = 'none';
+    }
+}
+</script>
+
+<script>
+// GLOBAL VARIABLES - CLEAN VERSION
+let currentStory = null;
+let comicPages = [];
+let uploadedCharacters = [];
+let selectedCharacters = [];
+let recognition = null;
+let currentUtterance = null;
+
+// Agent data
+const agents = [
+    ["Story Generator", "pending", 0, "<i class=\"fas fa-pen-fancy\"></i>"],
+    ["Script Director", "pending", 0, "<i class=\"fas fa-video\"></i>"],
+    ["Panel Generator", "pending", 0, "<i class=\"fas fa-paint-brush\"></i>"]
+];
+// Quick fix for generateComic
+generateComic = async function() {
+    // Make sure selectedCharacters exists
+    if (typeof selectedCharacters === 'undefined') {
+        window.selectedCharacters = [];
+    }
+    return originalGenerateComic.apply(this, arguments);
+};
+</script>
+
+<script>
+// GLOBAL VARIABLES - CLEAN VERSION
+let currentStory = null;
+let comicPages = [];
+let uploadedCharacters = [];
+let selectedCharacters = [];
+let recognition = null;
+let currentUtterance = null;
+
+// Agent data
+const agents = [
+    ["Story Generator", "pending", 0, "<i class=\"fas fa-pen-fancy\"></i>"],
+    ["Script Director", "pending", 0, "<i class=\"fas fa-video\"></i>"],
+    ["Panel Generator", "pending", 0, "<i class=\"fas fa-paint-brush\"></i>"]
+];
+// Initialize agents on page load
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🔄 Initializing agents to pending state');
+    
+    // Make sure agents array exists
+    if (typeof agents !== 'undefined') {
+        agents[0][1] = 'pending';
+        agents[0][2] = 0;
+        agents[1][1] = 'pending';
+        agents[1][2] = 0;
+        agents[2][1] = 'pending';
+        agents[2][2] = 0;
+        
+        if (typeof updateAgentDisplay === 'function') {
+            updateAgentDisplay();
+        }
+    }
+    
+    // Make sure selectedCharacters exists
+    if (typeof selectedCharacters === 'undefined') {
+        window.selectedCharacters = [];
+    }
+});
+</script>
+
+<script>
+// GLOBAL VARIABLES - CLEAN VERSION
+let currentStory = null;
+let comicPages = [];
+let uploadedCharacters = [];
+let selectedCharacters = [];
+let recognition = null;
+let currentUtterance = null;
+
+// Agent data
+const agents = [
+    ["Story Generator", "pending", 0, "<i class=\"fas fa-pen-fancy\"></i>"],
+    ["Script Director", "pending", 0, "<i class=\"fas fa-video\"></i>"],
+    ["Panel Generator", "pending", 0, "<i class=\"fas fa-paint-brush\"></i>"]
+];
+// Function to reset all agents to pending
+function resetAgents() {
+    if (typeof agents !== 'undefined') {
+        agents[0][1] = 'pending';
+        agents[0][2] = 0;
+        agents[1][1] = 'pending';
+        agents[1][2] = 0;
+        agents[2][1] = 'pending';
+        agents[2][2] = 0;
+        
+        if (typeof updateAgentDisplay === 'function') {
+            updateAgentDisplay();
+        }
+    }
+    console.log('✅ Agents reset to pending');
+}
+
+// Call reset on page load
+document.addEventListener('DOMContentLoaded', resetAgents);
+</script>
+
+<script>
+// GLOBAL VARIABLES - CLEAN VERSION
+let currentStory = null;
+let comicPages = [];
+let uploadedCharacters = [];
+let selectedCharacters = [];
+let recognition = null;
+let currentUtterance = null;
+
+// Agent data
+const agents = [
+    ["Story Generator", "pending", 0, "<i class=\"fas fa-pen-fancy\"></i>"],
+    ["Script Director", "pending", 0, "<i class=\"fas fa-video\"></i>"],
+    ["Panel Generator", "pending", 0, "<i class=\"fas fa-paint-brush\"></i>"]
+];
+// Final agent reset
+(function() {
+    console.log('🔄 Final agent reset');
+    if (typeof agents !== 'undefined') {
+        agents[0][1] = 'pending';
+        agents[0][2] = 0;
+        agents[1][1] = 'pending';
+        agents[1][2] = 0;
+        agents[2][1] = 'pending';
+        agents[2][2] = 0;
+        if (typeof updateAgentDisplay === 'function') {
+            updateAgentDisplay();
+        }
+    }
+})();
+</script>
+
+<script>
+// GLOBAL VARIABLES - CLEAN VERSION
+let currentStory = null;
+let comicPages = [];
+let uploadedCharacters = [];
+let selectedCharacters = [];
+let recognition = null;
+let currentUtterance = null;
+
+// Agent data
+const agents = [
+    ["Story Generator", "pending", 0, "<i class=\"fas fa-pen-fancy\"></i>"],
+    ["Script Director", "pending", 0, "<i class=\"fas fa-video\"></i>"],
+    ["Panel Generator", "pending", 0, "<i class=\"fas fa-paint-brush\"></i>"]
+];
+// FINAL AGENT RESET - ENSURES PENDING STATE
+(function() {
+    console.log('🔄 Final agent state check');
+    if (typeof agents !== 'undefined') {
+        agents[0][1] = 'pending';
+        agents[0][2] = 0;
+        agents[1][1] = 'pending';
+        agents[1][2] = 0;
+        agents[2][1] = 'pending';
+        agents[2][2] = 0;
+        if (typeof updateAgentDisplay === 'function') {
+            updateAgentDisplay();
+            console.log('✅ Agents display updated to pending');
+        }
+    }
+})();
+</script>
+
+<script>
+// GLOBAL VARIABLES - CLEAN VERSION
+let currentStory = null;
+let comicPages = [];
+let uploadedCharacters = [];
+let selectedCharacters = [];
+let recognition = null;
+let currentUtterance = null;
+
+// Agent data
+const agents = [
+    ["Story Generator", "pending", 0, "<i class=\"fas fa-pen-fancy\"></i>"],
+    ["Script Director", "pending", 0, "<i class=\"fas fa-video\"></i>"],
+    ["Panel Generator", "pending", 0, "<i class=\"fas fa-paint-brush\"></i>"]
+];
+// Debug agent state changes
+const originalUpdateDisplay = updateAgentDisplay;
+updateAgentDisplay = function() {
+    console.log('📊 Updating agents. Current states:', 
+        agents.map(a => `${a[0]}: ${a[1]} (${a[2]}%)`));
+    return originalUpdateDisplay.apply(this, arguments);
+};
+</script>
+
+<!-- ==================== PERMANENT AGENT ICON FIX ==================== -->
+<style>
+/* FORCE AGENT ICONS TO BE VISIBLE - ULTIMATE FIX */
+.agent-card {
+    display: flex !important;
+    flex-direction: column !important;
+    background: white !important;
+    border-radius: 10px !important;
+    padding: 15px !important;
+    margin: 10px 0 !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    min-height: 120px !important;
+    width: 100% !important;
+}
+
+.agent-header {
+    display: flex !important;
+    align-items: center !important;
+    gap: 15px !important;
+    margin-bottom: 15px !important;
+    width: 100% !important;
+}
+
+.agent-icon {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 45px !important;
+    height: 45px !important;
+    min-width: 45px !important;
+    min-height: 45px !important;
+    background: linear-gradient(135deg, #667eea, #764ba2) !important;
+    border-radius: 50% !important;
+    color: white !important;
+    font-size: 24px !important;
+    flex-shrink: 0 !important;
+}
+
+.agent-icon i, .agent-icon svg, .agent-icon .fas {
+    display: inline-block !important;
+    font-size: 24px !important;
+    color: white !important;
+    width: auto !important;
+    height: auto !important;
+    line-height: 1 !important;
+}
+
+.agent-info {
+    flex: 1 !important;
+}
+
+.agent-info h3 {
+    margin: 0 0 5px 0 !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    color: #333 !important;
+}
+
+.agent-status {
+    font-size: 14px !important;
+    color: #666 !important;
+}
+
+.progress-bar {
+    height: 6px !important;
+    background: #e0e0e0 !important;
+    border-radius: 3px !important;
+    overflow: hidden !important;
+    width: 100% !important;
+}
+
+.progress-fill {
+    height: 100% !important;
+    transition: width 0.3s ease !important;
+}
+
+.agent-card.pending .progress-fill {
+    background: #95a5a6 !important;
+    width: 0% !important;
+}
+
+.agent-card.active .progress-fill {
+    background: #4a90e2 !important;
+    width: 30% !important;
+}
+
+.agent-card.completed .progress-fill {
+    background: #27ae60 !important;
+    width: 100% !important;
+}
+</style>
+
+<script>
+// ULTIMATE AGENT ICON RESTORER
+(function() {
+    console.log('🛠️ Ultimate agent icon restorer running');
+    
+    // Force recreate agents array with icons
+    window.agents = [
+        ['Story Generator', 'pending', 0, '<i class="fas fa-pen-fancy"></i>'],
+        ['Script Director', 'pending', 0, '<i class="fas fa-video"></i>'],
+        ['Panel Generator', 'pending', 0, '<i class="fas fa-paint-brush"></i>']
+    ];
+    
+    // Override update function
+    window.updateAgentDisplay = function() {
+        const grid = document.getElementById('agentGrid');
+        if (!grid) {
+            console.log('Agent grid not found');
+            return;
+        }
+        
+        let html = '';
+        for (let i = 0; i < window.agents.length; i++) {
+            const [name, status, progress, icon] = window.agents[i];
+            let statusText = status === 'active' ? '⚡ Working...' : 
+                            status === 'completed' ? '✅ Complete' : '⏳ Pending';
+            let statusColor = status === 'active' ? '#4a90e2' : 
+                            status === 'completed' ? '#27ae60' : '#95a5a6';
+            
+            html += `<div class="agent-card ${status}">
+                <div class="agent-header">
+                    <span class="agent-icon">${icon}</span>
+                    <div class="agent-info">
+                        <h3>${name}</h3>
+                        <span class="agent-status" style="color:${statusColor}">${statusText}</span>
+                    </div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:${progress}%; background:${statusColor}"></div>
+                </div>
+            </div>`;
+        }
+        grid.innerHTML = html;
+        console.log('✅ Agent display updated with icons');
+    };
+    
+    // Run immediately and on every state change
+    window.updateAgentDisplay();
+    
+    // Also run after any DOM changes
+    const observer = new MutationObserver(function() {
+        window.updateAgentDisplay();
+    });
+    
+    setTimeout(function() {
+        const grid = document.getElementById('agentGrid');
+        if (grid) {
+            observer.observe(grid, { childList: true, subtree: true });
+        }
+    }, 500);
+    
+    console.log('✅ Ultimate icon restorer applied');
+})();
+</script>
+
+<!-- ==================== PERMANENT AGENT ICON FIX ==================== -->
+<style>
+/* FORCE AGENT ICONS TO BE VISIBLE - ULTIMATE FIX */
+.agent-card {
+    display: flex !important;
+    flex-direction: column !important;
+    background: white !important;
+    border-radius: 10px !important;
+    padding: 15px !important;
+    margin: 10px 0 !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    min-height: 120px !important;
+    width: 100% !important;
+}
+
+.agent-header {
+    display: flex !important;
+    align-items: center !important;
+    gap: 15px !important;
+    margin-bottom: 15px !important;
+    width: 100% !important;
+}
+
+.agent-icon {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 45px !important;
+    height: 45px !important;
+    min-width: 45px !important;
+    min-height: 45px !important;
+    background: linear-gradient(135deg, #667eea, #764ba2) !important;
+    border-radius: 50% !important;
+    color: white !important;
+    font-size: 24px !important;
+    flex-shrink: 0 !important;
+}
+
+.agent-icon i, .agent-icon svg, .agent-icon .fas {
+    display: inline-block !important;
+    font-size: 24px !important;
+    color: white !important;
+    width: auto !important;
+    height: auto !important;
+    line-height: 1 !important;
+}
+
+.agent-info {
+    flex: 1 !important;
+}
+
+.agent-info h3 {
+    margin: 0 0 5px 0 !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    color: #333 !important;
+}
+
+.agent-status {
+    font-size: 14px !important;
+    color: #666 !important;
+}
+
+.progress-bar {
+    height: 6px !important;
+    background: #e0e0e0 !important;
+    border-radius: 3px !important;
+    overflow: hidden !important;
+    width: 100% !important;
+}
+
+.progress-fill {
+    height: 100% !important;
+    transition: width 0.3s ease !important;
+}
+
+.agent-card.pending .progress-fill {
+    background: #95a5a6 !important;
+    width: 0% !important;
+}
+
+.agent-card.active .progress-fill {
+    background: #4a90e2 !important;
+    width: 30% !important;
+}
+
+.agent-card.completed .progress-fill {
+    background: #27ae60 !important;
+    width: 100% !important;
+}
+</style>
+
+<script>
+// ULTIMATE AGENT ICON RESTORER
+(function() {
+    console.log('🛠️ Ultimate agent icon restorer running');
+    
+    // Force recreate agents array with icons
+    window.agents = [
+        ['Story Generator', 'pending', 0, '<i class="fas fa-pen-fancy"></i>'],
+        ['Script Director', 'pending', 0, '<i class="fas fa-video"></i>'],
+        ['Panel Generator', 'pending', 0, '<i class="fas fa-paint-brush"></i>']
+    ];
+    
+    // Override update function
+    window.updateAgentDisplay = function() {
+        const grid = document.getElementById('agentGrid');
+        if (!grid) {
+            console.log('Agent grid not found');
+            return;
+        }
+        
+        let html = '';
+        for (let i = 0; i < window.agents.length; i++) {
+            const [name, status, progress, icon] = window.agents[i];
+            let statusText = status === 'active' ? '⚡ Working...' : 
+                            status === 'completed' ? '✅ Complete' : '⏳ Pending';
+            let statusColor = status === 'active' ? '#4a90e2' : 
+                            status === 'completed' ? '#27ae60' : '#95a5a6';
+            
+            html += `<div class="agent-card ${status}">
+                <div class="agent-header">
+                    <span class="agent-icon">${icon}</span>
+                    <div class="agent-info">
+                        <h3>${name}</h3>
+                        <span class="agent-status" style="color:${statusColor}">${statusText}</span>
+                    </div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:${progress}%; background:${statusColor}"></div>
+                </div>
+            </div>`;
+        }
+        grid.innerHTML = html;
+        console.log('✅ Agent display updated with icons');
+    };
+    
+    // Run immediately and on every state change
+    window.updateAgentDisplay();
+    
+    // Also run after any DOM changes
+    const observer = new MutationObserver(function() {
+        window.updateAgentDisplay();
+    });
+    
+    setTimeout(function() {
+        const grid = document.getElementById('agentGrid');
+        if (grid) {
+            observer.observe(grid, { childList: true, subtree: true });
+        }
+    }, 500);
+    
+    console.log('✅ Ultimate icon restorer applied');
+})();
+</script>
+
+<script>
+// ==================== WORKING GENERATE STORY FUNCTION ====================
+    }
+    
+    try {
+        // Call backend
+        const response = await fetch('/generate-story', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                topic: userPrompt,
+                language: document.getElementById('language')?.value || 'en'
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const story = await response.json();
+        console.log("✅ Story received:", story);
+        
+        // Store story
+        window.currentStory = story;
+        
+        // Display story
+        const storyContent = document.getElementById('storyContent');
+        if (storyContent) {
+            let chars = story.characters ? story.characters.map(c => `<span class="character-tag">${c}</span>`).join('') : '';
+            let plots = story.plot ? story.plot.map(p => `<li>${p}</li>`).join('') : '';
+            
+            storyContent.innerHTML = `
+                <div class="story-title">${story.title || 'Adventure'}</div>
+                <div class="characters">${chars}</div>
+                <ol class="plot-points">${plots}</ol>
+            `;
+        }
+        
+        // Show story result
+        const storyResult = document.getElementById('storyResult');
+        if (storyResult) storyResult.style.display = 'block';
+        
+        // Enable comic button
+        const comicBtn = document.getElementById('comicBtn');
+        if (comicBtn) comicBtn.disabled = false;
+        
+        // Update agent to completed
+        if (typeof agents !== 'undefined') {
+            agents[0][1] = 'completed';
+            agents[0][2] = 100;
+            if (typeof updateAgentDisplay === 'function') {
+                updateAgentDisplay();
+            }
+        }
+        
+    } catch (error) {
+        console.error('❌ Error:', error);
+        alert('Failed to generate story. Please try again.');
+        
+        // Reset agent on error
+        if (typeof agents !== 'undefined') {
+            agents[0][1] = 'pending';
+            agents[0][2] = 0;
+            if (typeof updateAgentDisplay === 'function') {
+                updateAgentDisplay();
+            }
+        }
+    } finally {
+        // Hide loading
+        if (loadingOverlay) loadingOverlay.style.display = 'none';
+    }
+}
+</script>
+
+<script>
+// ==================== SINGLE GENERATE STORY FUNCTION ====================
+async function generateStory() {
+    console.log("📝 Generate Story clicked - SINGLE FUNCTION");
+    
+    const promptInput = document.getElementById('prompt');
+    if (!promptInput || !promptInput.value.trim()) {
+        alert('Please enter a prompt');
+        return;
+    }
+    
+    const userPrompt = promptInput.value.trim();
+    console.log("📝 Generating story for:", userPrompt);
+    
+    // Show loading
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const loadingMessage = document.getElementById('loadingMessage');
+    if (loadingOverlay) {
+        if (loadingMessage) loadingMessage.textContent = 'Generating story...';
+        loadingOverlay.style.display = 'flex';
+    }
+    
+    // Update agent
+    if (typeof agents !== 'undefined') {
+        agents[0][1] = 'active';
+        agents[0][2] = 50;
+        if (typeof updateAgentDisplay === 'function') {
+            updateAgentDisplay();
+        }
+    }
+    
+    try {
+        // Call backend
+        const response = await fetch('/generate-story', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                topic: userPrompt,
+                language: document.getElementById('language')?.value || 'en'
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const story = await response.json();
+        console.log("✅ Story received:", story);
+        
+        // Store story
+        window.currentStory = story;
+        
+        // Display story
+        const storyContent = document.getElementById('storyContent');
+        if (storyContent) {
+            let chars = story.characters ? story.characters.map(c => `<span class="character-tag">${c}</span>`).join('') : '';
+            let plots = story.plot ? story.plot.map(p => `<li>${p}</li>`).join('') : '';
+            
+            storyContent.innerHTML = `
+                <div class="story-title">${story.title || 'Adventure'}</div>
+                <div class="characters">${chars}</div>
+                <ol class="plot-points">${plots}</ol>
+            `;
+        }
+        
+        // Show story result
+        const storyResult = document.getElementById('storyResult');
+        if (storyResult) storyResult.style.display = 'block';
+        
+        // Enable comic button
+        const comicBtn = document.getElementById('comicBtn');
+        if (comicBtn) comicBtn.disabled = false;
+        
+        // Update agent to completed
+        if (typeof agents !== 'undefined') {
+            agents[0][1] = 'completed';
+            agents[0][2] = 100;
+            if (typeof updateAgentDisplay === 'function') {
+                updateAgentDisplay();
+            }
+        }
+        
+    } catch (error) {
+        console.error('❌ Error:', error);
+        alert('Failed to generate story. Please try again.');
+        
+        // Reset agent on error
+        if (typeof agents !== 'undefined') {
+            agents[0][1] = 'pending';
+            agents[0][2] = 0;
+            if (typeof updateAgentDisplay === 'function') {
+                updateAgentDisplay();
+            }
+        }
+    } finally {
+        // Hide loading
+        if (loadingOverlay) loadingOverlay.style.display = 'none';
+    }
+}
+</script>

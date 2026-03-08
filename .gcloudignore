@@ -1,0 +1,14 @@
+.git
+.gitignore
+README.md
+.env
+.env.example
+.vscode
+.idea
+__pycache__
+*.pyc
+venv
+env
+tests/
+docs/
+.github/

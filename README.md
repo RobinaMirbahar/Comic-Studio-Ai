@@ -1,4 +1,4 @@
-# 🎨 ComicCrafter AI - Multi-Agent Comic Generator
+# 🎨 Comic Studio AI - Multi-Agent Comic Generator
 
 <div align="center">
 
@@ -30,7 +30,7 @@
 
 </div>
 
-**Robina Mirbahar** is a Google Developer Expert in Machine Learning and Cloud Engineer who built ComicCrafter AI from the ground up for the Gemini Live Agent Challenge. With deep expertise in multi-agent systems, cloud architecture, and generative AI, Robina designed and implemented every component of this project—from the frontend UI to the backend microservices, from the agent coordination logic to the cloud deployment on Google Cloud Run.
+**Robina Mirbahar** is a Google Developer Expert in Machine Learning and Cloud Engineer who built Comic Studio Ai AI from the ground up for the Gemini Live Agent Challenge. With deep expertise in multi-agent systems, cloud architecture, and generative AI, Robina designed and implemented every component of this project—from the frontend UI to the backend microservices, from the agent coordination logic to the cloud deployment on Google Cloud Run.
 
 ---
 
@@ -128,7 +128,7 @@ graph LR
 
 ## 🍌 The Secret Sauce: nano-banana-pro-preview
 
-The **nano-banana-pro-preview** model is the powerhouse behind ComicCrafter AI. This specialized Gemini model is optimized for comic generation, offering several key advantages:
+The **nano-banana-pro-preview** model is the powerhouse behind Comic Studio Ai AI. This specialized Gemini model is optimized for comic generation, offering several key advantages:
 
 ### Why nano-banana-pro-preview?
 
@@ -647,7 +647,7 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 
 </div>
 
-**Robina Mirbahar** is a Google Developer Expert in Machine Learning and a Cloud Engineer who built ComicCrafter AI from the ground up for the Gemini Live Agent Challenge. With deep expertise in multi-agent systems, cloud architecture, and generative AI, Robina designed and implemented every component of this project.
+**Robina Mirbahar** is a Google Developer Expert in Machine Learning and a Cloud Engineer who built Comic Studio Ai AI from the ground up for the Gemini Live Agent Challenge. With deep expertise in multi-agent systems, cloud architecture, and generative AI, Robina designed and implemented every component of this project.
 
 ### 🏆 **Expertise Applied**
 

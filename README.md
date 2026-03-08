@@ -30,7 +30,7 @@
 
 </div>
 
-**Robina Mirbahar** is a Google Developer Expert in Machine Learning and Cloud Engineer who built Comic Studio Ai AI from the ground up for the Gemini Live Agent Challenge. With deep expertise in multi-agent systems, cloud architecture, and generative AI, Robina designed and implemented every component of this project—from the frontend UI to the backend microservices, from the agent coordination logic to the cloud deployment on Google Cloud Run.
+**Robina Mirbahar** is a Google Developer Expert in Machine Learning and Cloud Engineer who built Comic Studio AI from the ground up for the Gemini Live Agent Challenge. With deep expertise in multi-agent systems, cloud architecture, and generative AI, Robina designed and implemented every component of this project—from the frontend UI to the backend microservices, from the agent coordination logic to the cloud deployment on Google Cloud Run.
 
 ---
 
@@ -128,7 +128,7 @@ graph LR
 
 ## 🍌 The Secret Sauce: nano-banana-pro-preview
 
-The **nano-banana-pro-preview** model is the powerhouse behind Comic Studio Ai AI. This specialized Gemini model is optimized for comic generation, offering several key advantages:
+The **nano-banana-pro-preview** model is the powerhouse behind Comic Studio AI. This specialized Gemini model is optimized for comic generation, offering several key advantages:
 
 ### Why nano-banana-pro-preview?
 
@@ -337,7 +337,7 @@ No complex vector mathematics or Euclidean distance formulas needed—just smart
 ## 📁 Repository Structure
 
 ```
-comic-crafter-ai/
+comic-studio-ai/
 ├── 📂 agents/                      # Multi-agent system
 │   ├── 📄 story_generator.py       # Gemini-powered story creation
 │   ├── 📄 panel_generator.py       # 4-panel comic generation with nano-banana-pro-preview
@@ -397,8 +397,8 @@ comic-crafter-ai/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/robinamirbahar/comic-crafter-ai.git
-   cd comic-crafter-ai
+   git clone https://github.com/robinamirbahar/comic-studio-ai.git
+   cd comic-studio-ai
    ```
 
 2. **Create virtual environment**
@@ -647,7 +647,7 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 
 </div>
 
-**Robina Mirbahar** is a Google Developer Expert in Machine Learning and a Cloud Engineer who built Comic Studio Ai AI from the ground up for the Gemini Live Agent Challenge. With deep expertise in multi-agent systems, cloud architecture, and generative AI, Robina designed and implemented every component of this project.
+**Robina Mirbahar** is a Google Developer Expert in Machine Learning and a Cloud Engineer who built Comic Studio AI from the ground up for the Gemini Live Agent Challenge. With deep expertise in multi-agent systems, cloud architecture, and generative AI, Robina designed and implemented every component of this project.
 
 ### 🏆 **Expertise Applied**
 
@@ -677,7 +677,7 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 <div align="center">
 
 [![Portfolio](https://img.shields.io/badge/🌐%20Portfolio-robinamirbahar.com-667eea?style=for-the-badge)](https://robinamirbahar.com)
-[![Email](https://img.shields.io/badge/📧%20Email-mallah.robina@gmail.com-D14836?style=for-the-badge)](mailto:robina.mirbahar@example.com)
+[![Email](https://img.shields.io/badge/📧%20Email-mallah.robina@gmail.com-D14836?style=for-the-badge)](mailto:mallah.robina@gmail.com)
 
 </div>
 

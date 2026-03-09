@@ -48,7 +48,7 @@
 - [🚀 Quick Start](#-quick-start)
 - [🎮 Button Guide](#-button-guide)
 - [⚙️ Configuration](#️-configuration)
-- [🎨 Usage Guide](#-usage-guide)
+- [📚 Documentation](#-documentation)
 - [🌐 Deployment to Cloud Run](#-deployment-to-cloud-run)
 - [🧪 Testing](#-testing)
 - [📊 Performance Metrics](#-performance-metrics)
@@ -520,7 +520,123 @@ google-cloud-secret-manager==2.16.0
 
 ---
 
+## 🎨 Usage Guide
+
+### 1. **Generate a Comic with nano-banana**
+
+```bash
+# Via curl
+curl -X POST http://localhost:8080/generate-pages-with-characters \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompt": "mouse on road",
+    "style": "manga",
+    "panels": 4
+  }'
+```
+
+### 2. **Upload Character**
+
+```bash
+curl -X POST http://localhost:8080/api/upload-character \
+  -F "file=@/path/to/character.jpg"
+```
+
+### 3. **Download as PDF**
+
+```bash
+curl -X POST http://localhost:8080/download-pdf \
+  -H "Content-Type: application/json" \
+  -d '{
+    "pages": ["/static/comics/page_1.png", ...],
+    "title": "My Comic"
+  }' \
+  --output comic.pdf
+```
+
+### 4. **Voice Commands**
+
+```javascript
+// Frontend voice command example
+const commands = {
+    "stop": stopGeneration,
+    "new story": regenerateStory,
+    "generate comic": generateComic,
+    "read aloud": narrateStory
+};
+```
+
 ---
+
+## 🌐 Deployment to Cloud Run
+
+### 1. **Set up Google Cloud**
+
+```bash
+# Install Google Cloud SDK
+# https://cloud.google.com/sdk/docs/install
+
+# Authenticate
+gcloud auth login
+
+# Set project
+gcloud config set project YOUR_PROJECT_ID
+
+# Enable required APIs
+gcloud services enable run.googleapis.com \
+    secretmanager.googleapis.com \
+    cloudbuild.googleapis.com
+```
+
+### 2. **Store API Key in Secret Manager**
+
+```bash
+# Create secret
+echo -n "YOUR_GEMINI_API_KEY" | \
+    gcloud secrets create gemini-api-key \
+    --data-file=-
+
+# Grant access to Cloud Run
+gcloud secrets add-iam-policy-binding gemini-api-key \
+    --member="serviceAccount:YOUR_PROJECT_NUMBER-compute@developer.gserviceaccount.com" \
+    --role="roles/secretmanager.secretAccessor"
+```
+
+### 3. **Build and Deploy**
+
+```bash
+# Build container
+gcloud builds submit --tag gcr.io/YOUR_PROJECT_ID/comic-generator
+
+# Deploy to Cloud Run
+gcloud run deploy comic-generator \
+    --image gcr.io/YOUR_PROJECT_ID/comic-generator \
+    --platform managed \
+    --region us-central1 \
+    --allow-unauthenticated \
+    --memory 2Gi \
+    --cpu 2 \
+    --timeout 300 \
+    --set-secrets=GEMINI_API_KEY=gemini-api-key:latest
+```
+
+---
+
+## 🧪 Testing
+
+### Run Unit Tests
+
+```bash
+# Run all tests
+pytest tests/
+
+# Run specific test
+pytest tests/test_agents.py -v
+
+# Run with coverage
+pytest --cov=agents tests/
+```
+
 ---
 
 ## 📊 Performance Metrics
@@ -633,5 +749,16 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 [![GitHub stars](https://img.shields.io/github/stars/RobinaMirbahar/Comic-Studio-Ai?style=social)](https://github.com/RobinaMirbahar/Comic-Studio-Ai)
 
 *March 9, 2026 • Version 2.0.0*
+
+</div>
+
+---
+
+## 🚀 **Ready to Create?**
+
+<div align="center">
+
+**⭐ Star this repo if you found it useful!**  
+**🐛 Found an issue? [Report it here](https://github.com/RobinaMirbahar/Comic-Studio-Ai/issues)**
 
 </div>

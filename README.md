@@ -613,24 +613,6 @@ pytest --cov=agents tests/
 
 ---
 
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
----
-
-## 📄 License
-
-Distributed under the Apache 2.0 License. See `LICENSE` for more information.
-
----
-
 ## 🙏 Acknowledgments
 
 ### 👩‍💻 **Project Creator & Lead Developer**
@@ -672,87 +654,104 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 
 ---
 
-## 🎨 **Made with Love & AI**
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+Distributed under the Apache 2.0 License. See `LICENSE` for more information.
+
+---
+
+## 🎨 Made with Love & AI
 
 <div align="center">
 
 ### 💖 **Robina Mirbahar** 💖
 *Google Developer Expert in Machine Learning* • *Cloud Engineer*
 
----
+<br>
 
-### 🦄 **My Superpowers**
+**🦄 My Superpowers**
 
-[![GDE](https://img.shields.io/badge/Google%20Developer%20Expert-Machine%20Learning-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://developers.google.com/profile/u/robinamirbahar)
+[![GDE](https://img.shields.io/badge/Google%20Developer%20Expert-Machine%20Learning-4285F4?style=flat-square&logo=google&logoColor=white)](https://developers.google.com/profile/u/robinamirbahar)
+[![Cloud Engineer](https://img.shields.io/badge/Google%20Cloud-Certified-4285F4?style=flat-square&logo=google-cloud&logoColor=white)](https://www.credly.com/users/robinamirbahar)
+[![Credly](https://img.shields.io/badge/Credly-Profile-FF6B00?style=flat-square&logo=credly&logoColor=white)](https://www.credly.com/users/robinamirbahar)
 
-[![Cloud Engineer](https://img.shields.io/badge/Google%20Cloud-Certified-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white)](https://www.credly.com/users/robinamirbahar)
+<br>
 
-[![Credly](https://img.shields.io/badge/Credly-Profile-FF6B00?style=for-the-badge&logo=credly&logoColor=white)](https://www.credly.com/users/robinamirbahar)
+**🌈 Find Me Here**
 
----
+[![Email](https://img.shields.io/badge/Email-mallah.robina@gmail.com-D14836?style=flat-square&logo=gmail&logoColor=white)](mailto:mallah.robina@gmail.com)
+[![Twitter](https://img.shields.io/badge/Twitter-@robinamirbahar-1DA1F2?style=flat-square&logo=twitter&logoColor=white)](https://twitter.com/robinamirbahar)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-robinamirbahar-0077B5?style=flat-square&logo=linkedin&logoColor=white)](https://linkedin.com/in/robinamirbahar)
+[![GitHub](https://img.shields.io/badge/GitHub-robinamirbahar-333?style=flat-square&logo=github&logoColor=white)](https://github.com/robinamirbahar)
+[![Instagram](https://img.shields.io/badge/Instagram-@robinamirbahar-E4405F?style=flat-square&logo=instagram&logoColor=white)](https://instagram.com/robinamirbahar)
 
-### 🌈 **Find Me Here**
-
-[![Email](https://img.shields.io/badge/Email-mallah.robina@gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:mallah.robina@gmail.com)
-
-[![Twitter](https://img.shields.io/badge/Twitter-@robinamirbahar-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/robinamirbahar)
-
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-robinamirbahar-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/robinamirbahar)
-
-[![GitHub](https://img.shields.io/badge/GitHub-robinamirbahar-333?style=for-the-badge&logo=github&logoColor=white)](https://github.com/robinamirbahar)
-
-[![Instagram](https://img.shields.io/badge/Instagram-@robinamirbahar-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://instagram.com/robinamirbahar)
+</div>
 
 ---
 
-## 🌟 **Big Thank Yous To...**
-
-**🤖 Google Gemini Team** — For the magical **nano-banana-pro-preview** that makes comics in a snap!
-
-**☁️ Google Cloud Platform** — For the cozy Cloud Run home & Secret Manager hugs
-
-**⚡ FastAPI Team** — For the super speedy framework
-
-**🖼️ Open Source Community** — For PIL, ReportLab and all the free hugs (libraries)
-
-**👥 Beta Testers** — For squishing bugs and sending love
-
----
-
-## 🧁 **A Sweet Treat of a Project**
+## 🌟 Big Thank Yous
 
 <div align="center">
 
-### 🍌 Powered by **nano-banana-pro-preview** 🍌
-*The secret sauce that's more fun than a barrel of monkeys!*
+| | |
+|---|---|
+| **🤖 Google Gemini Team** | For the magical **nano-banana-pro-preview** |
+| **☁️ Google Cloud Platform** | For Cloud Run & Secret Manager |
+| **⚡ FastAPI Team** | For the super speedy framework |
+| **🖼️ Open Source Community** | For PIL, ReportLab & more |
+| **👥 Beta Testers** | For squishing bugs & sending love |
+
+</div>
 
 ---
 
-### 👧💻 **Built with sparkles and code by**
+## 🧁 A Sweet Treat
 
-## [✨ Robina Mirbahar ✨](https://github.com/robinamirbahar)
+<div align="center">
+
+### 🍌 **Powered by nano-banana-pro-preview**
+*The secret sauce behind 3-second comics*
+
+<br>
+
+**Built with 💖 by [Robina Mirbahar](https://github.com/robinamirbahar)**  
 *Google Developer Expert in Machine Learning • Cloud Engineer*
 
-> *"Turning 🐭 mouse on road into 🎨 comic magic in 3 seconds flat!"*
+> *"Turning 🐭 mouse on road into 🎨 comic magic!"*
 
----
+<br>
 
-### 🏆 **Gemini Live Agent Challenge**  
+### 🏆 **Gemini Live Agent Challenge**
 **Category: Creative Storyteller**
 
 [![Devpost](https://img.shields.io/badge/Devpost-Submission-003E54?style=for-the-badge&logo=devpost&logoColor=white)](https://devpost.com/software/comic-studio-ai)
+[![GitHub stars](https://img.shields.io/github/stars/RobinaMirbahar/Comic-Studio-Ai?style=social)](https://github.com/RobinaMirbahar/Comic-Studio-Ai)
 
-[![GitHub stars](https://img.shields.io/github/stars/RobinaMirbahar/Comic-Studio-Ai?style=social&label=Star%20me!)](https://github.com/RobinaMirbahar/Comic-Studio-Ai)
+<br>
+
+*March 9, 2026 • Version 2.0.0*
+
+</div>
 
 ---
 
-### ⏰ **Last Updated**
-*March 9, 2026* • **Version 2.0.0** • *Now with extra cuteness!* 🍭
+## 🚀 **Ready to Create?**
+
+<div align="center">
+
+**⭐ Star this repo if you found it useful!**  
+**🐛 Found an issue? [Report it here](https://github.com/RobinaMirbahar/Comic-Studio-Ai/issues)**
 
 </div>
-
-### ⏰ **Last Updated**
-*March 9, 2026* • **Version 2.0.0** • *Now with extra cuteness!* 🍭
-
-</div>
-

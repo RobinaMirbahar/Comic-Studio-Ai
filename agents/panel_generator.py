@@ -13,10 +13,12 @@ class PanelGeneratorAgent:
     """Generates comic images based on user prompt"""
     
     def __init__(self):
-        self.model = genai.GenerativeModel("models/nano-banana-pro-preview")
+        # Get model from environment, default to nano-banana-pro-preview
+        model_name = os.getenv("GEMINI_MODEL", "models/nano-banana-pro-preview")
+        self.model = genai.GenerativeModel(model_name)
         self.name = "panel_generator"
         self.character_processor = None
-        print("✅ Panel Generator Ready")
+        print(f"✅ Panel Generator Ready with model: {model_name}")
     
     def set_character_processor(self, processor):
         self.character_processor = processor
@@ -27,6 +29,7 @@ class PanelGeneratorAgent:
         print(f"\n{'='*50}")
         print(f"🎨 GENERATING COMIC FOR PROMPT: '{prompt}'")
         print(f"🎨 STYLE: {style}")
+        print(f"🤖 Using model: {self.model.model_name}")
         print(f"{'='*50}\n")
         
         os.makedirs(output_dir, exist_ok=True)
@@ -38,6 +41,10 @@ class PanelGeneratorAgent:
         plot = story.get('plot', ['Scene 1', 'Scene 2', 'Scene 3', 'Scene 4'])
         
         main_character = characters[0] if characters else "Hero"
+        all_characters = ", ".join(characters)
+        
+        print(f"🎯 MAIN CHARACTER: {main_character}")
+        print(f"👥 ALL CHARACTERS: {all_characters}")
         
         # Style mapping
         style_desc = {
@@ -45,7 +52,7 @@ class PanelGeneratorAgent:
             "manga": "japanese manga, black and white, screentones, dynamic",
             "western": "american comic book, bold colors, superhero style",
             "anime": "japanese anime, vibrant colors, cel-shaded",
-            "watercolor": "watercolor painting, soft colors, artistic",
+            "watercolor": "watercolor painting, soft gradients, artistic",
             "vintage": "vintage 1950s comic, muted colors, halftone dots"
         }
         
@@ -74,7 +81,7 @@ class PanelGeneratorAgent:
             
             SCENE: {scenes[i]}
             
-            CHARACTERS: {main_character} is the main character. Other characters: {', '.join(characters[1:])}
+            CHARACTERS: {main_character} is the main character. Other characters: {all_characters}
             
             REQUIREMENTS:
             - This is Panel {i+1} of 4
@@ -89,15 +96,33 @@ class PanelGeneratorAgent:
             print(f"📦 Generating panel {i+1} for: '{prompt[:30]}...'")
             
             try:
-                response = self.model.generate_content(
-                    full_prompt,
-                    generation_config={
-                        "temperature": 0.9,
-                        "max_output_tokens": 4096,
-                    }
-                )
+                # Add retry logic for quota issues
+                import time
+                max_retries = 3
+                response = None
                 
-                if response.parts and hasattr(response.parts[0], 'inline_data'):
+                for attempt in range(max_retries):
+                    try:
+                        response = self.model.generate_content(
+                            full_prompt,
+                            generation_config={
+                                "temperature": 0.9,
+                                "max_output_tokens": 4096,
+                            }
+                        )
+                        break  # Success, exit retry loop
+                    except Exception as e:
+                        if "429" in str(e) or "quota" in str(e).lower():
+                            if attempt < max_retries - 1:
+                                wait_time = (attempt + 1) * 5
+                                print(f"⚠️ Quota exceeded, waiting {wait_time}s before retry {attempt+2}/{max_retries}")
+                                time.sleep(wait_time)
+                            else:
+                                raise e
+                        else:
+                            raise e
+                
+                if response and response.parts and hasattr(response.parts[0], 'inline_data'):
                     image_data = response.parts[0].inline_data.data
                     image = Image.open(BytesIO(image_data))
                     
@@ -111,7 +136,7 @@ class PanelGeneratorAgent:
                     print(f"⚠️ No image data for panel {i+1}")
                     pages.append(self._create_fallback(output_dir, i+1, prompt, style, main_character))
                 
-                time.sleep(2)
+                time.sleep(2)  # Delay to avoid rate limits
                 
             except Exception as e:
                 print(f"⚠️ Error for panel {i+1}: {e}")
@@ -137,7 +162,9 @@ class PanelGeneratorAgent:
             draw.text((20, 150), f"CHARACTER: {character}", fill=(0, 150, 0))
             
             # Draw based on prompt (but NOT camel unless specified)
-            if "mouse" in prompt.lower():
+            prompt_lower = prompt.lower()
+            
+            if "mouse" in prompt_lower:
                 # Draw a mouse
                 draw.ellipse((200, 200, 300, 280), outline=(0, 0, 0), width=2)
                 draw.ellipse((280, 180, 320, 220), outline=(0, 0, 0), width=2)
@@ -148,7 +175,30 @@ class PanelGeneratorAgent:
                 draw.ellipse((350, 120, 450, 170), outline=(0, 0, 0), width=2)
                 draw.text((370, 135), "Squeak!", fill=(0, 0, 0))
                 
-            elif "road" in prompt.lower():
+            elif "cat" in prompt_lower:
+                # Draw a cat
+                draw.ellipse((200, 200, 300, 280), outline=(0, 0, 0), width=2)
+                draw.ellipse((220, 180, 260, 220), outline=(0, 0, 0), width=2)
+                draw.ellipse((280, 180, 320, 220), outline=(0, 0, 0), width=2)
+                draw.line((240, 160, 230, 140), fill=(0, 0, 0), width=2)
+                draw.line((300, 160, 310, 140), fill=(0, 0, 0), width=2)
+                
+                # Add bubble
+                draw.ellipse((350, 120, 450, 170), outline=(0, 0, 0), width=2)
+                draw.text((370, 135), "Meow!", fill=(0, 0, 0))
+                
+            elif "dog" in prompt_lower:
+                # Draw a dog
+                draw.ellipse((200, 200, 300, 280), outline=(0, 0, 0), width=2)
+                draw.ellipse((280, 180, 330, 230), outline=(0, 0, 0), width=2)
+                draw.ellipse((300, 190, 310, 200), fill=(0, 0, 0))
+                draw.ellipse((170, 190, 200, 220), outline=(0, 0, 0), width=2)
+                
+                # Add bubble
+                draw.ellipse((350, 120, 450, 170), outline=(0, 0, 0), width=2)
+                draw.text((370, 135), "Woof!", fill=(0, 0, 0))
+                
+            elif "car" in prompt_lower or "road" in prompt_lower:
                 # Draw a road scene
                 draw.rectangle((100, 300, 400, 350), fill=(100, 100, 100))
                 draw.line((100, 325, 400, 325), fill=(255, 255, 0), width=3)
@@ -161,29 +211,6 @@ class PanelGeneratorAgent:
                 # Add bubble
                 draw.ellipse((320, 150, 420, 200), outline=(255, 0, 0), width=2)
                 draw.text((340, 165), "Vroom!", fill=(255, 0, 0))
-                
-            elif "cat" in prompt.lower():
-                # Draw a cat
-                draw.ellipse((200, 200, 300, 280), outline=(0, 0, 0), width=2)
-                draw.ellipse((220, 180, 260, 220), outline=(0, 0, 0), width=2)
-                draw.ellipse((280, 180, 320, 220), outline=(0, 0, 0), width=2)
-                draw.line((240, 160, 230, 140), fill=(0, 0, 0), width=2)
-                draw.line((300, 160, 310, 140), fill=(0, 0, 0), width=2)
-                
-                # Add bubble
-                draw.ellipse((350, 120, 450, 170), outline=(0, 0, 0), width=2)
-                draw.text((370, 135), "Meow!", fill=(0, 0, 0))
-                
-            elif "dog" in prompt.lower():
-                # Draw a dog
-                draw.ellipse((200, 200, 300, 280), outline=(0, 0, 0), width=2)
-                draw.ellipse((280, 180, 330, 230), outline=(0, 0, 0), width=2)
-                draw.ellipse((300, 190, 310, 200), fill=(0, 0, 0))
-                draw.ellipse((170, 190, 200, 220), outline=(0, 0, 0), width=2)
-                
-                # Add bubble
-                draw.ellipse((350, 120, 450, 170), outline=(0, 0, 0), width=2)
-                draw.text((370, 135), "Woof!", fill=(0, 0, 0))
                 
             else:
                 # Draw a generic character
@@ -212,7 +239,6 @@ class PanelGeneratorAgent:
             print(f"❌ Fallback failed: {e}")
             return ""
 
-    # Add this method to help debug
     def debug_generate(self, story, language="en", style="manga", character_ids=None, prompt="", output_dir="static/comics"):
         print(f"\n🔍 DEBUG - PanelGenerator received:")
         print(f"   prompt: '{prompt}'")

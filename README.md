@@ -671,21 +671,20 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 - **Cloud Infrastructure**: Set up auto-scaling deployment on Cloud Run
 
 ---
-
 ## 🎨 **Made with Love & AI**
 
 <div align="center">
 
 ### 💖 **Robina Mirbahar** 💖
-*小小 Google Developer Expert in Machine Learning* • *Cloud Engineer*
+*Google Developer Expert in Machine Learning* • *Cloud Engineer*
 
 | 🦄 **My Superpowers** | 🌈 **Find Me Here** |
 |:---:|:---:|
-| ![GDE](https://img.shields.io/badge/✨%20Google%20Developer%20Expert-Machine%20Learning-4285F4?style=for-the-badge&logo=google&logoColor=white) | 📧 [**Say Hi!**](mailto:mallah.robina@gmail.com) |
-| ![Cloud](https://img.shields.io/badge/☁️%20Google%20Cloud-Certified-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white) | 🐦 [**Tweet Tweet**](https://twitter.com/robinamirbahar) |
-| ![Credly](https://img.shields.io/badge/🏆%20Credly-Star-FF6B00?style=for-the-badge&logo=credly&logoColor=white) | 💼 [**Let's Connect**](https://linkedin.com/in/robinamirbahar) |
-| | 🐙 [**Code Cutie**](https://github.com/robinamirbahar) |
-| | 📸 [**Pic Pals**](https://instagram.com/robinamirbahar) |
+| [![GDE](https://img.shields.io/badge/✨%20Google%20Developer%20Expert-Machine%20Learning-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://developers.google.com/profile/u/robinamirbahar) | [![Email](https://img.shields.io/badge/📧%20Say%20Hi!-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:mallah.robina@gmail.com) |
+| [![Cloud Engineer](https://img.shields.io/badge/☁️%20Google%20Cloud-Certified-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white)](https://www.credly.com/users/robinamirbahar) | [![Twitter](https://img.shields.io/badge/🐦%20Tweet%20Tweet-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/robinamirbahar) |
+| [![Credly](https://img.shields.io/badge/🏆%20Credly%20Star-FF6B00?style=for-the-badge&logo=credly&logoColor=white)](https://www.credly.com/users/robinamirbahar) | [![LinkedIn](https://img.shields.io/badge/💼%20Let's%20Connect-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/robinamirbahar) |
+| | [![GitHub](https://img.shields.io/badge/🐙%20Code%20Cutie-333?style=for-the-badge&logo=github&logoColor=white)](https://github.com/robinamirbahar) |
+| | [![Instagram](https://img.shields.io/badge/📸%20Pic%20Pals-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://instagram.com/robinamirbahar) |
 
 </div>
 
@@ -727,8 +726,8 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 ### 🏆 **Gemini Live Agent Challenge**  
 **Category: Creative Storyteller**  
 
-[![Devpost](https://img.shields.io/badge/📋%20Devpost-Submission-003E54?style=for-the-badge&logo=devpost&logoColor=white)](https://devpost.com/software/comic-studio-ai)
-[![GitHub stars](https://img.shields.io/github/stars/RobinaMirbahar/Comic-Studio-Ai?style=social&label=⭐%20Star%20me!)](https://github.com/RobinaMirbahar/Comic-Studio-Ai/stargazers)
+[![Devpost](https://img.shields.io/badge/📋%20View%20Submission-003E54?style=for-the-badge&logo=devpost&logoColor=white)](https://devpost.com/software/comic-studio-ai)
+[![GitHub stars](https://img.shields.io/github/stars/RobinaMirbahar/Comic-Studio-Ai?style=social&label=⭐%20Star%20me!)](https://github.com/RobinaMirbahar/Comic-Studio-Ai)
 
 ---
 

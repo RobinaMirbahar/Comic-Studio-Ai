@@ -1,5 +1,354 @@
-yes
-id_*
+# ███████╗██╗████████╗ ██████╗ ███╗   ██╗ ██████╗ ██████╗ ███████╗
+# ██╔════╝██║╚══██╔══╝██╔════╝ ████╗  ██║██╔════╝ ██╔══██╗██╔════╝
+# █████╗  ██║   ██║   ██║  ███╗██╔██╗ ██║██║  ███╗██████╔╝█████╗
+# ██╔══╝  ██║   ██║   ██║   ██║██║╚██╗██║██║   ██║██╔══██╗██╔══╝
+# ██║     ██║   ██║   ╚██████╔╝██║ ╚████║╚██████╔╝██║  ██║███████╗
+# ╚═╝     ╚═╝   ╚═╝    ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+#                    Professional .gitignore for Comic Studio AI
+#                          Gemini Live Agent Challenge
+#                      Created by Robina Mirbahar (GDE)
+
+# ============================================================================
+# 🔐 SECURITY & SECRETS - NEVER COMMIT THESE!
+# ============================================================================
+
+# SSH Keys (CRITICAL - NEVER COMMIT!)
 *.key
 *.pem
 *.priv
+*.pkk
+*.pub
+id_*
+yes
+no
+
+# API Keys & Secrets
+*.secret
+*.token
+*.auth
+*.credentials
+*.p12
+*.pfx
+*.ovpn
+api_key.txt
+apikey.txt
+secret_key.txt
+
+# Environment Files
+.env
+.env.*
+!.env.example
+*.env.local
+*.env.dev
+*.env.prod
+*.env.staging
+environment.yaml
+environment.yml
+
+# Configuration Files with Secrets
+*.cfg
+*.conf
+*.config
+!requirements.txt
+!pyproject.toml
+!setup.cfg
+
+# ============================================================================
+# 🐍 PYTHON-SPECIFIC
+# ============================================================================
+
+# Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+pythonenv*
+*.venv
+.venv/
+virtualenv/
+venv-local/
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+pip-selfcheck.json
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+pytestdebug.log
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+*.ipynb
+
+# Profiling
+*.prof
+*.stats
+
+# ============================================================================
+# ☁️ GOOGLE CLOUD
+# ============================================================================
+
+# Google Cloud credentials
+*.json.enc
+*.json.gpg
+client-secret*.json
+*.json.key
+application_default_credentials.json
+gcloud-credentials.json
+service-account-key.json
+service-account-creds.json
+*.private.json
+*.public.json
+
+# Cloud Run
+*.url
+*.deployed
+
+# ============================================================================
+# 🖥️ IDE & EDITORS
+# ============================================================================
+
+# VS Code
+.vscode/
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+!.vscode/settings.json
+*.code-workspace
+
+# IntelliJ / PyCharm
+.idea/
+*.iml
+*.iws
+*.ipr
+.idea_modules/
+atlassian-ide-plugin.xml
+
+# Vim
+*.swp
+*.swo
+*~
+.*.swp
+.*.swo
+Session.vim
+.netrwhist
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Eclipse
+.project
+.classpath
+.settings/
+.metadata/
+
+# ============================================================================
+# 🖼️ STATIC ASSETS & GENERATED FILES
+# ============================================================================
+
+# Generated comics (keep directory structure, ignore files)
+static/comics/*
+!static/comics/.gitkeep
+
+# Uploaded characters (keep directory structure, ignore files)
+static/uploads/*
+!static/uploads/.gitkeep
+
+# Generated images
+*.generated.png
+*.processed.jpg
+*.thumb.jpg
+
+# ============================================================================
+# 📊 LOGS & DATABASES
+# ============================================================================
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+*.log.*
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+
+# ============================================================================
+# 🧪 TESTING & COVERAGE
+# ============================================================================
+
+# Testing
+.pytest_cache/
+.coverage
+.coverage.*
+*.cover
+htmlcov/
+.tox/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+*.tst
+*.test
+
+# ============================================================================
+# 📦 DEPENDENCIES
+# ============================================================================
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# ============================================================================
+# 🗑️ OS-SPECIFIC FILES
+# ============================================================================
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+*.icloud
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ============================================================================
+# 📄 DOCUMENTATION TEMPORARY FILES
+# ============================================================================
+
+# Mermaid diagram fragments (accidental files)
+B[*]
+C[*]
+D[*]
+E[*]
+F[*]
+G[*]
+H[*]
+*[Story]*
+*[Panel]*
+*[Bubble]*
+*[Generated]*
+*.mermaid.tmp
+*.mmd.tmp
+
+# ============================================================================
+# 🚀 DEPLOYMENT & CI/CD
+# ============================================================================
+
+# Deployment
+*.deployed
+*.revision
+*.tag
+*.version
+
+# Cloud Build
+cloudbuild.yaml.tmp
+*.cloudbuild.yaml
+
+# ============================================================================
+# 📁 PROJECT-SPECIFIC
+# ============================================================================
+
+# Comic Studio AI specific
+comic_studio_ai.egg-info/
+dist/
+build/
+*.pid
+*.sock
+*.port
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+*.orig
+
+# ============================================================================
+# ⚠️  DO NOT COMMIT IGNORED FILES
+# ============================================================================
+# This .gitignore ensures your repository stays clean and secure.
+# Last updated: March 9, 2026
+# For Comic Studio AI - Gemini Live Agent Challenge

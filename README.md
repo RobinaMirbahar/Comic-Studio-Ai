@@ -8,6 +8,9 @@
 [![Google Gemini](https://img.shields.io/badge/Google%20Gemini-nano--banana--pro--preview-orange)](https://deepmind.google/technologies/gemini/)
 [![Cloud Run](https://img.shields.io/badge/Cloud%20Run-Deployed-blue)](https://cloud.google.com/run)
 [![GDE](https://img.shields.io/badge/GDE-Machine%20Learning-4285F4)](https://developers.google.com/community/experts)
+[![GitHub last commit](https://img.shields.io/github/last-commit/RobinaMirbahar/Comic-Studio-Ai)](https://github.com/RobinaMirbahar/Comic-Studio-Ai)
+[![GitHub issues](https://img.shields.io/github/issues/RobinaMirbahar/Comic-Studio-Ai)](https://github.com/RobinaMirbahar/Comic-Studio-Ai/issues)
+[![GitHub stars](https://img.shields.io/github/stars/RobinaMirbahar/Comic-Studio-Ai?style=social)](https://github.com/RobinaMirbahar/Comic-Studio-Ai/stargazers)
 
 **Turn simple prompts into professional 4-panel comics with AI-powered storytelling, automatic speech bubbles, and voice narration.**
 

@@ -72,16 +72,14 @@
 ### 🎨 **Art Styles**
 
 ```
-┌────────────┬────────────────────────────────────────────┐
-│ Style      │ Description                                │
-├────────────┼────────────────────────────────────────────┤
-│ 🇯🇵 Manga   │ Black and white, screentones, speed lines │
-│ 🇺🇸 Western │ Bold outlines, vibrant colors, superhero  │
-│ ✨ Anime    │ Vibrant colors, glossy eyes, cel-shaded  │
-│ ✏️ Sketch   │ Pencil sketch, rough lines, hand-drawn   │
-│ 🎨 Watercolor│ Soft gradients, painted look             │
-│ 📰 Vintage  │ 1950s style, muted colors, halftone dots │
-└────────────┴────────────────────────────────────────────┘
+| Style | Description |
+|-------|-------------|
+| 🇯🇵 Manga | Black and white, screentones, speed lines |
+| 🇺🇸 Western | Bold outlines, vibrant colors, superhero |
+| ✨ Anime | Vibrant colors, glossy eyes, cel-shaded |
+| ✏️ Sketch | Pencil sketch, rough lines, hand-drawn |
+| 🎨 Watercolor | Soft gradients, painted look |
+| 📰 Vintage | 1950s style, muted colors, halftone dots |
 ```
 
 ### 💬 **Bubble Types**

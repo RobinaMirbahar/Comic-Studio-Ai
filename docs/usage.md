@@ -2,6 +2,7 @@
 
 ## 📋 Table of Contents
 - [Quick Start](#quick-start)
+- [🎨 Your First Comic - Visual Guide](#-your-first-comic---visual-guide)
 - [Web Interface Guide](#web-interface-guide)
 - [API Usage Guide](#api-usage-guide)
 - [Voice Commands](#voice-commands)
@@ -34,11 +35,135 @@ python app.py
 http://localhost:8080
 ```
 
-### 3. **Your First Comic**
-1. Enter a prompt like **"mouse on road"**
-2. Click **"Generate Story"**
-3. Click **"Generate Comic"**
-4. Watch your 4-panel comic appear! 🎉
+---
+
+## 🎨 Your First Comic - Visual Guide
+
+### Step 1: Enter a Prompt
+Type your idea in the text area. For example: **"mouse on road"**
+
+```
+┌─────────────────────────────────────┐
+│ [mouse on road]                     │
+│ [Generate Story] [Generate Comic]   │
+└─────────────────────────────────────┘
+```
+*Enter your creative idea in the prompt box*
+
+### Step 2: Generate Story
+Click **"Generate Story"** and wait 2-3 seconds
+
+```
+┌─────────────────────────────────────┐
+│ 📖 Generated Story                   │
+│                                      │
+│ The Amazing Adventure                │
+│ Hero • Wise Guide • Curious Friend  │
+│                                      │
+│ 1. Once upon a time...              │
+│ 2. Our hero discovered...           │
+│ 3. Together they embarked...        │
+│ 4. In the end they found...         │
+└─────────────────────────────────────┘
+```
+*AI generates a complete story with characters and plot*
+
+### Step 3: Generate Comic
+Click **"Generate Comic"** and watch the magic happen!
+
+```
+┌─────────────┐ ┌─────────────┐
+│   Panel 1   │ │   Panel 2   │
+│             │ │             │
+│    🐭       │ │    🚗       │
+│  "I need to │ │  "Watch     │
+│   cross!"   │ │   out!"     │
+└─────────────┘ └─────────────┘
+┌─────────────┐ ┌─────────────┐
+│   Panel 3   │ │   Panel 4   │
+│             │ │             │
+│    🧀       │ │    🏁       │
+│  "Almost    │ │  "I made    │
+│   there!"   │ │   it!"      │
+└─────────────┘ └─────────────┘
+```
+*4 comic panels appear with auto-generated speech bubbles*
+
+### Step 4: Your Complete Comic! 🎉
+
+| Before | After |
+|--------|-------|
+| Just text: "mouse on road" | 🖼️ **4 Complete Comic Panels** |
+| | • Consistent mouse character |
+| | • 4-part story progression |
+| | • Auto-generated speech bubbles |
+
+---
+
+### 📸 Example Gallery
+
+#### Example 1: "mouse on road"
+| Panel 1 | Panel 2 | Panel 3 | Panel 4 |
+|---------|---------|---------|---------|
+| Mouse spots cheese | Crosses road | Narrow escape | Enjoys cheese |
+| "I need that!" | "Here I go!" | "That was close!" | "Totally worth it!" |
+
+#### Example 2: "cat astronaut on moon"
+| Panel 1 | Panel 2 | Panel 3 | Panel 4 |
+|---------|---------|---------|---------|
+| Cat in spaceship | Lands on moon | Plants flag | Waves at Earth |
+| "3..2..1.." | "One small step" | "For cats everywhere!" | "Meow from space!" |
+
+#### Example 3: "dragon eating pizza"
+| Panel 1 | Panel 2 | Panel 3 | Panel 4 |
+|---------|---------|---------|---------|
+| Dragon sees pizza | Takes a bite | Loves it! | Orders more |
+| "What's this?" | "MMM!" | "Best thing ever!" | "I'll take 10!" |
+
+---
+
+### 🎯 Visual Workflow
+
+```mermaid
+graph LR
+    A[📝 "mouse on road"] --> B[📖 Generated Story]
+    B --> C[🎨 4 Comic Panels]
+    
+    style A fill:#e1f5fe,stroke:#01579b
+    style B fill:#fff3e0,stroke:#bf360c
+    style C fill:#e8f5e8,stroke:#1b5e20
+```
+
+---
+
+### 📱 What You'll See
+
+**Before Generation:**
+```
+┌─────────────────────────────────────┐
+│ Enter your comic idea...            │
+│ [mouse on road]                      │
+│                                      │
+│ [Generate Story] [Generate Comic]    │
+└─────────────────────────────────────┘
+```
+
+**During Generation:**
+```
+┌─────────────────────────────────────┐
+│ ⏳ Generating...                     │
+│    🤖 Story Agent working...         │
+└─────────────────────────────────────┘
+```
+
+**After Generation:**
+```
+┌─────────────────────────────────────┐
+│ 📖 Story Generated!                  │
+│ 🎨 4 Comic Panels Ready!             │
+│ 💬 Speech Bubbles Added!             │
+└─────────────────────────────────────┘
+```
 
 ---
 

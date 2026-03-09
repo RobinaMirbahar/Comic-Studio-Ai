@@ -671,6 +671,7 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 - **Cloud Infrastructure**: Set up auto-scaling deployment on Cloud Run
 
 ---
+
 ## 🎨 **Made with Love & AI**
 
 <div align="center">
@@ -678,31 +679,43 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 ### 💖 **Robina Mirbahar** 💖
 *Google Developer Expert in Machine Learning* • *Cloud Engineer*
 
-| 🦄 **My Superpowers** | 🌈 **Find Me Here** |
-|:---:|:---:|
-| [![GDE](https://img.shields.io/badge/✨%20Google%20Developer%20Expert-Machine%20Learning-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://developers.google.com/profile/u/robinamirbahar) | [![Email](https://img.shields.io/badge/📧%20Say%20Hi!-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:mallah.robina@gmail.com) |
-| [![Cloud Engineer](https://img.shields.io/badge/☁️%20Google%20Cloud-Certified-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white)](https://www.credly.com/users/robinamirbahar) | [![Twitter](https://img.shields.io/badge/🐦%20Tweet%20Tweet-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/robinamirbahar) |
-| [![Credly](https://img.shields.io/badge/🏆%20Credly%20Star-FF6B00?style=for-the-badge&logo=credly&logoColor=white)](https://www.credly.com/users/robinamirbahar) | [![LinkedIn](https://img.shields.io/badge/💼%20Let's%20Connect-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/robinamirbahar) |
-| | [![GitHub](https://img.shields.io/badge/🐙%20Code%20Cutie-333?style=for-the-badge&logo=github&logoColor=white)](https://github.com/robinamirbahar) |
-| | [![Instagram](https://img.shields.io/badge/📸%20Pic%20Pals-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://instagram.com/robinamirbahar) |
+---
 
-</div>
+### 🦄 **My Superpowers**
+
+[![GDE](https://img.shields.io/badge/Google%20Developer%20Expert-Machine%20Learning-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://developers.google.com/profile/u/robinamirbahar)
+
+[![Cloud Engineer](https://img.shields.io/badge/Google%20Cloud-Certified-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white)](https://www.credly.com/users/robinamirbahar)
+
+[![Credly](https://img.shields.io/badge/Credly-Profile-FF6B00?style=for-the-badge&logo=credly&logoColor=white)](https://www.credly.com/users/robinamirbahar)
 
 ---
 
-## 🌟 **Big Thank Yous to...**
+### 🌈 **Find Me Here**
 
-<div align="center">
+[![Email](https://img.shields.io/badge/Email-mallah.robina@gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:mallah.robina@gmail.com)
 
-| 🤗 | |
-|:---:|:---|
-| **🤖 Google Gemini Team** | For the magical **nano-banana-pro-preview** that makes comics in a snap! |
-| **☁️ Google Cloud Platform** | For the cozy Cloud Run home & Secret Manager hugs |
-| **⚡ FastAPI Team** | For the super speedy framework |
-| **🖼️ Open Source Community** | For PIL, ReportLab and all the free hugs (libraries) |
-| **👥 Beta Testers** | For squishing bugs and sending love |
+[![Twitter](https://img.shields.io/badge/Twitter-@robinamirbahar-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/robinamirbahar)
 
-</div>
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-robinamirbahar-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/robinamirbahar)
+
+[![GitHub](https://img.shields.io/badge/GitHub-robinamirbahar-333?style=for-the-badge&logo=github&logoColor=white)](https://github.com/robinamirbahar)
+
+[![Instagram](https://img.shields.io/badge/Instagram-@robinamirbahar-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://instagram.com/robinamirbahar)
+
+---
+
+## 🌟 **Big Thank Yous To...**
+
+**🤖 Google Gemini Team** — For the magical **nano-banana-pro-preview** that makes comics in a snap!
+
+**☁️ Google Cloud Platform** — For the cozy Cloud Run home & Secret Manager hugs
+
+**⚡ FastAPI Team** — For the super speedy framework
+
+**🖼️ Open Source Community** — For PIL, ReportLab and all the free hugs (libraries)
+
+**👥 Beta Testers** — For squishing bugs and sending love
 
 ---
 
@@ -715,7 +728,8 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 
 ---
 
-### 👧💻 **Built with sparkles and code by**  
+### 👧💻 **Built with sparkles and code by**
+
 ## [✨ Robina Mirbahar ✨](https://github.com/robinamirbahar)
 *Google Developer Expert in Machine Learning • Cloud Engineer*
 
@@ -724,12 +738,18 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 ---
 
 ### 🏆 **Gemini Live Agent Challenge**  
-**Category: Creative Storyteller**  
+**Category: Creative Storyteller**
 
-[![Devpost](https://img.shields.io/badge/📋%20View%20Submission-003E54?style=for-the-badge&logo=devpost&logoColor=white)](https://devpost.com/software/comic-studio-ai)
-[![GitHub stars](https://img.shields.io/github/stars/RobinaMirbahar/Comic-Studio-Ai?style=social&label=⭐%20Star%20me!)](https://github.com/RobinaMirbahar/Comic-Studio-Ai)
+[![Devpost](https://img.shields.io/badge/Devpost-Submission-003E54?style=for-the-badge&logo=devpost&logoColor=white)](https://devpost.com/software/comic-studio-ai)
+
+[![GitHub stars](https://img.shields.io/github/stars/RobinaMirbahar/Comic-Studio-Ai?style=social&label=Star%20me!)](https://github.com/RobinaMirbahar/Comic-Studio-Ai)
 
 ---
+
+### ⏰ **Last Updated**
+*March 9, 2026* • **Version 2.0.0** • *Now with extra cuteness!* 🍭
+
+</div>
 
 ### ⏰ **Last Updated**
 *March 9, 2026* • **Version 2.0.0** • *Now with extra cuteness!* 🍭

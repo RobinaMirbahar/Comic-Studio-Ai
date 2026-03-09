@@ -674,6 +674,8 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 
 ---
 
+---
+
 ## 👩‍💻 **Connect with the Creator**
 
 <div align="center">
@@ -681,12 +683,14 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 ### Robina Mirbahar
 *Google Developer Expert in Machine Learning* • *Cloud Engineer*
 
-[![Google Developer Profile](https://img.shields.io/badge/Google%20Developer%20Profile-robinamirbahar-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://developers.google.com/profile/u/robinamirbahar)
+[![GDE](https://img.shields.io/badge/Google%20Developer%20Expert-Machine%20Learning-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://developers.google.com/profile/u/robinamirbahar)
+[![Cloud Engineer](https://img.shields.io/badge/Google%20Cloud-Certified-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white)](https://www.credly.com/users/robinamirbahar)
+[![Credly](https://img.shields.io/badge/Credly-Profile-FF6B00?style=for-the-badge&logo=credly&logoColor=white)](https://www.credly.com/users/robinamirbahar)
+
 [![Email](https://img.shields.io/badge/📧%20Email-mallah.robina@gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:mallah.robina@gmail.com)
 [![Twitter](https://img.shields.io/badge/Twitter-@robinamirbahar-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/robinamirbahar)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-robinamirbahar-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/robinamirbahar)
 [![GitHub](https://img.shields.io/badge/GitHub-robinamirbahar-333?style=for-the-badge&logo=github&logoColor=white)](https://github.com/robinamirbahar)
-[![Credly](https://img.shields.io/badge/Credly-Profile-FF6B00?style=for-the-badge&logo=credly&logoColor=white)](https://www.credly.com/users/robinamirbahar)
 [![Instagram](https://img.shields.io/badge/Instagram-robinamirbahar-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://instagram.com/robinamirbahar)
 [![Portfolio](https://img.shields.io/badge/🌐%20Portfolio-robinamirbahar.com-667eea?style=for-the-badge)](https://robinamirbahar.com)
 
@@ -696,8 +700,6 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 
 ## 🙌 **Acknowledgments**
 
-<div align="center">
-
 | | |
 |:---|:---|
 | **🤖 Google Gemini Team** | For the revolutionary **nano-banana-pro-preview** model |
@@ -706,16 +708,11 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 | **🖼️ Open Source Community** | For PIL, ReportLab, and countless libraries |
 | **👥 Beta Testers** | For invaluable feedback |
 
-</div>
-
 ---
 
 ## 🏆 **Built with Pride**
 
 <div align="center">
-
-[![GDE](https://img.shields.io/badge/Google%20Developer%20Expert-Machine%20Learning-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://developers.google.com/community/experts)
-[![Cloud Engineer](https://img.shields.io/badge/Google%20Cloud-Certified-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white)](https://cloud.google.com/certification)
 
 **Powered by 🍌 nano-banana-pro-preview**  
 *The secret sauce behind 3-second comic generation*

@@ -46,6 +46,7 @@
 - [🏗️ Architecture](#️-architecture)
 - [📁 Repository Structure](#-repository-structure)
 - [🚀 Quick Start](#-quick-start)
+- [🎮 Button Guide](#-button-guide)
 - [⚙️ Configuration](#️-configuration)
 - [🎨 Usage Guide](#-usage-guide)
 - [🌐 Deployment to Cloud Run](#-deployment-to-cloud-run)
@@ -71,30 +72,30 @@
 | **🌐 9 Languages** | English, Spanish, French, German, Japanese, Arabic, etc. | Multi-lingual prompts |
 | **📥 Multiple Exports** | ZIP, PDF, Booklet formats | ReportLab, img2pdf |
 | **🔊 Text-to-Speech** | Narrates generated stories | Web Speech API |
+| **🎬 Storyboard Mode** | Visual planning overlay with yellow guides | CSS Toggles |
+| **🤖 Bubble Guide** | Interactive conversational agent for adding bubbles | Custom JavaScript + API |
 
 ### 🎨 **Art Styles**
 
-```
 | Style | Description |
 |-------|-------------|
-| 🇯🇵 Manga | Black and white, screentones, speed lines |
-| 🇺🇸 Western | Bold outlines, vibrant colors, superhero |
-| ✨ Anime | Vibrant colors, glossy eyes, cel-shaded |
-| ✏️ Sketch | Pencil sketch, rough lines, hand-drawn |
-| 🎨 Watercolor | Soft gradients, painted look |
-| 📰 Vintage | 1950s style, muted colors, halftone dots |
-```
+| 🇯🇵 **Manga** | Black and white, screentones, speed lines |
+| 🇺🇸 **Western** | Bold outlines, vibrant colors, superhero |
+| ✨ **Anime** | Vibrant colors, glossy eyes, cel-shaded |
+| ✏️ **Sketch** | Pencil sketch, rough lines, hand-drawn |
+| 🎨 **Watercolor** | Soft gradients, painted look |
+| 📰 **Vintage** | 1950s style, muted colors, halftone dots |
 
 ### 💬 **Bubble Types**
 
 | Type | Appearance | Use Case |
 |------|------------|----------|
-| 🗣️ Speech | Round white bubble | Normal dialogue |
-| 💭 Thought | Cloud-like with circles | Inner thoughts |
-| 📢 Shout | Yellow with red border | Exclamations |
-| 🤫 Whisper | Dotted border | Quiet speech |
-| 📖 Narration | Yellow box | Story narration |
-| 💥 SFX | Big red text | Sound effects |
+| 🗣️ **Speech** | Round white bubble | Normal dialogue |
+| 💭 **Thought** | Cloud-like with circles | Inner thoughts |
+| 📢 **Shout** | Yellow with red border | Exclamations |
+| 🤫 **Whisper** | Dotted border | Quiet speech |
+| 📖 **Narration** | Yellow box | Story narration |
+| 💥 **SFX** | Big red text | Sound effects |
 
 ---
 
@@ -124,6 +125,7 @@ graph LR
     style H fill:#96ceb4,color:white
     style I fill:#96ceb4,color:white
 ```
+
 ---
 
 ## 🍌 The Secret Sauce: nano-banana-pro-preview
@@ -397,8 +399,8 @@ comic-studio-ai/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/robinamirbahar/comic-studio-ai.git
-   cd comic-studio-ai
+   git clone https://github.com/RobinaMirbahar/Comic-Studio-Ai.git
+   cd Comic-Studio-Ai
    ```
 
 2. **Create virtual environment**
@@ -432,6 +434,52 @@ comic-studio-ai/
    ```
    http://localhost:8080
    ```
+
+---
+
+## 🎮 Button Guide
+
+### Main Control Buttons
+
+| Button | Function |
+|--------|----------|
+| **1. Generate Story** | Creates a story from your prompt |
+| **2. Generate Comic** | Creates 4 comic panels from the story |
+
+### Extra Buttons
+
+| Button | Icon | Function |
+|--------|------|----------|
+| **Voice Input** | 🎤 | Speak your prompt instead of typing |
+| **New Story** | 🔄 | Clears everything and starts fresh |
+| **Read Aloud** | 🔊 | Narrates the generated story |
+| **Stop** | ⏹️ | Stops ongoing narration |
+| **Share** | 🔗 | Copies story to clipboard |
+| **Storyboard** | 🎬 | Toggles visual planning guides (yellow borders) |
+| **Download Page** | 📥 | Downloads current panel as PNG |
+| **Add Bubbles** | 💬 | Opens manual bubble editor |
+| **Bubble Guide** | 🤖 | Interactive chat assistant for adding bubbles |
+
+### When Storyboard is ON
+- Button changes to **"Storyboard ON"**
+- Yellow dashed borders appear around all panels
+- "🎬 STORYBOARD" labels appear on each panel
+- Click again to turn off
+
+### Bubble Guide Conversation Flow
+```
+🤖 "Would you like to add speech bubbles?"
+👤 "Yes"
+🤖 "Which panel? (1-4)"
+👤 "2"
+🤖 "What should they say?"
+👤 "Watch out!"
+🤖 "What kind of bubble?"
+👤 [Speech/Thought/Shout/Whisper]
+🤖 "Where should it go?"
+👤 [Top/Bottom/Left/Right/Auto]
+✨ Bubble added!
+```
 
 ---
 
@@ -477,7 +525,6 @@ google-cloud-secret-manager==2.16.0
 ### 1. **Generate a Comic with nano-banana**
 
 ```bash
-# Via curl
 curl -X POST http://localhost:8080/generate-pages-with-characters \
   -H "Content-Type: application/json" \
   -d '{
@@ -500,7 +547,7 @@ curl -X POST http://localhost:8080/api/upload-character \
 curl -X POST http://localhost:8080/download-pdf \
   -H "Content-Type: application/json" \
   -d '{
-    "pages": ["/static/comics/page_1.png", ...],
+    "pages": ["/static/comics/page_1.png", "/static/comics/page_2.png", "/static/comics/page_3.png", "/static/comics/page_4.png"],
     "title": "My Comic"
   }' \
   --output comic.pdf
@@ -509,7 +556,6 @@ curl -X POST http://localhost:8080/download-pdf \
 ### 4. **Voice Commands**
 
 ```javascript
-// Frontend voice command example
 const commands = {
     "stop": stopGeneration,
     "new story": regenerateStory,
@@ -525,30 +571,15 @@ const commands = {
 ### 1. **Set up Google Cloud**
 
 ```bash
-# Install Google Cloud SDK
-# https://cloud.google.com/sdk/docs/install
-
-# Authenticate
 gcloud auth login
-
-# Set project
 gcloud config set project YOUR_PROJECT_ID
-
-# Enable required APIs
-gcloud services enable run.googleapis.com \
-    secretmanager.googleapis.com \
-    cloudbuild.googleapis.com
+gcloud services enable run.googleapis.com secretmanager.googleapis.com cloudbuild.googleapis.com
 ```
 
 ### 2. **Store API Key in Secret Manager**
 
 ```bash
-# Create secret
-echo -n "YOUR_GEMINI_API_KEY" | \
-    gcloud secrets create gemini-api-key \
-    --data-file=-
-
-# Grant access to Cloud Run
+echo -n "YOUR_GEMINI_API_KEY" | gcloud secrets create gemini-api-key --data-file=-
 gcloud secrets add-iam-policy-binding gemini-api-key \
     --member="serviceAccount:YOUR_PROJECT_NUMBER-compute@developer.gserviceaccount.com" \
     --role="roles/secretmanager.secretAccessor"
@@ -557,18 +588,14 @@ gcloud secrets add-iam-policy-binding gemini-api-key \
 ### 3. **Build and Deploy**
 
 ```bash
-# Build container
-gcloud builds submit --tag gcr.io/YOUR_PROJECT_ID/comic-generator
-
-# Deploy to Cloud Run
-gcloud run deploy comic-generator \
-    --image gcr.io/YOUR_PROJECT_ID/comic-generator \
+gcloud builds submit --tag gcr.io/YOUR_PROJECT_ID/comic-studio-ai
+gcloud run deploy comic-studio-ai \
+    --image gcr.io/YOUR_PROJECT_ID/comic-studio-ai \
     --platform managed \
     --region us-central1 \
     --allow-unauthenticated \
     --memory 2Gi \
     --cpu 2 \
-    --timeout 300 \
     --set-secrets=GEMINI_API_KEY=gemini-api-key:latest
 ```
 
@@ -576,16 +603,9 @@ gcloud run deploy comic-generator \
 
 ## 🧪 Testing
 
-### Run Unit Tests
-
 ```bash
-# Run all tests
 pytest tests/
-
-# Run specific test
 pytest tests/test_agents.py -v
-
-# Run with coverage
 pytest --cov=agents tests/
 ```
 
@@ -629,34 +649,11 @@ pytest --cov=agents tests/
 
 </div>
 
-**Robina Mirbahar** is a Google Developer Expert in Machine Learning and a Cloud Engineer who built Comic Studio AI from the ground up for the Gemini Live Agent Challenge. With deep expertise in multi-agent systems, cloud architecture, and generative AI, Robina designed and implemented every component of this project.
-
-### 🏆 **Expertise Applied**
-
-| Area | Implementation |
-|------|----------------|
-| **🤖 Multi-Agent Systems** | 5 specialized agents collaborating via shared state |
-| **🎨 Prompt Engineering** | Custom prompts achieving 94% character consistency with nano-banana |
-| **🍌 nano-banana Integration** | Optimized model configuration for comic generation |
-| **☁️ Cloud Architecture** | Serverless deployment on Google Cloud Run |
-| **🔐 Security** | API keys protected via Secret Manager |
-| **🖼️ Image Processing** | PIL-based bubble rendering with 6 bubble types |
-| **🎤 Voice Integration** | Real-time voice commands with WebRTC |
-
-### 💡 **Key Contributions**
-
-- **Agent Architecture**: Designed communication protocol for 5 agents
-- **nano-banana Optimization**: Tuned model parameters for fastest comic generation (3.2s for 4 panels)
-- **Character Consistency System**: Built prompt engineering framework that maintains 94% consistency
-- **Bubble Drawing Engine**: Created PIL-based renderer with intelligent text wrapping
-- **Voice Command System**: Implemented real-time voice interruption
-- **Cloud Infrastructure**: Set up auto-scaling deployment on Cloud Run
+**Robina Mirbahar** is a Google Developer Expert in Machine Learning and a Cloud Engineer who built Comic Studio AI from the ground up for the Gemini Live Agent Challenge.
 
 ---
 
 ## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
@@ -679,17 +676,9 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 ### 💖 **Robina Mirbahar** 💖
 *Google Developer Expert in Machine Learning* • *Cloud Engineer*
 
-<br>
-
-**🦄 My Superpowers**
-
 [![GDE](https://img.shields.io/badge/Google%20Developer%20Expert-Machine%20Learning-4285F4?style=flat-square&logo=google&logoColor=white)](https://developers.google.com/profile/u/robinamirbahar)
 [![Cloud Engineer](https://img.shields.io/badge/Google%20Cloud-Certified-4285F4?style=flat-square&logo=google-cloud&logoColor=white)](https://www.credly.com/users/robinamirbahar)
 [![Credly](https://img.shields.io/badge/Credly-Profile-FF6B00?style=flat-square&logo=credly&logoColor=white)](https://www.credly.com/users/robinamirbahar)
-
-<br>
-
-**🌈 Find Me Here**
 
 [![Email](https://img.shields.io/badge/Email-mallah.robina@gmail.com-D14836?style=flat-square&logo=gmail&logoColor=white)](mailto:mallah.robina@gmail.com)
 [![Twitter](https://img.shields.io/badge/Twitter-@robinamirbahar-1DA1F2?style=flat-square&logo=twitter&logoColor=white)](https://twitter.com/robinamirbahar)
@@ -703,8 +692,6 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 
 ## 🌟 Big Thank Yous
 
-<div align="center">
-
 | | |
 |---|---|
 | **🤖 Google Gemini Team** | For the magical **nano-banana-pro-preview** |
@@ -712,8 +699,6 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 | **⚡ FastAPI Team** | For the super speedy framework |
 | **🖼️ Open Source Community** | For PIL, ReportLab & more |
 | **👥 Beta Testers** | For squishing bugs & sending love |
-
-</div>
 
 ---
 
@@ -724,14 +709,10 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 ### 🍌 **Powered by nano-banana-pro-preview**
 *The secret sauce behind 3-second comics*
 
-<br>
-
 **Built with 💖 by [Robina Mirbahar](https://github.com/robinamirbahar)**  
 *Google Developer Expert in Machine Learning • Cloud Engineer*
 
 > *"Turning 🐭 mouse on road into 🎨 comic magic!"*
-
-<br>
 
 ### 🏆 **Gemini Live Agent Challenge**
 **Category: Creative Storyteller**
@@ -739,19 +720,6 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 [![Devpost](https://img.shields.io/badge/Devpost-Submission-003E54?style=for-the-badge&logo=devpost&logoColor=white)](https://devpost.com/software/comic-studio-ai)
 [![GitHub stars](https://img.shields.io/github/stars/RobinaMirbahar/Comic-Studio-Ai?style=social)](https://github.com/RobinaMirbahar/Comic-Studio-Ai)
 
-<br>
-
 *March 9, 2026 • Version 2.0.0*
-
-</div>
-
----
-
-## 🚀 **Ready to Create?**
-
-<div align="center">
-
-**⭐ Star this repo if you found it useful!**  
-**🐛 Found an issue? [Report it here](https://github.com/RobinaMirbahar/Comic-Studio-Ai/issues)**
 
 </div>

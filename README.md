@@ -101,15 +101,15 @@
 
 ```mermaid
 graph LR
-    A[User Prompt<br/>"mouse on road"] --> B[Story Agent]
-    B --> C[Panel Agent]
-    C --> D[Bubble Agent]
-    D --> E[Download Handler]
+    A["User Prompt<br>mouse on road"] --> B["Story Agent"]
+    B --> C["Panel Agent"]
+    C --> D["Bubble Agent"]
+    D --> E["Download Handler"]
     
-    B --> F[Generated Story<br/>Montgomery the mouse<br/>needs to cross]
-    C --> G[4 Comic Panels<br/>with consistent<br/>character]
-    D --> H[Speech Bubbles<br/>auto-added]
-    E --> I[ZIP/PDF/Booklet]
+    B --> F["Generated Story<br>Montgomery the mouse<br>needs to cross"]
+    C --> G["4 Comic Panels<br>with consistent<br>character"]
+    D --> H["Speech Bubbles<br>auto-added"]
+    E --> I["ZIP/PDF/Booklet"]
     
     style A fill:#667eea,color:white
     style B fill:#764ba2,color:white
@@ -121,7 +121,6 @@ graph LR
     style H fill:#96ceb4,color:white
     style I fill:#96ceb4,color:white
 ```
-
 ---
 
 ## 🍌 The Secret Sauce: nano-banana-pro-preview

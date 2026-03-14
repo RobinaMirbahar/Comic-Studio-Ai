@@ -98,6 +98,10 @@ You can upload a character image to make the comic feature a specific person or 
 ![Story with own image](images/storyownimage.jpg)
 
 ![Final comic with own character](images/own-imagecomic.jpg)
+![Own image step 1](https://raw.githubusercontent.com/RobinaMirbahar/Comic-Studio-Ai/main/docs/images/01-ownimage.png)
+![Own image step 2](https://raw.githubusercontent.com/RobinaMirbahar/Comic-Studio-Ai/main/docs/images/o2-ownimage.png)
+![Own image step 3](https://raw.githubusercontent.com/RobinaMirbahar/Comic-Studio-Ai/main/docs/images/03-ownimage.png)
+
 
 ### Step 2: Generate Story
 Click **"1. Generate Story"** – you'll see the AI-generated story with title, characters, and plot.

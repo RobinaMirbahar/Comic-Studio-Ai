@@ -120,8 +120,8 @@ After approving, select art style, language tone, and optional color palette.
 │ [2. Generate Panels]                  │
 └─────────────────────────────────────┘
 ```
-
-[Image: Screenshot of style selection dropdowns]
+![Style selection](https://raw.githubusercontent.com/RobinaMirbahar/Comic-Studio-Ai/main/docs/images/style.jpg)
+![Language tone selection](https://raw.githubusercontent.com/RobinaMirbahar/Comic-Studio-Ai/main/docs/images/tone.jpg)
 
 ### Step 5: Generate Panels & Dialogue
 Click **"2. Generate Panels"** – the app creates 4 panel descriptions with dialogue and bubble types.
@@ -136,7 +136,8 @@ Click **"2. Generate Panels"** – the app creates 4 panel descriptions with dia
 │ ...                                   │
 └─────────────────────────────────────┘
 ```
-[Image: Screenshot of panel descriptions with dialogue]
+![Generated panels](https://raw.githubusercontent.com/RobinaMirbahar/Comic-Studio-Ai/main/docs/images/panelgenerated.jpg)
+![Panel generate](https://raw.githubusercontent.com/RobinaMirbahar/Comic-Studio-Ai/main/docs/images/panelgenete.jpg)
 
 ### Step 6: Generate Images
 Click **"3. Generate Images"** – the app uses Imagen to create actual comic panels (may take 10–20 seconds).
@@ -149,7 +150,12 @@ Click **"3. Generate Images"** – the app uses Imagen to create actual comic pa
 │ ...                                   │
 └─────────────────────────────────────┘
 ```
-[Image: Screenshot of generated comic panels with speech bubbles]
+![Images Generated](https://raw.githubusercontent.com/RobinaMirbahar/Comic-Studio-Ai/main/docs/images/imagesgenerated.jpg)
+![Generate Images Button](https://raw.githubusercontent.com/RobinaMirbahar/Comic-Studio-Ai/main/docs/images/generateimages.jpg)
+![Panel 1](https://raw.githubusercontent.com/RobinaMirbahar/Comic-Studio-Ai/main/docs/images/01.png)
+![Panel 2](https://raw.githubusercontent.com/RobinaMirbahar/Comic-Studio-Ai/main/docs/images/02.png)
+![Panel 3](https://raw.githubusercontent.com/RobinaMirbahar/Comic-Studio-Ai/main/docs/images/03.png)
+![Panel 4](https://raw.githubusercontent.com/RobinaMirbahar/Comic-Studio-Ai/main/docs/images/04.png)
 
 ### Step 7: Download Your Comic
 Choose **PDF** (one panel per page) or **Booklet** (two panels per page, landscape). Files include the story title and a timestamp.

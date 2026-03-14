@@ -586,4 +586,3 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 **🐛 Found an issue? [Report it here](https://github.com/RobinaMirbahar/Comic-Studio-Ai/issues)**
 
 </div>
-```

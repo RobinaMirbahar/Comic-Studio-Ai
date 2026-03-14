@@ -1,4 +1,6 @@
+Here is the updated `README.md` with the new image upload feature included:
 
+```markdown
 # 🎨 Comic Studio AI - Multi-Agent Comic Generator
 
 <div align="center">
@@ -66,6 +68,7 @@
 | Feature | Description | Technology |
 |---------|-------------|------------|
 | **🎤 Voice Input** | Speak your comic idea instead of typing | Web Speech API |
+| **📷 Image Upload** | Upload a character image – the story will feature that character | Gemini multimodal |
 | **📝 Story Generation** | AI crafts complete narratives with characters | Gemini API + **nano-banana-pro-preview** |
 | **🖼️ 1–6 Panel Comics** | Generates sequential panels with consistent characters | **nano-banana-pro-preview** + Prompt Engineering |
 | **💬 Speech Bubbles** | 6 bubble types with dialogue placement | Custom prompts |
@@ -353,6 +356,7 @@ comic-studio-ai/
 | Button | Function |
 |--------|----------|
 | **1. Generate Story** | Creates a story from your prompt |
+| **📷 Generate Story with Image** | Creates a story using your uploaded character image as reference |
 | **2. Generate Panels** | Creates panel descriptions and dialogue |
 | **3. Generate Images** | Generates actual comic panels using Imagen |
 
@@ -361,6 +365,7 @@ comic-studio-ai/
 | Feature | Icon/Control | Function |
 |---------|--------------|----------|
 | **Voice Input** | 🎤 | Speak your comic idea – fills the prompt field |
+| **Image Upload** | File picker + preview | Upload a character image to base the story on |
 | **Random Prompt** | 🎲 | Fills prompt with a random creative idea |
 | **Panel Count** | Slider | Choose between 1 and 6 panels |
 | **Language Selector** | Dropdown | 7 languages with RTL support for Arabic/Urdu |
@@ -415,7 +420,8 @@ jinja2>=3.1.0
 ## 🎨 Usage Guide
 
 ### 1. **Generate a Story**
-Enter a prompt (or click 🎤 to speak, or 🎲 for a random one), choose panel count, select language, and click "Generate Story".
+Enter a prompt (or click 🎤 to speak, or 🎲 for a random one), choose panel count, select language, and click "Generate Story".  
+For a **custom character**, upload an image first, then click **📷 Generate Story with Image**.
 
 ### 2. **Refine with Conversational Agent**
 Chat with the agent to modify characters, plot, or tone. Say "yes" when satisfied.

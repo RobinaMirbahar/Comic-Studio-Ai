@@ -1,3 +1,4 @@
+
 # 🚀 Deployment Guide - Comic Studio AI
 
 ## 📋 Table of Contents
@@ -30,7 +31,7 @@ Before deploying, ensure you have:
 | **Google Cloud SDK** | Latest version (`gcloud --version`) |
 | **Git** | 2.x or higher |
 | **Python** | 3.9 or higher |
-| **Gemini API Key** | From [Google AI Studio](https://makersuite.google.com/app/apikey) |
+| **Gemini API Key** | From [Google AI Studio](https://makersuite.google.com/app/apikey) (must have access to `gemini-2.0-flash`, `nano-banana-pro-preview`, and `gemini-3.1-flash-image-preview`) |
 | **Project ID** | Your Google Cloud Project ID |
 
 ---
@@ -68,22 +69,7 @@ cd Comic-Studio-Ai
 ls -la
 ```
 
-Expected output:
-```
-total 80
-drwxr-xr-x 8 user user 4096 Mar 9 12:00 .
-drwxr-xr-x 3 user user 4096 Mar 9 12:00 ..
-drwxr-xr-x 2 user user 4096 Mar 9 12:00 agents
--rw-r--r-- 1 user user 12048 Mar 9 12:00 app.py
--rw-r--r-- 1 user user  1024 Mar 9 12:00 cloudbuild.yaml
-drwxr-xr-x 2 user user 4096 Mar 9 12:00 docs
--rw-r--r-- 1 user user   274 Mar 9 12:00 .env.example
-drwxr-xr-x 2 user user 4096 Mar 9 12:00 static
-drwxr-xr-x 2 user user 4096 Mar 9 12:00 templates
-drwxr-xr-x 2 user user 4096 Mar 9 12:00 tests
--rw-r--r-- 1 user user  1234 Mar 9 12:00 requirements.txt
--rw-r--r-- 1 user user 27498 Mar 9 12:00 README.md
-```
+Expected output includes `agents/`, `main.py`, `templates/index.html`, `Dockerfile`, `cloudbuild.yaml`, etc.
 
 ### 2. **Set Up Google Cloud Project**
 
@@ -100,11 +86,12 @@ gcloud config set project $PROJECT_ID
 gcloud services enable \
     run.googleapis.com \
     secretmanager.googleapis.com \
-    cloudbuild.googleapis.com
+    cloudbuild.googleapis.com \
+    aiplatform.googleapis.com  # Required for Imagen
 
 # Verify enabled APIs
 echo "✅ Enabled APIs:"
-gcloud services list --enabled | grep -E "run|secretmanager|cloudbuild"
+gcloud services list --enabled | grep -E "run|secretmanager|cloudbuild|aiplatform"
 ```
 
 ### 3. **Store Gemini API Key in Secret Manager**
@@ -142,14 +129,6 @@ cat > .env << EOF
 # Required
 GEMINI_API_KEY=your_gemini_api_key_here
 PROJECT_ID=${PROJECT_ID}
-
-# Optional (with defaults)
-PORT=8080
-MAX_PANELS=4
-MAX_UPLOAD_SIZE=5MB
-DEFAULT_LANGUAGE=en
-DEFAULT_STYLE=manga
-GEMINI_MODEL=nano-banana-pro-preview
 EOF
 
 echo "✅ Local .env file created"
@@ -166,7 +145,7 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 
 # Run the app
-python app.py
+python main.py
 
 # Test in browser: http://localhost:8080
 # Press Ctrl+C to stop
@@ -224,7 +203,7 @@ curl ${SERVICE_URL}/health
 # Test story generation
 curl -X POST ${SERVICE_URL}/generate-story \
   -H "Content-Type: application/json" \
-  -d '{"topic": "mouse on road"}'
+  -d '{"topic": "mouse on road", "language": "en", "panels": 4}'
 
 # Open in browser
 echo "🔍 Open in browser: $SERVICE_URL"
@@ -431,6 +410,7 @@ gcloud run services update comic-studio-ai \
 | **Memory limit exceeded** | `Container terminated` | Increase memory: `--memory 4Gi` |
 | **Timeout** | `Request timeout` | Increase timeout: `--timeout 600` |
 | **Cold start slow** | First request >5s | Set `--min-instances=1` |
+| **Image generation fails** | `Image generation failed` | Ensure API key has access to `gemini-3.1-flash-image-preview` |
 
 ### Debug Commands
 
@@ -463,8 +443,8 @@ curl -X POST http://localhost:8080/generate-story \
 | **Cloud Run** | 10k requests, 1 instance avg | ~$5-8 |
 | **Secret Manager** | 1 secret, 10k accesses | ~$1 |
 | **Cloud Build** | 50 builds/month | ~$2 |
-| **Gemini API** | 1k generations/month | ~$10 |
-| **Total** | | **~$18-21/month** |
+| **Gemini API** | 1k generations/month (text) + 500 images | ~$15-20 |
+| **Total** | | **~$23-31/month** |
 
 ### Cost-Saving Tips
 
@@ -547,7 +527,7 @@ COPY --chown=appuser:appuser . .
 USER appuser
 
 # Run the application
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
 ```
 
 ---
@@ -620,12 +600,8 @@ fi
 | `GEMINI_API_KEY` | Google Gemini API key | - | ✅ Yes | ✅ |
 | `PROJECT_ID` | Google Cloud Project ID | - | ✅ Yes | ❌ |
 | `PORT` | Server port | 8080 | ❌ No | ❌ |
-| `MAX_PANELS` | Maximum panels per comic | 4 | ❌ No | ❌ |
-| `MAX_UPLOAD_SIZE` | Max character upload size | 5MB | ❌ No | ❌ |
-| `DEFAULT_LANGUAGE` | Default language | en | ❌ No | ❌ |
-| `DEFAULT_STYLE` | Default art style | manga | ❌ No | ❌ |
-| `GEMINI_MODEL` | Gemini model to use | nano-banana-pro-preview | ❌ No | ❌ |
-| `LOG_LEVEL` | Logging level | INFO | ❌ No | ❌ |
+
+All other settings (max panels, language, style) are handled via the frontend and do not require environment variables.
 
 ---
 
@@ -662,7 +638,7 @@ fi
 echo -n "📝 Story generation: "
 STORY_RESPONSE=$(curl -s -X POST ${SERVICE_URL}/generate-story \
     -H "Content-Type: application/json" \
-    -d '{"topic": "test"}')
+    -d '{"topic": "test", "language": "en", "panels": 4}')
 if echo "$STORY_RESPONSE" | grep -q "title"; then
     echo "✅ OK"
 else
@@ -723,7 +699,8 @@ If you encounter any issues:
 
 **Deployed successfully?** [Let us know!](https://twitter.com/robinamirbahar)
 
-*This deployment guide was last tested on March 9, 2026*  
+*This deployment guide was last tested on March 2026*  
 *Comic Studio AI v2.0.0 - Gemini Live Agent Challenge*
 
 </div>
+```

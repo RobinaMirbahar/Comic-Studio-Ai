@@ -22,15 +22,17 @@
 ## 🚀 Quick Start
 
 ### 1. **Start the Server**
+
 ```bash
 # Make sure you're in the project directory
 cd Comic-Studio-Ai
 
-# Activate virtual environment
+# Create and activate virtual environment (if not already done)
+python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-# Install minimal dependencies
-pip install fastapi uvicorn python-dotenv google-generativeai Pillow reportlab
+# Install all required dependencies
+pip install fastapi uvicorn python-dotenv google-generativeai Pillow reportlab jinja2
 
 # Run the app
 python main.py

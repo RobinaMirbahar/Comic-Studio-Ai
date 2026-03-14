@@ -5,7 +5,7 @@
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.9%2B-blue)](https://python.org)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.104.1-green)](https://fastapi.tiangolo.com)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115.0-green)](https://fastapi.tiangolo.com)
 [![Google Gemini](https://img.shields.io/badge/Google%20Gemini-nano--banana--pro--preview-orange)](https://deepmind.google/technologies/gemini/)
 [![Cloud Run](https://img.shields.io/badge/Cloud%20Run-Deployed-blue)](https://cloud.google.com/run)
 [![GDE](https://img.shields.io/badge/GDE-Machine%20Learning-4285F4)](https://developers.google.com/community/experts)
@@ -15,7 +15,7 @@
 
 **Turn simple prompts into professional comics with AI-powered storytelling, automatic speech bubbles, and a conversational agent.**
 
-[🚀 Live Demo](#) • [📹 Video Demo](#) • [📝 Devpost Submission](#) • [🐛 Report Bug](#) • [✨ Request Feature](#)
+[🚀 Live Demo](#) • [📹 Video Demo](#) • [📝 Devpost Submission](#) • [📚 Usage Guide](docs/usage.md) • [📡 API Docs](docs/api.md) • [🏗️ Architecture](docs/architecture.md) • [🌐 Deployment](docs/deployment.md)
 
 </div>
 
@@ -68,7 +68,7 @@
 | **📝 Story Generation** | AI crafts complete narratives with characters | Gemini API + **nano-banana-pro-preview** |
 | **🖼️ 1–6 Panel Comics** | Generates sequential panels with consistent characters | **nano-banana-pro-preview** + Prompt Engineering |
 | **💬 Speech Bubbles** | 6 bubble types with dialogue placement | Custom prompts |
-| **🌐 9 Languages** | English, French, Spanish, German, Japanese, Arabic, Urdu, etc. | Multi-lingual prompts |
+| **🌐 7 Languages** | English, French, Spanish, German, Japanese, Arabic, Urdu | Multi-lingual prompts with RTL support |
 | **📥 Multiple Exports** | PDF and Booklet (two panels per page) | ReportLab |
 | **🎲 Random Prompt** | One-click random creative idea generator | Custom JavaScript |
 | **💡 Agent Tooltips** | Hover over agents to see their role | CSS tooltips |
@@ -88,6 +88,7 @@
 | ✏️ **Sketch** | Pencil sketch, rough lines, hand-drawn |
 | 🎨 **Watercolor** | Soft gradients, painted look |
 | 📰 **Vintage** | 1950s style, muted colors, halftone dots |
+| 🎭 **Cartoon** | Looney Tunes style, exaggerated expressions |
 
 ### 💬 **Bubble Types**
 
@@ -282,6 +283,12 @@ comic-studio-ai/
 ├── 📂 templates/                     # Frontend HTML
 │   └── 📄 index.html                 # Main application UI
 │
+├── 📂 docs/                          # Documentation
+│   ├── 📄 usage.md                   # Detailed usage guide with screenshots
+│   ├── 📄 api.md                      # API reference
+│   ├── 📄 architecture.md             # System architecture
+│   └── 📄 deployment.md                # Deployment instructions
+│
 ├── 📄 main.py                         # FastAPI application
 ├── 📄 requirements.txt               # Python dependencies
 ├── 📄 Dockerfile                      # Container configuration
@@ -398,29 +405,19 @@ python-dotenv>=1.0.0
 google-generativeai>=0.3.0
 Pillow>=10.0.0
 reportlab>=4.0.0
+jinja2>=3.1.0
 ```
 
 ---
 
-## 🎨 Usage Guide
+## 📚 Documentation
 
-### 1. **Generate a Story**
-Enter a prompt (or click 🎲 for a random one), choose panel count, select language, and click "Generate Story".
+Detailed guides are available in the `docs/` folder:
 
-### 2. **Refine with Conversational Agent**
-Chat with the agent to modify characters, plot, or tone. Say "yes" when satisfied.
-
-### 3. **Choose Style**
-Select art style, language tone, and color palette (optional).
-
-### 4. **Generate Panels**
-Click "Generate Panels" to get panel descriptions and dialogue with bubble types.
-
-### 5. **Generate Images**
-Click "Generate Images" to create actual comic panels using Imagen (may take 10-20 seconds).
-
-### 6. **Download**
-Save your comic as a standard PDF or booklet PDF.
+- **[Usage Guide](docs/usage.md)** – Step-by-step instructions with screenshots on how to use the comic generator.
+- **[API Documentation](docs/api.md)** – Complete reference for all backend endpoints.
+- **[Architecture Guide](docs/architecture.md)** – Overview of the multi-agent system, data flow, and design decisions.
+- **[Deployment Guide](docs/deployment.md)** – How to deploy the app to Google Cloud Run and set up CI/CD.
 
 ---
 
@@ -443,6 +440,8 @@ gcloud run deploy comic-studio \
   --allow-unauthenticated \
   --set-env-vars GEMINI_API_KEY=your_api_key_here
 ```
+
+For detailed steps, see the [Deployment Guide](docs/deployment.md).
 
 ---
 
@@ -571,3 +570,7 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 
 </div>
 ```
+
+
+
+This README now provides easy access to all documentation and accurately reflects the current project. You can commit and push it.

@@ -1,6 +1,4 @@
-Below is the complete, updated `README.md` file with the voice input feature included. Copy this entire block and paste it into your `README.md` file.
 
-```markdown
 # 🎨 Comic Studio AI - Multi-Agent Comic Generator
 
 <div align="center">

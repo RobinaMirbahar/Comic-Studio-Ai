@@ -65,11 +65,9 @@ graph LR
 git clone https://github.com/RobinaMirbahar/Comic-Studio-Ai.git
 cd Comic-Studio-Ai
 
-# Verify you have all files
+# Verify you have all files – you should see agents/, main.py, templates/, Dockerfile, etc.
 ls -la
 ```
-
-Expected output includes `agents/`, `main.py`, `templates/index.html`, `Dockerfile`, `cloudbuild.yaml`, etc.
 
 ### 2. **Set Up Google Cloud Project**
 
@@ -144,7 +142,7 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 # Install dependencies
 pip install -r requirements.txt
 
-# Run the app
+# Run the app (entry point is main.py)
 python main.py
 
 # Test in browser: http://localhost:8080
@@ -156,7 +154,7 @@ python main.py
 #### Option A: **Manual Deployment (Quick Start)**
 
 ```bash
-# Build and deploy in one command
+# Build and deploy in one command (service name can be comic-studio-ai or your choice)
 gcloud run deploy comic-studio-ai \
     --source . \
     --platform managed \
@@ -195,10 +193,8 @@ echo "✅ Deployed to: $SERVICE_URL"
 ### 7. **Verify Deployment**
 
 ```bash
-# Test health endpoint
-curl ${SERVICE_URL}/health
-
-# Expected response: {"status":"healthy"}
+# Test the root endpoint to see if the app loads
+curl ${SERVICE_URL} | head -20
 
 # Test story generation
 curl -X POST ${SERVICE_URL}/generate-story \
@@ -208,6 +204,8 @@ curl -X POST ${SERVICE_URL}/generate-story \
 # Open in browser
 echo "🔍 Open in browser: $SERVICE_URL"
 ```
+
+*Note: The app does not have a dedicated `/health` endpoint; the root endpoint serves the HTML interface, which is sufficient for verifying that the app is running.*
 
 ---
 
@@ -624,13 +622,13 @@ SERVICE_URL=$(gcloud run services describe comic-studio-ai \
     --format='value(status.url)')
 echo "📡 Service URL: $SERVICE_URL"
 
-# 2. Test health endpoint
-echo -n "🏥 Health check: "
-HEALTH_STATUS=$(curl -s -o /dev/null -w "%{http_code}" ${SERVICE_URL}/health)
-if [ "$HEALTH_STATUS" -eq 200 ]; then
+# 2. Test that the app loads
+echo -n "🏠 Home page: "
+HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" ${SERVICE_URL})
+if [ "$HTTP_STATUS" -eq 200 ]; then
     echo "✅ OK"
 else
-    echo "❌ Failed (HTTP $HEALTH_STATUS)"
+    echo "❌ Failed (HTTP $HTTP_STATUS)"
     exit 1
 fi
 

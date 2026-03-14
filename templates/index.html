@@ -1,122 +1,853 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎨 Multi-Agent Comic Generator</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>🎨 Comic Studio AI · by Robina Mirbahar</title>
     <style>
-        /* Your existing CSS here - keep all your styles */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* Base mobile-first styles – same color palette */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            background: rgba(0,0,0,0.2);
+            backdrop-filter: blur(5px);
+            padding: 15px 20px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        .header h1 {
+            font-size: 1.6rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .header h1 span {
+            background: rgba(255,255,255,0.15);
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: normal;
+        }
+        .creator-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.1);
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+        }
+        .creator-badge i {
+            font-style: normal;
+            color: #ffd700;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            background: rgba(255,255,255,0.95);
+            color: #2d3748;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            flex: 1;
+        }
+        h2 {
+            color: #4a5568;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 8px;
+            margin-top: 20px;
+        }
+        .agents-showcase {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f7fafc;
+            border-radius: 20px;
+        }
+        .agent-card {
+            background: white;
+            border-radius: 30px;
+            padding: 8px 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid #e9eef2;
+            transition: transform 0.1s;
+            cursor: help; /* indicate tooltip */
+            position: relative;
+        }
+        .agent-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 12px rgba(102,126,234,0.2);
+        }
+        .agent-card .tooltip-text {
+            visibility: hidden;
+            width: 160px;
+            background-color: #2d3748;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%; /* above the card */
+            left: 50%;
+            margin-left: -80px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+            pointer-events: none;
+        }
+        .agent-card:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        .agent-icon {
+            font-size: 1.5rem;
+        }
+        .agent-name {
+            font-weight: 600;
+            color: #2d3748;
+        }
+        .agent-role {
+            font-size: 0.75rem;
+            color: #718096;
+            margin-left: 4px;
+        }
+        .input-group {
+            display: flex;
+            gap: 10px;
+            align-items: stretch;
+            flex-wrap: wrap;
+        }
+        .input-group textarea {
+            flex: 1;
+        }
+        .input-group button {
+            width: auto;
+            min-width: 60px;
+        }
+        textarea, select, input[type="text"], input[type="range"] {
+            width: 100%;
+            padding: 14px;
+            margin: 8px 0;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border 0.2s;
+        }
+        textarea:focus, select:focus, input:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 40px;
+            padding: 14px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            box-shadow: 0 4px 10px rgba(102,126,234,0.3);
+        }
+        button:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        button:disabled {
+            background: #cbd5e0;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 15px 0;
+        }
+        .agent-message {
+            background: #e6edff;
+            padding: 14px;
+            border-radius: 20px 20px 20px 5px;
+            margin: 12px 0;
+            border-left: 5px solid #667eea;
+        }
+        .user-message {
+            background: #edf2f7;
+            padding: 14px;
+            border-radius: 20px 20px 5px 20px;
+            margin: 12px 0;
+            text-align: right;
+            border-right: 5px solid #9f7aea;
+        }
+        .chat-box {
+            max-height: 350px;
+            overflow-y: auto;
+            padding: 15px;
+            background: #ffffff;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+        }
+        .panel {
+            background: #f8faff;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 18px;
+            border-left: 6px solid #667eea;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+        .dialogue {
+            background: #fef9e7;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 16px;
+            border-left: 4px solid #fbbf24;
+        }
+        .bubble-type {
+            font-size: 0.75rem;
+            color: #64748b;
+            background: #eef2f6;
+            padding: 2px 10px;
+            border-radius: 30px;
+            display: inline-block;
+            margin-left: 8px;
+        }
+        .style-box {
+            background: #e0e7ff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 18px;
+            border-left: 6px solid #4ade80;
+        }
+        .comic-panel {
+            border: 2px solid #e2e8f0;
+            border-radius: 20px;
+            margin: 20px 0;
+            padding: 18px;
+            background: white;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+        .comic-panel img {
+            max-width: 100%;
+            border-radius: 16px;
+            margin-bottom: 12px;
+            border: 1px solid #e2e8f0;
+        }
+        .placeholder-note {
+            color: #718096;
+            font-style: italic;
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 8px;
+        }
+        .style-row {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .language-selector {
+            margin: 20px 0;
+        }
+        .footer {
+            background: rgba(0,0,0,0.2);
+            backdrop-filter: blur(5px);
+            padding: 20px;
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            font-size: 0.95rem;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.15);
+        }
+        .footer a {
+            color: #ffd700;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+        .footer a:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+        .social-links {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 15px 0 10px;
+            flex-wrap: wrap;
+        }
+        .social-links a {
+            color: white;
+            background: rgba(255,255,255,0.1);
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .social-links a:hover {
+            background: rgba(255,255,255,0.2);
+            text-decoration: none;
+        }
+        .gde-gradient {
+            background: linear-gradient(135deg, #4285f4, #ea4335, #fbbc05, #34a853);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+        }
+        /* Loading spinner */
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
             color: white;
         }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        .header { text-align: center; margin-bottom: 30px; }
-        .header h1 { font-size: 2.5rem; }
-        .controls, .pipeline, .story-box { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 15px; padding: 20px; margin-bottom: 20px; }
-        textarea { width: 100%; padding: 12px; border-radius: 10px; border: none; margin-bottom: 15px; }
-        .btn { padding: 8px 16px; border: none; border-radius: 20px; cursor: pointer; background: white; color: #667eea; }
-        .btn-primary { background: #ffd700; color: #333; }
-        .agent-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
-        .comic-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .loading-overlay.active {
+            display: flex;
+        }
+        .loading-message {
+            background: white;
+            color: #2d3748;
+            padding: 20px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 300px;
+        }
+        .panel-count-slider {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .panel-count-slider input {
+            flex: 1;
+        }
+        .panel-count-slider span {
+            min-width: 40px;
+            text-align: center;
+            font-weight: bold;
+        }
+        /* RTL support */
+        .rtl {
+            direction: rtl;
+            text-align: right;
+        }
+        .rtl textarea, .rtl input, .rtl select {
+            direction: rtl;
+        }
+        /* Tablet and up */
+        @media (min-width: 768px) {
+            body { padding: 0; }
+            .container { padding: 30px; }
+            .button-group { flex-direction: row; }
+            button { width: auto; }
+            .style-row { flex-direction: row; }
+            .agents-showcase { justify-content: center; }
+            .input-group { flex-wrap: nowrap; }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🎨 Multi-Agent Comic Generator</h1>
-            <p>by Robina Mirbahar · Google Developer Expert</p>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-message">
+            <div class="spinner"></div>
+            <p id="loadingText">Processing... please wait</p>
+        </div>
+    </div>
+
+    <div class="header">
+        <h1>🎨 Comic Studio AI <span>multi‑agent</span></h1>
+        <div class="creator-badge">
+            <span>👩‍💻</span>
+            <span>by <i>Robina Mirbahar</i></span>
+        </div>
+    </div>
+
+    <div class="container" id="mainContainer">
+        <div class="agents-showcase">
+            <div class="agent-card">
+                <span class="agent-icon">📝</span><span class="agent-name">Researcher</span><span class="agent-role">story</span>
+                <span class="tooltip-text">Creates the initial story from your prompt</span>
+            </div>
+            <div class="agent-card">
+                <span class="agent-icon">🎯</span><span class="agent-name">Script Director</span><span class="agent-role">quality</span>
+                <span class="tooltip-text">Ensures story quality and consistency</span>
+            </div>
+            <div class="agent-card">
+                <span class="agent-icon">🖼️</span><span class="agent-name">Panel Generator</span><span class="agent-role">nano‑banana</span>
+                <span class="tooltip-text">Describes each panel visually</span>
+            </div>
+            <div class="agent-card">
+                <span class="agent-icon">💬</span><span class="agent-name">Dialogue Doctor</span><span class="agent-role">bubbles</span>
+                <span class="tooltip-text">Adds speech bubbles and dialogue</span>
+            </div>
+            <div class="agent-card">
+                <span class="agent-icon">🎨</span><span class="agent-name">Style Advisor</span><span class="agent-role">palette</span>
+                <span class="tooltip-text">Recommends art style and colors</span>
+            </div>
+            <div class="agent-card">
+                <span class="agent-icon">✨</span><span class="agent-name">Imagen</span><span class="agent-role">images</span>
+                <span class="tooltip-text">Generates the actual comic panels</span>
+            </div>
         </div>
 
-        <div class="controls">
-            <textarea id="prompt" placeholder="Enter your comic idea... (e.g., 'penguin in a castle')"></textarea>
+        <div class="language-selector">
+            <label for="language">Choose Language:</label>
+            <select id="language" onchange="setLanguage(this.value)">
+                <option value="English">English</option>
+                <option value="French">Français</option>
+                <option value="Spanish">Español</option>
+                <option value="German">Deutsch</option>
+                <option value="Japanese">日本語</option>
+                <option value="Arabic">العربية</option>
+                <option value="Urdu">اردو</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <textarea id="prompt" placeholder="e.g., a curious cat lost in the desert">penguin in a fridge</textarea>
+            <button onclick="randomPrompt()" id="randomBtn" style="background: #9f7aea;" title="Get a random prompt">🎲</button>
+        </div>
+
+        <div class="panel-count-slider">
+            <label for="panelCount">Number of panels:</label>
+            <input type="range" id="panelCount" min="1" max="6" value="4" oninput="updatePanelCount(this.value)">
+            <span id="panelCountValue">4</span>
+        </div>
+
+        <button onclick="generateStory()" id="storyBtn">1. Generate Story</button>
+        
+        <div id="storyOutput" style="margin-top:20px;"></div>
+        
+        <div id="chatSection" style="display:none; margin-top:20px;">
+            <h3>🎬 Conversational Agent</h3>
+            <div id="chatMessages" class="chat-box"></div>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <input type="text" id="chatInput" placeholder="Type your feedback or 'yes' to approve...">
+                <button onclick="sendChat()">Send</button>
+            </div>
+        </div>
+        
+        <div id="styleSection" style="display:none; margin-top:20px;">
+            <h3>🎨 Choose Your Style</h3>
+            <div class="style-row">
+                <div>
+                    <label>Art Style:</label>
+                    <select id="artStyle">
+                        <option value="">Let AI decide</option>
+                        <option value="Manga">Manga (Japanese comic)</option>
+                        <option value="Western">Western (American comic)</option>
+                        <option value="Anime">Anime (Japanese animation)</option>
+                        <option value="Watercolor">Watercolor</option>
+                        <option value="Sketch">Sketch</option>
+                        <option value="Vintage">Vintage 1950s</option>
+                        <option value="Cartoon">Cartoon (Looney Tunes style)</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Language Tone:</label>
+                    <select id="languageTone">
+                        <option value="">Let AI decide</option>
+                        <option value="Humorous">Humorous</option>
+                        <option value="Dramatic">Dramatic</option>
+                        <option value="Sarcastic">Sarcastic</option>
+                        <option value="Heartwarming">Heartwarming</option>
+                        <option value="Adventurous">Adventurous</option>
+                        <option value="Mysterious">Mysterious</option>
+                    </select>
+                </div>
+            </div>
+            <div class="style-row">
+                <div>
+                    <label>Color Palette (optional):</label>
+                    <input type="text" id="colorPalette" placeholder="e.g., warm, vibrant, dark, pastel">
+                </div>
+            </div>
+            <button onclick="generatePanels()" id="panelsBtn">2. Generate Panels</button>
+        </div>
+        
+        <div id="comicOutput" style="margin-top:20px;"></div>
+        
+        <div id="imageSection" style="display:none; margin-top:20px;">
             <div class="button-group">
-                <button class="btn" onclick="generateStory()" id="storyBtn">1. Generate Story</button>
-                <button class="btn btn-primary" onclick="generateComic()" id="comicBtn" disabled>2. Generate Comic</button>
+                <button onclick="generateImages()" id="imageBtn">3. Generate Images</button>
+                <button onclick="downloadPDF()" id="pdfBtn" style="background: #27ae60;">📄 PDF</button>
+                <button onclick="downloadBooklet()" id="bookletBtn" style="background: #e67e22;">📚 Booklet</button>
             </div>
-            <div class="extra-buttons">
-                <button class="btn" onclick="toggleADKAutoMode()" id="adkAutoBtn" style="background:#9b59b6; color:white;">🎬 ADK Auto: OFF</button>
-            </div>
-        </div>
-
-        <div class="pipeline">
-            <h2>🤖 Agent Pipeline</h2>
-            <div class="agent-grid" id="agentGrid"></div>
-        </div>
-
-        <div id="storyResult" style="display: none;">
-            <div class="story-box">
-                <h2>📖 Generated Story</h2>
-                <div class="story-content" id="storyContent"></div>
-            </div>
-        </div>
-
-        <div id="comicResult" style="display: none;">
-            <div class="comic-gallery">
-                <h2>🎨 Your Comic</h2>
-                <div class="comic-grid" id="comicGrid"></div>
-            </div>
+            <div id="imageOutput"></div>
         </div>
     </div>
 
-    <div class="loading-overlay" id="loadingOverlay" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:1000;">
-        <div style="background:white; padding:30px; border-radius:20px; text-align:center;">
-            <div class="spinner" style="border:4px solid #f0f0f0; border-top:4px solid #667eea; border-radius:50%; width:40px; height:40px; animation:spin 1s linear infinite; margin:0 auto;"></div>
-            <h3>Generating...</h3>
+    <div class="footer">
+        <p>✨ Created by <strong>Robina Mirbahar</strong> · <span class="gde-gradient">Google Developer Expert</span> in Cloud & AI</p>
+        <div class="social-links">
+            <a href="https://linkedin.com/in/robinamirbahar" target="_blank" rel="noopener">🔗 LinkedIn</a>
+            <a href="https://github.com/robinamirbahar" target="_blank" rel="noopener">🐙 GitHub</a>
+            <a href="https://instagram.com/robinamirbahar" target="_blank" rel="noopener">📷 Instagram</a>
+            <a href="https://twitter.com/robinamirbahar" target="_blank" rel="noopener">🐦 X (Twitter)</a>
         </div>
+        <p style="font-size:0.8rem; opacity:0.7; margin-top:8px;">6 specialized agents · 7 languages · Imagen · PDF/Booklet export</p>
     </div>
 
-    <!-- Load ONLY the clean JavaScript -->
-    <script src="/static/js/clean-all.js"></script>
-    
     <script>
-        // Minimal agent display function
-        function updateAgentDisplay() {
-            const grid = document.getElementById('agentGrid');
-            if (!grid) return;
-            
-            const agents = [
-                ["Story Generator", "completed", 100, '<i class="fas fa-pen-fancy"></i>'],
-                ["Script Director", "pending", 0, '<i class="fas fa-video"></i>'],
-                ["Panel Generator", "pending", 0, '<i class="fas fa-paint-brush"></i>']
-            ];
-            
-            let html = '';
-            agents.forEach(([name, status, progress, icon]) => {
-                let statusText = status === 'completed' ? '✅ Complete' : '⏳ Pending';
-                let statusColor = status === 'completed' ? '#27ae60' : '#95a5a6';
-                
-                html += `<div class="agent-card" style="background:white; border-radius:10px; padding:15px; color:#333;">
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <span style="font-size:1.5rem; background:linear-gradient(135deg,#667eea,#764ba2); width:45px; height:45px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white;">${icon}</span>
-                        <div><h3>${name}</h3><span style="color:${statusColor}">${statusText}</span></div>
-                    </div>
-                    <div style="height:4px; background:#e0e0e0; border-radius:2px; margin-top:10px;">
-                        <div style="width:${progress}%; height:100%; background:${statusColor}; border-radius:2px;"></div>
-                    </div>
-                </div>`;
-            });
-            grid.innerHTML = html;
+        let currentStory = null;
+        let currentPanels = null;
+        let currentDialogues = null;
+        let currentStyle = null;
+        let currentImages = null;
+        let selectedStyle = {};
+        let currentLanguage = 'English';
+        let currentPanelCount = 4;
+
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            const container = document.getElementById('mainContainer');
+            if (lang === 'Arabic' || lang === 'Urdu') {
+                container.classList.add('rtl');
+            } else {
+                container.classList.remove('rtl');
+            }
         }
-        
-        // Placeholder functions
-        window.generateComic = function() { alert("Generate comic - to be implemented"); };
-        
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            updateAgentDisplay();
-            console.log("✅ App initialized");
-        });
+
+        function updatePanelCount(val) {
+            currentPanelCount = val;
+            document.getElementById('panelCountValue').innerText = val;
+        }
+
+        function randomPrompt() {
+            const prompts = [
+                "a ninja cat in a pizza restaurant",
+                "a robot exploring an underwater city",
+                "a detective duck solving a mystery in Paris",
+                "a dragon who loves baking cookies",
+                "an alien trying to understand Earth's internet",
+                "a clumsy wizard in a magic school",
+                "a penguin on a tropical island",
+                "a superhero without powers at a gym",
+                "a ghost haunting a coffee shop",
+                "a time-traveling hamster"
+            ];
+            const random = prompts[Math.floor(Math.random() * prompts.length)];
+            document.getElementById('prompt').value = random;
+        }
+
+        function showLoading(message) {
+            document.getElementById('loadingText').innerText = message;
+            document.getElementById('loadingOverlay').classList.add('active');
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingOverlay').classList.remove('active');
+        }
+
+        async function generateStory() {
+            const prompt = document.getElementById('prompt').value;
+            if (!prompt.trim()) {
+                alert('Please enter a prompt');
+                return;
+            }
+            showLoading('Generating story...');
+            try {
+                const response = await fetch('/generate-story', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        topic: prompt,
+                        language: currentLanguage,
+                        panels: currentPanelCount
+                    })
+                });
+                const data = await response.json();
+                currentStory = data.story;
+                displayStory(currentStory);
+                
+                document.getElementById('chatSection').style.display = 'block';
+                addAgentMessage("I've created a story for you. You can ask me to change it in many ways! For example:\n- 'add a dog character'\n- 'make the plot more adventurous'\n- 'change the main character's personality to be braver'\n- 'add a twist at the end'\nJust tell me what you'd like, or say 'yes' to proceed.");
+                document.getElementById('styleSection').style.display = 'none';
+                document.getElementById('imageSection').style.display = 'none';
+                hideLoading();
+            } catch (error) {
+                hideLoading();
+                document.getElementById('storyOutput').innerHTML = 'Error: ' + error;
+            }
+        }
+
+        function displayStory(story) {
+            let html = '<h2>Generated Story</h2>';
+            html += '<h3>' + (story.title || 'Untitled') + '</h3>';
+            html += '<h4>Characters:</h4><ul>';
+            (story.characters || []).forEach(c => html += '<li>' + c + '</li>');
+            html += '</ul><h4>Plot:</h4><ol>';
+            (story.plot || []).forEach(p => html += '<li>' + p + '</li>');
+            html += '</ol>';
+            document.getElementById('storyOutput').innerHTML = html;
+        }
+
+        function addAgentMessage(text) {
+            const chat = document.getElementById('chatMessages');
+            chat.innerHTML += '<div class="agent-message">🎬 ' + text.replace(/\n/g, '<br>') + '</div>';
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function addUserMessage(text) {
+            const chat = document.getElementById('chatMessages');
+            chat.innerHTML += '<div class="user-message">👤 ' + text + '</div>';
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        async function sendChat() {
+            const input = document.getElementById('chatInput');
+            const msg = input.value.trim();
+            if (!msg) return;
+            addUserMessage(msg);
+            input.value = '';
+
+            if (msg.toLowerCase() === 'yes') {
+                addAgentMessage('Great! Now choose your style preferences and click "Generate Panels".');
+                document.getElementById('chatSection').style.display = 'none';
+                document.getElementById('styleSection').style.display = 'block';
+                return;
+            }
+
+            addAgentMessage('⏳ Modifying story... (this may take a few seconds)');
+            showLoading('Refining story...');
+            try {
+                const response = await fetch('/refine-story', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        story: currentStory,
+                        modification: msg,
+                        language: currentLanguage
+                    })
+                });
+                const data = await response.json();
+                currentStory = data.story;
+                displayStory(currentStory);
+                addAgentMessage('Story updated! You can keep refining (e.g., "add another character", "make it funnier") or say "yes" to continue.');
+                hideLoading();
+            } catch (error) {
+                hideLoading();
+                addAgentMessage('Sorry, I encountered an error. Please try again with a different request.');
+            }
+        }
+
+        async function generatePanels() {
+            selectedStyle = {
+                overall_style: document.getElementById('artStyle').value || undefined,
+                language_tone: document.getElementById('languageTone').value || undefined,
+                color_palette: document.getElementById('colorPalette').value || undefined
+            };
+
+            document.getElementById('comicOutput').innerHTML = '⏳ Generating comic panels and dialogue...';
+            showLoading('Generating panels and dialogue...');
+            try {
+                const response = await fetch('/generate-panels', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        story: currentStory,
+                        style: selectedStyle,
+                        language: currentLanguage
+                    })
+                });
+                const data = await response.json();
+                currentPanels = data.panels;
+                currentDialogues = data.dialogues;
+                currentStyle = data.style_advice;
+                displayComic(data);
+                document.getElementById('imageSection').style.display = 'block';
+                hideLoading();
+            } catch (error) {
+                hideLoading();
+                document.getElementById('comicOutput').innerHTML = 'Error: ' + error;
+            }
+        }
+
+        function displayComic(data) {
+            let html = '<h2>Final Comic</h2>';
+            html += '<h4>Panels & Dialogue:</h4>';
+            (data.panels || []).forEach((panel, i) => {
+                html += '<div class="panel">';
+                html += '<strong>Panel ' + panel.panel_number + '</strong><br>';
+                html += '<p>' + panel.description + '</p>';
+                html += '<p><em>Characters: ' + (panel.characters_present || []).join(', ') + '</em></p>';
+                
+                const dialogue = (data.dialogues || []).find(d => d.panel_number === panel.panel_number);
+                if (dialogue) {
+                    html += '<div class="dialogue"><strong>Dialogue:</strong><br>';
+                    (dialogue.dialogues || []).forEach(d => {
+                        html += `"${d.text}" – ${d.character} <span class="bubble-type">(${d.bubble_type})</span><br>`;
+                    });
+                    html += '</div>';
+                }
+                html += '</div>';
+            });
+
+            if (data.style_advice && Object.keys(data.style_advice).length) {
+                html += '<div class="style-box">';
+                html += '<h4>🎨 Style Advice</h4>';
+                if (data.style_advice.overall_style) html += '<p><strong>Overall Style:</strong> ' + data.style_advice.overall_style + '</p>';
+                if (data.style_advice.language_tone) html += '<p><strong>Language Tone:</strong> ' + data.style_advice.language_tone + '</p>';
+                if (data.style_advice.color_palette) html += '<p><strong>Color Palette:</strong> ' + data.style_advice.color_palette + '</p>';
+                html += '</div>';
+            }
+            
+            document.getElementById('comicOutput').innerHTML = html;
+        }
+
+        async function generateImages() {
+            document.getElementById('imageOutput').innerHTML = '⏳ Generating images with Imagen... (this may take 10-20 seconds)';
+            showLoading('Generating images with Imagen... (may take 10-20 seconds)');
+            try {
+                const response = await fetch('/generate-images', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        panels: currentPanels,
+                        style: currentStyle,
+                        dialogues: currentDialogues,
+                        language: currentLanguage
+                    })
+                });
+                const data = await response.json();
+                currentImages = data.images;
+                displayImages(data.images);
+                hideLoading();
+            } catch (error) {
+                hideLoading();
+                document.getElementById('imageOutput').innerHTML = 'Error: ' + error;
+            }
+        }
+
+        function displayImages(images) {
+            let html = '<h3>🎨 Generated Comic Panels (Imagen)</h3>';
+            
+            images.sort((a,b) => a.panel_number - b.panel_number);
+            
+            images.forEach(img => {
+                html += '<div class="comic-panel">';
+                html += '<h4>Panel ' + img.panel_number + '</h4>';
+                
+                if (img.image) {
+                    html += `<img src="data:image/png;base64,${img.image}" alt="Panel ${img.panel_number}">`;
+                    html += '<div class="placeholder-note">✓ Real Imagen generation with speech bubbles</div>';
+                } else {
+                    const colors = ['#667eea', '#764ba2', '#ff6b6b', '#4ecdc4'];
+                    const color = colors[(img.panel_number - 1) % colors.length];
+                    html += `<div style="height:200px; background:linear-gradient(135deg, ${color}, ${color}dd); border-radius:8px; display:flex; align-items:center; justify-content:center; color:white;">`;
+                    html += '⚠️ Imagen unavailable - showing placeholder';
+                    html += '<br><small>' + (img.description || '') + '</small>';
+                    html += '</div>';
+                }
+                html += '</div>';
+            });
+            
+            document.getElementById('imageOutput').innerHTML = html;
+        }
+
+        async function downloadPDF() {
+            if (!currentImages || currentImages.length === 0) {
+                alert('Please generate images first.');
+                return;
+            }
+            try {
+                const response = await fetch('/download-pdf', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        images: currentImages,
+                        style_advice: currentStyle,
+                        story_title: currentStory ? currentStory.title : 'Comic'
+                    })
+                });
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'comic.pdf';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            } catch (error) {
+                alert('PDF download failed: ' + error);
+            }
+        }
+
+        async function downloadBooklet() {
+            if (!currentImages || currentImages.length === 0) {
+                alert('Please generate images first.');
+                return;
+            }
+            try {
+                const response = await fetch('/download-booklet', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        images: currentImages,
+                        style_advice: currentStyle,
+                        story_title: currentStory ? currentStory.title : 'Comic'
+                    })
+                });
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'comic_booklet.pdf';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            } catch (error) {
+                alert('Booklet download failed: ' + error);
+            }
+        }
     </script>
-    
-    <style>@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>
 </body>
 </html>
-    <!-- Agent Fix Script -->
-    <script src="/static/js/agent-fix.js"></script>
-    <!-- Emoji Fix Script -->
-    <script src="/static/js/emoji-fix.js"></script>

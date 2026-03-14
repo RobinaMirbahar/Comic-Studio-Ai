@@ -60,7 +60,7 @@ Type your idea in the text area, choose language, and select number of panels (1
 │ [1. Generate Story]                  │
 └─────────────────────────────────────┘
 ```
-[Image: Screenshot of the top section with language dropdown, prompt input, random button, and panel slider]
+![Enter the prompt](https://raw.githubusercontent.com/RobinaMirbahar/Comic-Studio-Ai/main/docs/images/enter-the-prompt.jpg)
 
 ### Step 2: Generate Story
 Click **"1. Generate Story"** – you'll see the AI-generated story with title, characters, and plot.
@@ -79,7 +79,9 @@ Click **"1. Generate Story"** – you'll see the AI-generated story with title, 
 │ 4. Pingu finds water and friends.    │
 └─────────────────────────────────────┘
 ```
-[Image: Screenshot of generated story output with title, characters, and plot points]
+
+![Generating Story](https://raw.githubusercontent.com/RobinaMirbahar/Comic-Studio-Ai/main/docs/images/generating-story.jpg)
+![Generated Story](https://raw.githubusercontent.com/RobinaMirbahar/Comic-Studio-Ai/main/docs/images/generatedstroy.jpg)
 
 ### Step 3: Chat with the Conversational Agent
 The agent appears and asks if you're satisfied. You can request changes like:

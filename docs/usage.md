@@ -62,6 +62,16 @@ Type your idea in the text area, choose language, and select number of panels (1
 ```
 ![Enter the prompt](https://raw.githubusercontent.com/RobinaMirbahar/Comic-Studio-Ai/main/docs/images/enter-the-prompt.jpg)
 
+### 🎤 Voice Input
+- Click the **🎤 microphone button** next to the prompt field.
+- Your browser will ask for microphone permission – allow it.
+- Speak your comic idea clearly (e.g., "a cat in a spaceship").
+- The spoken text will automatically fill the prompt box.
+- Works best in Chrome, Edge, or Safari.
+
+![Voice input button](images/audio.jpg)
+
+
 ### Step 2: Generate Story
 Click **"1. Generate Story"** – you'll see the AI-generated story with title, characters, and plot.
 

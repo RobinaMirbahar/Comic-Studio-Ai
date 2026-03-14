@@ -352,3 +352,6 @@ temp/
 # This .gitignore ensures your repository stays clean and secure.
 # Last updated: March 9, 2026
 # For Comic Studio AI - Gemini Live Agent Challenge
+# Python bytecode
+__pycache__/
+*.pyc

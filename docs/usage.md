@@ -1,18 +1,21 @@
+
 # 📖 Comic Studio AI - Usage Guide
 
 ## 📋 Table of Contents
 - [Quick Start](#quick-start)
 - [🎨 Your First Comic - Visual Guide](#-your-first-comic---visual-guide)
 - [Web Interface Guide](#web-interface-guide)
-- [API Usage Guide](#api-usage-guide)
-- [Voice Commands](#voice-commands)
-- [Character Upload](#character-upload)
-- [Bubble Editor](#bubble-editor)
+- [Conversational Agent](#conversational-agent)
+- [Style Selection](#style-selection)
+- [Panel Count & Random Prompt](#panel-count--random-prompt)
+- [Image Generation](#image-generation)
 - [Download Options](#download-options)
+- [API Usage Guide](#api-usage-guide)
 - [Art Styles](#art-styles)
 - [Languages](#languages)
 - [Examples](#examples)
 - [Troubleshooting](#troubleshooting)
+- [📷 Adding Images to this Guide](#-adding-images-to-this-guide)
 
 ---
 
@@ -26,8 +29,11 @@ cd Comic-Studio-Ai
 # Activate virtual environment
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
+# Install minimal dependencies
+pip install fastapi uvicorn python-dotenv google-generativeai Pillow reportlab
+
 # Run the app
-python app.py
+python main.py
 ```
 
 ### 2. **Open in Browser**
@@ -35,134 +41,147 @@ python app.py
 http://localhost:8080
 ```
 
+[Image: Screenshot of the top section with language dropdown, prompt input, random button, and panel slider]
+*(Place your screenshot here – see section "📷 Adding Images to this Guide")*
+
 ---
 
 ## 🎨 Your First Comic - Visual Guide
 
-### Step 1: Enter a Prompt
-Type your idea in the text area. For example: **"mouse on road"**
+### Step 1: Enter a Prompt & Adjust Settings
+Type your idea in the text area, choose language, and select number of panels (1–6). Example: **"penguin in a desert"**
 
 ```
 ┌─────────────────────────────────────┐
-│ [mouse on road]                     │
-│ [Generate Story] [Generate Comic]   │
+│ Language: [English ▼]               │
+│ [penguin in a desert]       [🎲]    │
+│ Panels: [=====○=====] (4)           │
+│ [1. Generate Story]                  │
 └─────────────────────────────────────┘
 ```
-*Enter your creative idea in the prompt box*
+[Image: Screenshot of the top section with language dropdown, prompt input, random button, and panel slider]
 
 ### Step 2: Generate Story
-Click **"Generate Story"** and wait 2-3 seconds
+Click **"1. Generate Story"** – you'll see the AI-generated story with title, characters, and plot.
 
 ```
 ┌─────────────────────────────────────┐
 │ 📖 Generated Story                   │
-│                                      │
-│ The Amazing Adventure                │
-│ Hero • Wise Guide • Curious Friend  │
-│                                      │
-│ 1. Once upon a time...              │
-│ 2. Our hero discovered...           │
-│ 3. Together they embarked...        │
-│ 4. In the end they found...         │
+│ Desert Penguin Adventure             │
+│ Characters:                          │
+│ • Pingu – A lost penguin             │
+│ • Cactus Carl – A grumpy cactus      │
+│ Plot:                                 │
+│ 1. Pingu wakes up in the desert...   │
+│ 2. He asks Cactus Carl for water...  │
+│ 3. Carl points to an oasis...        │
+│ 4. Pingu finds water and friends.    │
 └─────────────────────────────────────┘
 ```
-*AI generates a complete story with characters and plot*
+[Image: Screenshot of generated story output with title, characters, and plot points]
 
-### Step 3: Generate Comic
-Click **"Generate Comic"** and watch the magic happen!
+### Step 3: Chat with the Conversational Agent
+The agent appears and asks if you're satisfied. You can request changes like:
+- `"add a dog character"`
+- `"make the penguin braver"`
+- `"change the ending to be funnier"`
+
+Type your request, or simply say **"yes"** to proceed.
 
 ```
-┌─────────────┐ ┌─────────────┐
-│   Panel 1   │ │   Panel 2   │
-│             │ │             │
-│    🐭       │ │    🚗       │
-│  "I need to │ │  "Watch     │
-│   cross!"   │ │   out!"     │
-└─────────────┘ └─────────────┘
-┌─────────────┐ ┌─────────────┐
-│   Panel 3   │ │   Panel 4   │
-│             │ │             │
-│    🧀       │ │    🏁       │
-│  "Almost    │ │  "I made    │
-│   there!"   │ │   it!"      │
-└─────────────┘ └─────────────┘
+┌─────────────────────────────────────┐
+│ 🎬 I've created a story. You can ask │
+│    to change it, e.g., "add a dog".  │
+│ 👤 add a dog                         │
+│ 🎬 ⏳ Modifying...                    │
+│ 🎬 Story updated!                     │
+└─────────────────────────────────────┘
 ```
-*4 comic panels appear with auto-generated speech bubbles*
+[Image: Screenshot of the chat box with agent message and user input]
 
-### Step 4: Your Complete Comic! 🎉
+### Step 4: Choose Your Style
+After approving, select art style, language tone, and optional color palette.
 
-| Before | After |
-|--------|-------|
-| Just text: "mouse on road" | 🖼️ **4 Complete Comic Panels** |
-| | • Consistent mouse character |
-| | • 4-part story progression |
-| | • Auto-generated speech bubbles |
+```
+┌─────────────────────────────────────┐
+│ Art Style: [Manga ▼]                 │
+│ Language Tone: [Adventurous ▼]       │
+│ Color Palette: [warm]                 │
+│ [2. Generate Panels]                  │
+└─────────────────────────────────────┘
+```
+[Image: Screenshot of style selection dropdowns]
 
----
+### Step 5: Generate Panels & Dialogue
+Click **"2. Generate Panels"** – the app creates 4 panel descriptions with dialogue and bubble types.
+
+```
+┌─────────────────────────────────────┐
+│ Panel 1: Wide desert shot, Pingu...  │
+│ Characters: Pingu                     │
+│ Dialogue: "Where's the water?"        │
+│ (speech)                              │
+│ Panel 2: Pingu meets Cactus Carl...   │
+│ ...                                   │
+└─────────────────────────────────────┘
+```
+[Image: Screenshot of panel descriptions with dialogue]
+
+### Step 6: Generate Images
+Click **"3. Generate Images"** – the app uses Imagen to create actual comic panels (may take 10–20 seconds).
+
+```
+┌─────────────────────────────────────┐
+│ [Image of Panel 1]                   │
+│ ✓ Real Imagen generation             │
+│ [Image of Panel 2]                   │
+│ ...                                   │
+└─────────────────────────────────────┘
+```
+[Image: Screenshot of generated comic panels with speech bubbles]
+
+### Step 7: Download Your Comic
+Choose **PDF** (one panel per page) or **Booklet** (two panels per page, landscape). Files include the story title and a timestamp.
+
+```
+┌─────────────────────────────────────┐
+│ [PDF]    [Booklet]                   │
+│ comic_PenguinAdventure_12345678.pdf  │
+└─────────────────────────────────────┘
+```
+[Image: Screenshot of download buttons and sample filename]
 
 ### 📸 Example Gallery
 
-#### Example 1: "mouse on road"
+#### Example 1: "cat in a hospital" (Spanish, humorous)
 | Panel 1 | Panel 2 | Panel 3 | Panel 4 |
 |---------|---------|---------|---------|
-| Mouse spots cheese | Crosses road | Narrow escape | Enjoys cheese |
-| "I need that!" | "Here I go!" | "That was close!" | "Totally worth it!" |
+| Cat enters hospital | Meets a dog nurse | Gets a checkup | Makes friends |
+[Image: Collage of four panels from "cat in a hospital"]
 
-#### Example 2: "cat astronaut on moon"
+#### Example 2: "robot on Mars" (English, adventurous)
 | Panel 1 | Panel 2 | Panel 3 | Panel 4 |
 |---------|---------|---------|---------|
-| Cat in spaceship | Lands on moon | Plants flag | Waves at Earth |
-| "3..2..1.." | "One small step" | "For cats everywhere!" | "Meow from space!" |
+| Robot lands | Explores crater | Finds alien | Sends message |
+[Image: Collage of four panels from "robot on Mars"]
 
-#### Example 3: "dragon eating pizza"
+#### Example 3: "dragon at school" (Japanese, heartwarming)
 | Panel 1 | Panel 2 | Panel 3 | Panel 4 |
 |---------|---------|---------|---------|
-| Dragon sees pizza | Takes a bite | Loves it! | Orders more |
-| "What's this?" | "MMM!" | "Best thing ever!" | "I'll take 10!" |
-
----
+| Dragon is nervous | Meets a friendly owl | Learns to breathe fire | Graduates |
+[Image: Collage of four panels from "dragon at school"]
 
 ### 🎯 Visual Workflow
 
 ```mermaid
-graph LR
-    A[📝 "mouse on road"] --> B[📖 Generated Story]
-    B --> C[🎨 4 Comic Panels]
-    
-    style A fill:#e1f5fe,stroke:#01579b
-    style B fill:#fff3e0,stroke:#bf360c
-    style C fill:#e8f5e8,stroke:#1b5e20
-```
-
----
-
-### 📱 What You'll See
-
-**Before Generation:**
-```
-┌─────────────────────────────────────┐
-│ Enter your comic idea...            │
-│ [mouse on road]                      │
-│                                      │
-│ [Generate Story] [Generate Comic]    │
-└─────────────────────────────────────┘
-```
-
-**During Generation:**
-```
-┌─────────────────────────────────────┐
-│ ⏳ Generating...                     │
-│    🤖 Story Agent working...         │
-└─────────────────────────────────────┘
-```
-
-**After Generation:**
-```
-┌─────────────────────────────────────┐
-│ 📖 Story Generated!                  │
-│ 🎨 4 Comic Panels Ready!             │
-│ 💬 Speech Bubbles Added!             │
-└─────────────────────────────────────┘
+graph TD
+    A[Enter Prompt] --> B[Generate Story]
+    B --> C{Conversational Agent}
+    C -->|"Request changes"| B
+    C -->|"Approve (yes)"| D[Choose Style]
+    D --> E[Generate Panels]
+    E --> F[Generate Images]
+    F --> G[Download PDF/Booklet]
 ```
 
 ---
@@ -173,64 +192,122 @@ graph LR
 
 ```
 ┌─────────────────────────────────────────────┐
-│  HEADER                                     │
-│  Title, badges, creator info                │
+│  HEADER & AGENT SHOWCASE                    │
+│  (Researcher, Script Director, etc.)        │
 ├─────────────────────────────────────────────┤
-│  OPTIONS BAR                                │
-│  Language • Style • Panels                  │
+│  LANGUAGE SELECTOR                           │
+│  [English ▼]                                 │
 ├─────────────────────────────────────────────┤
-│  CHARACTER UPLOAD                           │
-│  Upload and select custom characters        │
+│  PROMPT INPUT & RANDOM BUTTON                │
+│  [penguin in a desert]          [🎲]        │
+│  PANEL COUNT SLIDER                          │
+│  [=====○=====] (4)                           │
+│  [1. Generate Story]                         │
 ├─────────────────────────────────────────────┤
-│  PROMPT INPUT                               │
-│  [ Enter your idea here ]                   │
-│  [Generate Story] [Generate Comic]          │
+│  STORY OUTPUT                                │
+│  (title, characters, plot)                   │
 ├─────────────────────────────────────────────┤
-│  EXTRA BUTTONS                              │
-│  Voice • New Story • Read Aloud • Stop     │
-│  Share • Storyboard • Download • Bubbles   │
+│  CONVERSATIONAL AGENT CHAT                   │
+│  (appears after story)                       │
 ├─────────────────────────────────────────────┤
-│  AGENT PIPELINE                             │
-│  [Story] [Director] [Panel] status         │
+│  STYLE SELECTION (appears after approval)    │
+│  Art Style ▼   Tone ▼   Palette ▼           │
+│  [2. Generate Panels]                        │
 ├─────────────────────────────────────────────┤
-│  RESULTS                                    │
-│  Generated Story & 4 Comic Panels          │
+│  PANELS & DIALOGUE OUTPUT                    │
+├─────────────────────────────────────────────┤
+│  IMAGE GENERATION & DOWNLOAD BUTTONS         │
+│  [3. Generate Images] [PDF] [Booklet]       │
+│  (generated images appear below)             │
 └─────────────────────────────────────────────┘
 ```
+[Image: Full-page screenshot of the entire web interface with numbered sections]
 
-### Step-by-Step Walkthrough
+### Agent Tooltips
+Hover over any agent card (Researcher, Script Director, etc.) to see a brief description of its role.
 
-#### **Step 1: Enter a Prompt**
-Type your idea in the text area. Examples:
-- `mouse on road`
-- `dragon eating pizza`
-- `cat astronaut on moon`
-- `robot teaching math`
+[Image: Screenshot showing a tooltip popup on an agent card]
 
-#### **Step 2: Generate Story**
-Click **"Generate Story"** and wait 2-3 seconds. You'll see:
-- Story title
-- Character descriptions
-- 4 plot points
+---
 
-#### **Step 3: Generate Comic**
-Click **"Generate Comic"** and wait 3-4 seconds. You'll see:
-- 4 comic panels with your characters
-- Auto-generated speech bubbles
-- Consistent character appearance
+## 💬 Conversational Agent
 
-#### **Step 4: Edit Bubbles (Optional)**
-1. Click **"Add Bubbles"**
-2. Select a panel (1-4)
-3. Choose bubble type and emotion
-4. Enter text or click **"AI Suggest"**
-5. Click **"Apply to Panel"**
+After story generation, the agent appears in a chat box. It helps you refine the story.
 
-#### **Step 5: Download Your Comic**
-Choose your format:
-- **📦 ZIP** - All images in one archive
-- **📄 PDF** - Professional document
-- **📚 Booklet** - Print-ready booklet
+**How to use:**
+- Type natural language requests like:
+  - `"add a dog character"`
+  - `"make the plot more adventurous"`
+  - `"change the main character's name to Fluffy"`
+  - `"make the ending happier"`
+- The agent preserves existing characters and only adds/modifies as you ask.
+- Say `"yes"` when you're satisfied to move to style selection.
+
+**Example conversation:**
+```
+🎬 I've created a story. You can ask me to change it, e.g.:
+   - 'add a dog character'
+   - 'make the plot more adventurous'
+   Just tell me, or say 'yes' to proceed.
+👤 add a cat and a dog
+🎬 ⏳ Modifying story...
+🎬 Story updated! You can keep refining or say 'yes'.
+👤 yes
+🎬 Great! Now choose your style preferences and click "Generate Panels".
+```
+[Image: Screenshot of the chat box with multi-turn conversation]
+
+---
+
+## 🎨 Style Selection
+
+Once you approve the story, you can choose:
+
+- **Art Style** – The visual aesthetic (Manga, Western, Anime, Watercolor, Sketch, Vintage, Cartoon)
+- **Language Tone** – The mood of dialogue (Humorous, Dramatic, Sarcastic, Heartwarming, Adventurous, Mysterious)
+- **Color Palette** – Optional hint (e.g., "warm", "pastel", "dark")
+
+If you leave any field blank, the AI will decide.
+
+[Image: Screenshot of style selection dropdowns with options visible]
+
+---
+
+## 🔢 Panel Count & Random Prompt
+
+### Panel Count Slider
+- Adjust the number of panels from 1 to 6.
+- The story and panels will adapt to the chosen count.
+
+[Image: Close-up of the panel count slider showing value 4]
+
+### Random Prompt Button (🎲)
+- Click the dice icon next to the prompt box to get a random creative idea.
+- Great for inspiration!
+
+[Image: Screenshot of random prompt button with a generated random idea in the input box]
+
+---
+
+## ✨ Image Generation
+
+After generating panels, click **"3. Generate Images"** to create actual comic panels using Imagen (via `gemini-3.1-flash-image-preview`). This may take 10–20 seconds for four panels.
+
+- Images are displayed as base64-encoded PNGs directly in the page.
+- If generation fails (e.g., due to API quota), a styled placeholder appears with the panel description.
+
+[Image: Screenshot of generated images with the success message "✓ Real Imagen generation"]
+
+---
+
+## 📥 Download Options
+
+- **PDF** – Standard portrait PDF with one panel per page and a title page showing style advice.
+- **Booklet** – Landscape PDF with two panels per page, suitable for printing as a booklet.
+
+Filenames include the story title and a timestamp (e.g., `PenguinAdventure_12345678.pdf`).
+
+[Image: Screenshot of download buttons with a sample PDF opened in a viewer]
 
 ---
 
@@ -245,286 +322,151 @@ http://localhost:8080
 ```bash
 curl -X POST http://localhost:8080/generate-story \
   -H "Content-Type: application/json" \
-  -d '{"topic": "mouse on road", "language": "en"}'
+  -d '{"topic": "penguin in a desert", "language": "en", "panels": 4}'
 ```
+[Image: Screenshot of terminal showing curl command and JSON response]
 
-### 2. **Generate Comic**
+### 2. **Refine Story**
 ```bash
-curl -X POST http://localhost:8080/generate-pages-with-characters \
+curl -X POST http://localhost:8080/refine-story \
   -H "Content-Type: application/json" \
   -d '{
-    "story": {
-      "title": "Mouse Adventure",
-      "characters": ["Montgomery"],
-      "plot": ["Start", "Middle", "Climax", "End"]
-    },
-    "style": "manga",
-    "prompt": "mouse on road"
+    "story": {...},
+    "modification": "add a dog character",
+    "language": "en"
   }'
 ```
+[Image: Screenshot of terminal with refine-story request and updated story response]
 
-### 3. **Add Bubble**
+### 3. **Generate Panels**
 ```bash
-curl -X POST http://localhost:8080/add-bubble \
+curl -X POST http://localhost:8080/generate-panels \
   -H "Content-Type: application/json" \
   -d '{
-    "image_url": "/static/comics/page_1.png",
-    "text": "I need to cross this road!",
-    "bubble_type": "speech",
-    "emotion": "excited"
+    "story": {...},
+    "style": {"overall_style": "manga", "language_tone": "humorous"},
+    "language": "en"
   }'
 ```
+[Image: Screenshot of terminal with generate-panels response showing panel objects]
 
-### 4. **Download as PDF**
+### 4. **Generate Images**
+```bash
+curl -X POST http://localhost:8080/generate-images \
+  -H "Content-Type: application/json" \
+  -d '{
+    "panels": [...],
+    "style": {...},
+    "dialogues": [...],
+    "language": "en"
+  }'
+```
+[Image: Screenshot of terminal with base64 image data in response]
+
+### 5. **Download PDF**
 ```bash
 curl -X POST http://localhost:8080/download-pdf \
   -H "Content-Type: application/json" \
   -d '{
-    "pages": [
-      "/static/comics/page_1.png",
-      "/static/comics/page_2.png",
-      "/static/comics/page_3.png",
-      "/static/comics/page_4.png"
-    ],
-    "title": "My Comic"
+    "images": [...],
+    "style_advice": {...},
+    "story_title": "Penguin Adventure"
   }' \
   --output comic.pdf
 ```
+[Image: Screenshot of file download prompt in browser or terminal]
 
-### 5. **Upload Character**
+### 6. **Download Booklet**
 ```bash
-curl -X POST http://localhost:8080/api/upload-character \
-  -F "file=@/path/to/character.jpg"
+curl -X POST http://localhost:8080/download-booklet \
+  -H "Content-Type: application/json" \
+  -d '{
+    "images": [...],
+    "style_advice": {...},
+    "story_title": "Penguin Adventure"
+  }' \
+  --output booklet.pdf
 ```
-
----
-
-## 🎤 Voice Commands
-
-### Using Voice Input
-
-1. Click the **🎤 Voice Input** button
-2. The button turns red and says "Listening..."
-3. Speak your command clearly
-4. Wait 2 seconds for processing
-
-### Supported Commands
-
-| Command | Action |
-|---------|--------|
-| `"stop"` or `"cancel"` | Stops current generation |
-| `"new story"` | Resets everything |
-| `"generate comic"` | Starts comic generation |
-| `"read aloud"` or `"narrate"` | Reads the story |
-| Any other phrase | Fills the prompt box |
-
-### Voice Tips
-- Speak clearly at normal volume
-- Wait for the "Listening..." indicator
-- Commands work mid-sentence
-- Voice input times out after 10 seconds
-
----
-
-## 🎭 Character Upload
-
-### How to Upload
-
-1. Click the **upload area** in the "Upload Your Characters" section
-2. Select an image (PNG, JPG, GIF, max 5MB)
-3. The character appears as a thumbnail
-4. **Click the thumbnail** to select it for generation
-
-### Using Uploaded Characters
-
-1. Select character(s) by clicking their thumbnails
-2. Generate a comic as usual
-3. The AI will try to incorporate your characters
-4. Characters appear in all 4 panels
-
-### Character Tips
-- Use clear, front-facing images
-- Simple characters work best
-- Cartoon style images work better than photos
-- You can select multiple characters
-
----
-
-## 💬 Bubble Editor
-
-### Bubble Types
-
-| Type | Best For |
-|------|----------|
-| **🗣️ Speech** | Normal dialogue |
-| **💭 Thought** | Inner thoughts |
-| **📢 Shout** | Exclamations |
-| **🤫 Whisper** | Quiet speech |
-| **📖 Narration** | Story narration |
-| **💥 SFX** | Sound effects |
-
-### Emotions
-
-| Emotion | Effect |
-|---------|--------|
-| 😊 Happy | Adds smile emoji |
-| 😢 Sad | Adds tear emoji |
-| 😠 Angry | Adds angry emoji |
-| 🤩 Excited | Adds star eyes |
-| 😨 Scared | Adds fear emoji |
-| 😐 Neutral | No emoji |
-
-### Positions
-
-| Position | Description |
-|----------|-------------|
-| **Top** | Top center of panel |
-| **Bottom** | Bottom center (default) |
-| **Left** | Left side, centered |
-| **Right** | Right side, centered |
-| **Auto** | AI chooses best spot |
-
-### Editing Steps
-
-1. Click **"Add Bubbles"**
-2. Select panel number (1-4)
-3. Choose bubble type
-4. Select emotion
-5. Choose position
-6. Enter text or click **"AI Suggest"**
-7. Click **"Apply to Panel"**
-
----
-
-## 📥 Download Options
-
-### ZIP Download
-- All 4 panels as individual PNG files
-- Preserves original quality
-- Good for editing
-
-### PDF Download
-- All panels in one document
-- Professional layout
-- Good for sharing
-
-### Booklet Download
-- 2 panels per page (front/back)
-- Ready for printing
-- Booklet format
+[Image: Screenshot of booklet PDF opened in viewer showing two panels per page]
 
 ---
 
 ## 🎨 Art Styles
 
-| Style | Description | Best For |
-|-------|-------------|----------|
-| 🇯🇵 **Manga** | Black & white, screentones | Japanese comics |
-| 🇺🇸 **Western** | Bold colors, superhero | American comics |
-| ✨ **Anime** | Vibrant, cel-shaded | Japanese animation |
-| ✏️ **Sketch** | Pencil, rough lines | Concept art |
-| 🎨 **Watercolor** | Soft, painted | Artistic comics |
-| 📰 **Vintage** | Muted, halftone | Retro comics |
+| Style | Description |
+|-------|-------------|
+| 🇯🇵 **Manga** | Black and white, screentones, speed lines |
+| 🇺🇸 **Western** | Bold outlines, vibrant colors, superhero |
+| ✨ **Anime** | Vibrant colors, glossy eyes, cel-shaded |
+| ✏️ **Sketch** | Pencil sketch, rough lines, hand-drawn |
+| 🎨 **Watercolor** | Soft gradients, painted look |
+| 📰 **Vintage** | 1950s style, muted colors, halftone dots |
+| 🎭 **Cartoon** | Looney Tunes style, exaggerated expressions |
+
+[Image: Collage showing example panels in each art style]
 
 ---
 
 ## 🌐 Languages
 
-| Code | Language |
-|------|----------|
-| `en` | English |
-| `es` | Spanish |
-| `fr` | French |
-| `de` | German |
-| `it` | Italian |
-| `pt` | Portuguese |
-| `ja` | Japanese |
-| `zh` | Chinese |
-| `ar` | Arabic |
+| Code | Language | RTL |
+|------|----------|-----|
+| `en` | English | no |
+| `fr` | French | no |
+| `es` | Spanish | no |
+| `de` | German | no |
+| `ja` | Japanese | no |
+| `ar` | Arabic | yes |
+| `ur` | Urdu | yes |
+
+RTL (right-to-left) layout is automatically applied for Arabic and Urdu.
+
+[Image: Screenshot of language dropdown showing all options]
+[Image: Screenshot of interface in Arabic showing RTL layout]
 
 ---
 
 ## 🎯 Examples
 
-### Example 1: Mouse on Road
-**Prompt:** `mouse on road`
+### Example 1: "cat in a hospital"
+**Language:** English  
+**Panels:** 4  
+**Style:** Cartoon, Heartwarming  
+**Output:** A story about a lost cat who brings joy to patients.
+[Image: Four panels from the "cat in a hospital" comic]
 
-**Generated Story:**
-> "Montgomery the mouse spots cheese across a busy road..."
+### Example 2: "robot on Mars" (French)
+**Language:** French  
+**Panels:** 6  
+**Style:** Manga, Adventurous  
+**Output:** A 6-panel comic about a robot exploring Mars.
+[Image: Six panels from the "robot on Mars" comic]
 
-**Result:** 4 panels showing the adventure with speech bubbles
-
-### Example 2: Dragon Pizza
-**Prompt:** `dragon eating pizza`
-
-**Generated Story:**
-> "Draco the dragon discovers his love for pepperoni..."
-
-**Result:** Funny panels of a dragon struggling with pizza
-
-### Example 3: Cat Astronaut
-**Prompt:** `cat astronaut on moon`
-
-**Generated Story:**
-> "Whiskers becomes the first feline on the lunar surface..."
-
-**Result:** Space-themed cat adventure
+### Example 3: "penguin in a desert" (Urdu)
+**Language:** Urdu  
+**Panels:** 4  
+**Style:** Watercolor, Mysterious  
+**Output:** A beautifully illustrated story of a penguin seeking water.
+[Image: Four panels from the Urdu "penguin in a desert" comic]
 
 ---
 
 ## 🔧 Troubleshooting
 
-### Common Issues
-
 | Problem | Solution |
 |---------|----------|
-| **"Failed to generate story"** | Check API key, internet connection |
-| **Images not appearing** | Check `static/comics/` folder permissions |
-| **Voice not working** | Allow microphone access in browser |
-| **Upload fails** | File size < 5MB, valid image format |
-| **Slow generation** | Normal for first request (cold start) |
-| **Bubbles not showing** | Check panel number, refresh page |
+| **"Failed to generate story"** | Check API key, internet connection. |
+| **Image generation fails** | Ensure your API key has access to `gemini-3.1-flash-image-preview`. Check logs. |
+| **PDF download doesn't work** | Generate images first; try again. |
+| **Conversational agent not adding characters** | Use precise requests like "add a dog character". The agent preserves existing ones. |
+| **Slow performance** | First request may be slow due to cold start. Subsequent requests are faster. |
+| **Arabic/Urdu text not RTL** | Ensure language is set correctly; the UI will switch automatically. |
 
-### Browser Support
-
-| Browser | Voice Support | Best Experience |
-|---------|---------------|-----------------|
-| **Chrome** | ✅ Full | ✅ Recommended |
-| **Edge** | ✅ Full | ✅ Good |
-| **Firefox** | ⚠️ Limited | ⚠️ Basic |
-| **Safari** | ⚠️ Limited | ⚠️ Basic |
-
-### Error Messages
-
-| Error | Meaning | Fix |
-|-------|---------|-----|
-| `400 Bad Request` | Missing required field | Check your input |
-| `404 Not Found` | Endpoint incorrect | Verify URL |
-| `500 Server Error` | Server issue | Check logs, retry |
-| `API key invalid` | Gemini key wrong | Update `.env` |
+[Image: Screenshot of error message with suggested fix]
 
 ---
 
-## 📝 Quick Reference Card
 
-```bash
-# Generate story
-curl -X POST http://localhost:8080/generate-story -d '{"topic":"mouse"}'
-
-# Generate comic
-curl -X POST http://localhost:8080/generate-pages-with-characters -d '{"prompt":"mouse"}'
-
-# Add bubble
-curl -X POST http://localhost:8080/add-bubble -d '{"text":"Hello!"}'
-
-# Download PDF
-curl -X POST http://localhost:8080/download-pdf -d '{"pages":[...]}' --output comic.pdf
-
-# Upload character
-curl -X POST http://localhost:8080/api/upload-character -F "file=@image.jpg"
-```
-
----
 
 ## 🎨 **Happy Comic Creating!**
 
@@ -534,6 +476,11 @@ For more help, check:
 - [Deployment Guide](deployment.md)
 - [GitHub Issues](https://github.com/RobinaMirbahar/Comic-Studio-Ai/issues)
 
+[Image: Footer with links and social media icons]
+
 ---
 
-*Last updated: March 9, 2026 • Version 2.0.0*
+*Last updated: March 2026 • Version 2.0.0*
+```
+
+Now you can replace the placeholders with actual screenshots following the instructions in the new "Adding Images to this Guide" section.

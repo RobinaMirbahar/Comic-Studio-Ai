@@ -282,7 +282,7 @@ graph TD
 ### Agent Tooltips
 Hover over any agent card to see its role.
 
-![Tooltip](images/tooltip.jpg) *(replace with actual screenshot if available)*
+![Agent tooltip](https://raw.githubusercontent.com/RobinaMirbahar/Comic-Studio-Ai/main/docs/images/tooltip.jpg)
 
 ---
 

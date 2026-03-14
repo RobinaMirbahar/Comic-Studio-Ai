@@ -107,7 +107,7 @@ Type your request, or simply say **"yes"** to proceed.
 │ 🎬 Story updated!                     │
 └─────────────────────────────────────┘
 ```
-[Image: Screenshot of the chat box with agent message and user input]
+![Created story](https://raw.githubusercontent.com/RobinaMirbahar/Comic-Studio-Ai/main/docs/images/createdstory.jpg)
 
 ### Step 4: Choose Your Style
 After approving, select art style, language tone, and optional color palette.
@@ -120,6 +120,7 @@ After approving, select art style, language tone, and optional color palette.
 │ [2. Generate Panels]                  │
 └─────────────────────────────────────┘
 ```
+
 [Image: Screenshot of style selection dropdowns]
 
 ### Step 5: Generate Panels & Dialogue

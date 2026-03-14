@@ -1,6 +1,4 @@
-Here is the updated `README.md` with the new image upload feature included:
 
-```markdown
 # 🎨 Comic Studio AI - Multi-Agent Comic Generator
 
 <div align="center">

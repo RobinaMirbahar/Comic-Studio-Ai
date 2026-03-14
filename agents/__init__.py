@@ -1,1 +1,1 @@
-# Agents package
+# Agent package for Comic Studio AI

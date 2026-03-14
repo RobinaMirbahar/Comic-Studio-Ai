@@ -41,8 +41,7 @@ python main.py
 http://localhost:8080
 ```
 
-[Image: Screenshot of the top section with language dropdown, prompt input, random button, and panel slider]
-*(Place your screenshot here – see section "📷 Adding Images to this Guide")*
+![Run the App](images/Run-the-App.jpg)
 
 ---
 

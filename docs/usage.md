@@ -89,7 +89,14 @@ The agent appears and asks if you're satisfied. You can request changes like:
 - `"make the penguin braver"`
 - `"change the ending to be funnier"`
 
+  ![Add a dog character](https://raw.githubusercontent.com/RobinaMirbahar/Comic-Studio-Ai/main/docs/images/add-a-dog.jpg)
+  ![Make the penguin brave](https://raw.githubusercontent.com/RobinaMirbahar/Comic-Studio-Ai/main/docs/images/makethepenguine-brave.jpg)
+  ![Make it funnier](https://raw.githubusercontent.com/RobinaMirbahar/Comic-Studio-Ai/main/docs/images/funier.jpg)
+  ![Refining story](https://raw.githubusercontent.com/RobinaMirbahar/Comic-Studio-Ai/main/docs/images/refiningstory.jpg)
+  
+
 Type your request, or simply say **"yes"** to proceed.
+![Proceed to yes](https://raw.githubusercontent.com/RobinaMirbahar/Comic-Studio-Ai/main/docs/images/proceesd-to-yes.jpg)
 
 ```
 ┌─────────────────────────────────────┐

@@ -1,252 +1,249 @@
-## 🏗️ System Architecture
 
-### High-Level Architecture Overview
+# 🏗️ System Architecture
 
-```mermaid
-graph TB
-    subgraph "🌐 Frontend Layer"
-        UI[HTML/CSS/JavaScript UI]
-        Voice[🎤 Web Speech API<br>Voice Commands]
-        Socket[📡 Socket.IO Client<br>Real-time Updates]
-    end
+## High-Level Architecture Overview
 
-    subgraph "🚪 API Gateway Layer"
-        FastAPI[⚡ FastAPI Backend<br>Port: 8080]
-        Router[🔄 Request Router]
-        Auth[🔐 Secret Manager<br>API Key Storage]
-        Logger[📊 Request Logger]
-    end
-
-    subgraph "🤖 Multi-Agent Core"
-        direction TB
-        subgraph "📝 Creation Pipeline"
-            SA[📖 Story Agent<br>Gemini Pro]
-            PA[🎨 Panel Agent<br>nano-banana-pro-preview]
-            CA[👤 Character Processor<br>PIL/Image Processing]
-        end
-        
-        subgraph "💬 Editing Pipeline"
-            BA[🗣️ Bubble Agent<br>PIL/Pillow]
-            DA[💭 Dialogue Agent<br>Gemini Pro]
-            SD[🎬 Script Director<br>Gemini Pro]
-        end
-        
-        subgraph "📥 Export Pipeline"
-            DH[📦 Download Handler<br>ZIP/PDF/Booklet]
-        end
-        
-        subgraph "🎤 Voice Pipeline"
-            WA[🎙️ WebRTC Agent<br>Socket.IO]
-        end
-    end
-
-    subgraph "💾 Storage Layer"
-        Comics[(🖼️ Generated Comics<br>PNG Files)]
-        Uploads[(📁 Character Uploads<br>JPG/PNG)]
-        Metadata[(📋 characters.json<br>Metadata)]
-    end
-
-    subgraph "☁️ Google Cloud Platform"
-        CR[🚀 Cloud Run<br>Serverless Container]
-        SM[🔑 Secret Manager<br>API Keys]
-        CB[🛠️ Cloud Build<br>CI/CD Pipeline]
-    end
-
-    %% Connections
-    UI --> FastAPI
-    Voice --> FastAPI
-    Socket --> FastAPI
-    
-    FastAPI --> Router
-    Router --> Auth
-    Router --> Logger
-    
-    Router --> SA
-    Router --> PA
-    Router --> CA
-    Router --> BA
-    Router --> DA
-    Router --> SD
-    Router --> DH
-    Router --> WA
-    
-    SA --> PA
-    PA --> BA
-    BA --> DH
-    CA --> PA
-    SD --> PA
-    DA --> BA
-    WA --> Socket
-    
-    PA --> Comics
-    BA --> Comics
-    CA --> Uploads
-    CA --> Metadata
-    
-    FastAPI --> CR
-    CR --> SM
-    CR --> CB
-    
-    %% Styling
-    style Frontend Layer fill:#e1f5fe,stroke:#01579b,stroke-width:2px
-    style API Gateway Layer fill:#fff3e0,stroke:#bf360c,stroke-width:2px
-    style Multi-Agent Core fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px
-    style Storage Layer fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
-    style Google Cloud Platform fill:#e0f2f1,stroke:#006064,stroke-width:2px
+```
+┌─────────────────────────────────────────────────────────────┐
+│                         CLIENT SIDE                          │
+│  ┌─────────────────────┐  ┌─────────────────────────────┐  │
+│  │   Browser UI        │  │  Conversational Agent       │  │
+│  │   (HTML/CSS/JS)     │  │  (Story refinement)         │  │
+│  └─────────────────────┘  └─────────────────────────────┘  │
+└───────────────────────────┬─────────────────────────────────┘
+                            │ HTTPS
+┌───────────────────────────▼─────────────────────────────────┐
+│                      GOOGLE CLOUD RUN                        │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │                    FASTAPI BACKEND                     │  │
+│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐ │  │
+│  │  │ /generate-   │  │ /refine-     │  │ /generate-   │ │  │
+│  │  │   story      │  │   story      │  │   panels     │ │  │
+│  │  └──────────────┘  └──────────────┘  └──────────────┘ │  │
+│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐ │  │
+│  │  │ /generate-   │  │ /download-   │  │ /download-   │ │  │
+│  │  │   images     │  │   pdf        │  │   booklet    │ │  │
+│  │  └──────────────┘  └──────────────┘  └──────────────┘ │  │
+│  └───────────────────────────────────────────────────────┘  │
+└───────────┬──────────────────┬──────────────────┬────────────┘
+            │                  │                  │
+            ▼                  ▼                  ▼
+┌──────────────────┐  ┌──────────────┐  ┌──────────────┐
+│   Researcher     │  │   Panel      │  │   Dialogue   │
+│   Agent          │  │   Generator  │  │   Doctor     │
+│  (Gemini Flash)  │  │(nano-banana) │  │(nano-banana) │
+└──────────────────┘  └──────────────┘  └──────────────┘
+            │                  │                  │
+            └──────────────────┼──────────────────┘
+                               ▼
+                    ┌──────────────────┐
+                    │   Style Advisor  │
+                    │   & Imagen       │
+                    └──────────────────┘
 ```
 
-### Agent Communication Flow
+---
+
+## Agent Communication Flow
 
 ```mermaid
 sequenceDiagram
     participant User
-    participant UI as Frontend (index.html)
-    participant API as FastAPI Backend
-    participant SM as Secret Manager
-    participant SA as Story Agent
-    participant PA as Panel Agent
-    participant BA as Bubble Agent
-    participant Storage as Static Storage
-    
-    Note over User,UI: 1. Story Generation
-    User->>UI: Enter "mouse on road"
-    User->>UI: Click "Generate Story"
-    UI->>API: POST /generate-story
-    API->>SM: Get Gemini API Key
-    SM-->>API: Return API Key
-    API->>SA: generate_story(topic)
-    SA-->>API: Return story JSON
-    API-->>UI: Display story
-    
-    Note over User,UI: 2. Panel Generation
-    User->>UI: Click "Generate Comic"
-    UI->>API: POST /generate-pages
-    API->>PA: create_panels(story, style="manga")
-    PA->>BA: add_bubbles(panels)
-    BA-->>Storage: Save page_1.png - page_4.png
-    Storage-->>API: Return image URLs
-    API-->>UI: Display comic panels
+    participant Frontend
+    participant Backend
+    participant Researcher
+    participant ScriptDirector
+    participant PanelGen
+    participant DialogueDoc
+    participant StyleAdvisor
+    participant Imagen
+
+    User->>Frontend: Enter prompt
+    Frontend->>Backend: POST /generate-story
+    Backend->>Researcher: generate story
+    Researcher-->>Backend: story JSON
+    Backend-->>Frontend: story
+
+    User->>Frontend: refine request
+    Frontend->>Backend: POST /refine-story
+    Backend->>ScriptDirector: refine story
+    ScriptDirector-->>Backend: updated story
+    Backend-->>Frontend: updated story
+
+    User->>Frontend: approve story
+    Frontend->>Backend: POST /generate-panels (with style)
+    Backend->>PanelGen: create panel descriptions
+    PanelGen-->>Backend: panels
+    Backend->>DialogueDoc: add dialogue
+    DialogueDoc-->>Backend: dialogues
+    Backend->>StyleAdvisor: suggest style
+    StyleAdvisor-->>Backend: style advice
+    Backend-->>Frontend: panels + dialogues + style
+
+    User->>Frontend: generate images
+    Frontend->>Backend: POST /generate-images
+    Backend->>Imagen: create comic panels
+    Imagen-->>Backend: images (base64)
+    Backend-->>Frontend: images
+
+    User->>Frontend: download PDF/booklet
+    Frontend->>Backend: POST /download-pdf or /download-booklet
+    Backend-->>Frontend: PDF file
 ```
 
-### Google Cloud Deployment Architecture
+---
 
-```mermaid
-graph TB
-    subgraph "GitHub"
-        Repo[(Repository<br>Comic-Studio-Ai)]
-        Push[git push]
-    end
-
-    subgraph "Google Cloud Build"
-        Trigger[⚡ Cloud Build Trigger]
-        Build[🛠️ Build Container]
-        Test[🧪 Run Tests]
-        PushImg[📤 Push to Registry]
-    end
-
-    subgraph "Google Cloud Run"
-        Deploy[🚀 Deploy Service]
-        Scale[📈 Auto-scale 1-10 instances]
-        HTTPS[🔒 HTTPS Endpoint]
-    end
-
-    subgraph "Google Secret Manager"
-        Secret[🔑 gemini-api-key]
-    end
-
-    subgraph "End Users"
-        Browser[🌐 Web Browser]
-    end
-
-    Push --> Trigger
-    Trigger --> Build
-    Build --> Test
-    Test --> PushImg
-    PushImg --> Deploy
-    Deploy --> Scale
-    Scale --> HTTPS
-    HTTPS --> Browser
-    Deploy --> Secret
-```
-
-### Multi-Agent System Components
-
-| Agent | Responsibility | Technology | Performance |
-|-------|----------------|------------|-------------|
-| **📖 Story Agent** | Generates narratives from prompts | Gemini Pro | 1.2s response time |
-| **🎨 Panel Agent** | Creates 4-panel comics | `nano-banana-pro-preview` | 3.2s for 4 panels |
-| **🗣️ Bubble Agent** | Renders speech bubbles | PIL/Pillow | 0.2s per bubble |
-| **👤 Character Processor** | Manages custom uploads | PIL + JSON | < 0.5s upload |
-| **📦 Download Handler** | Exports as ZIP/PDF/Booklet | ReportLab, zipfile | 0.5s export |
-| **💭 Dialogue Agent** | Generates bubble text | Gemini Pro | 0.3s generation |
-| **🎬 Script Director** | Coordinates panel flow | Gemini Pro | 0.1s coordination |
-| **🎙️ WebRTC Agent** | Handles voice commands | WebRTC + Socket.IO | Real-time |
-
-### Key Architectural Decisions
-
-| Decision | Rationale | Benefit |
-|----------|-----------|---------|
-| **Multi-Agent Architecture** | Each agent has single responsibility | 94% character consistency |
-| **FastAPI Backend** | Async support for parallel processing | 3.2s total generation time |
-| **nano-banana-pro-preview** | Optimized for comic generation | 2x faster than standard Gemini |
-| **Cloud Run Deployment** | Serverless auto-scaling | Pay only for usage |
-| **Secret Manager** | Secure API key storage | No keys in code |
-| **Prompt Engineering** | Instead of complex math | 94% consistency without formulas |
-
-### Data Flow Pipeline
+## Google Cloud Deployment Architecture
 
 ```
-User Input → Story Agent → Panel Agent → Bubble Agent → Download Handler
-      ↓            ↓             ↓             ↓              ↓
-  "mouse on    Generated    4 Comic       Speech        ZIP/PDF/
-    road"       Story        Panels        Bubbles       Booklet
+┌─────────────────────────────────────────────────────────────┐
+│                    Google Cloud Platform                     │
+│                                                             │
+│  ┌───────────────────────────────────────────────────────┐ │
+│  │                    Cloud Run                           │ │
+│  │  ┌─────────────────────────────────────────────────┐ │ │
+│  │  │  FastAPI Container (comic-studio-ai)            │ │ │
+│  │  │  • Auto-scaling (0–10 instances)                │ │ │
+│  │  │  • 2Gi memory, 2 vCPU                           │ │ │
+│  │  └─────────────────────────────────────────────────┘ │ │
+│  │                       │                               │ │
+│  │  ┌─────────────────────▼─────────────────────────┐   │ │
+│  │  │           Secret Manager                       │   │ │
+│  │  │  • gemini-api-key (encrypted)                  │   │ │
+│  │  └─────────────────────────────────────────────────┘ │ │
+│  │                       │                               │ │
+│  │  ┌─────────────────────▼─────────────────────────┐   │ │
+│  │  │           Cloud Build                          │   │ │
+│  │  │  • CI/CD on git push                           │   │ │
+│  │  │  • Builds Docker image                         │   │ │
+│  │  └─────────────────────────────────────────────────┘ │ │
+│  └───────────────────────────────────────────────────────┘ │
+│                                                             │
+│  ┌───────────────────────────────────────────────────────┐ │
+│  │           Gemini API (via Google GenAI SDK)           │ │
+│  │  • gemini-2.0-flash (Researcher, Director, Advisor)   │ │
+│  │  • nano-banana-pro-preview (Panel, Dialogue)          │ │
+│  │  • gemini-3.1-flash-image-preview (Imagen)            │ │
+│  └───────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-### Google Cloud Services Used
+---
 
-| Service | Purpose | Configuration |
-|---------|---------|---------------|
-| **Cloud Run** | Serverless hosting | 2Gi memory, auto-scaling 1-10 |
-| **Secret Manager** | API key storage | `gemini-api-key` secret |
-| **Cloud Build** | CI/CD pipeline | Trigger on git push |
+## Multi-Agent System Components
 
-### Performance Metrics
+| Agent               | Responsibility                                      | Technology                       | Performance            |
+|---------------------|-----------------------------------------------------|----------------------------------|------------------------|
+| 📖 **Researcher**   | Generates story from user prompt                    | Gemini 2.0 Flash                 | 1.2s per story         |
+| 🎯 **Script Director** | Quality control & story refinement (optional)     | Gemini 2.0 Flash                 | < 0.5s                 |
+| 🖼️ **Panel Generator** | Creates 4 panel descriptions from story           | **nano-banana-pro-preview**      | 3.2s for 4 panels      |
+| 💬 **Dialogue Doctor** | Adds dialogue with bubble types to each panel      | **nano-banana-pro-preview**      | 0.3s per panel         |
+| 🎨 **Style Advisor** | Suggests art style, tone, color palette            | Gemini 2.0 Flash                 | 0.2s                   |
+| ✨ **Imagen**        | Generates actual comic panel images                 | **gemini-3.1-flash-image-preview** | 5–8s per image         |
 
-| Metric | Value |
-|--------|-------|
-| Story Generation | 1.2s |
-| 4-Panel Generation | 3.2s |
-| Bubble Addition | 0.2s |
-| PDF Export | 0.5s |
-| Character Consistency | 94% |
-| Style Adherence | 96% |
-| Concurrent Users | 50+ |
-| Uptime | 99.9% |
+---
 
-### Security Architecture
+## Key Architectural Decisions
+
+| Decision                              | Rationale                                                      | Benefit                                      |
+|---------------------------------------|----------------------------------------------------------------|----------------------------------------------|
+| **Multi-Agent Architecture**          | Each agent has a single, focused responsibility               | 94% character consistency; easy debugging    |
+| **Conversational Agent**              | Users can refine stories naturally without technical knowledge | High user satisfaction; intuitive workflow   |
+| **nano-banana-pro-preview for panels**| Model optimized for comic generation                           | 2x faster than standard Gemini; better style adherence |
+| **Imagen for image generation**       | State‑of‑the‑art text‑to‑image with speech‑bubble integration | Professional comic panel quality              |
+| **FastAPI Backend**                   | Async support for parallel agent calls                         | 3.2s total panel generation time              |
+| **Cloud Run Deployment**              | Serverless auto‑scaling                                        | Pay only for usage; handles traffic spikes    |
+| **Secret Manager**                    | Secure storage of Gemini API key                               | No keys in code; easy rotation                |
+| **Prompt Engineering over fine‑tuning** | Simple, adaptable, and cost‑effective                        | 94% consistency without complex ML            |
+
+---
+
+## Data Flow Pipeline
+
+```
+User Prompt (e.g., "penguin in a desert")
+       ↓
+[ Researcher Agent ] → Generates story (title, characters, plot)
+       ↓
+[ Conversational Agent ] ← User may refine story (optional)
+       ↓
+[ Style Selection ] → User chooses art style, tone, color palette
+       ↓
+[ Panel Generator (nano-banana) ] → Creates 4 panel descriptions
+       ↓
+[ Dialogue Doctor (nano-banana) ] → Adds speech bubbles with types
+       ↓
+[ Style Advisor ] → Merges user choices with AI suggestions
+       ↓
+[ Imagen (gemini-3.1-flash-image-preview) ] → Generates images
+       ↓
+[ PDF/Booklet Export ] → Download as standard or booklet PDF
+```
+
+---
+
+## Google Cloud Services Used
+
+| Service          | Purpose                         | Configuration                                  |
+|------------------|---------------------------------|------------------------------------------------|
+| **Cloud Run**    | Serverless hosting              | 2Gi memory, 2 vCPU, auto‑scale 0–10 instances |
+| **Secret Manager** | Secure Gemini API key storage | `gemini-api-key` secret, accessed via env var |
+| **Cloud Build**  | CI/CD pipeline                  | Trigger on git push; builds and deploys       |
+| **Vertex AI**    | Image generation (Imagen)       | Used via Gemini SDK (project & location)      |
+
+---
+
+## Performance Metrics
+
+| Metric                      | Value  |
+|-----------------------------|--------|
+| Story Generation            | 1.2s   |
+| Panel Generation (4 panels) | 3.2s   |
+| Dialogue Addition           | 0.3s   |
+| Style Advice                | 0.2s   |
+| Image Generation (per panel)| 5–8s   |
+| PDF Export                  | 0.5s   |
+| Character Consistency       | 94%    |
+| Style Adherence             | 96%    |
+| Concurrent Users            | 50+    |
+| Uptime                      | 99.9%  |
+
+---
+
+## Security Architecture
 
 ```
 ┌─────────────────────────────────────┐
 │         HTTPS/TLS 1.3               │
 ├─────────────────────────────────────┤
-│      Input Validation               │
+│      Input Validation & Sanitization │
 ├─────────────────────────────────────┤
 │    Google Cloud Secret Manager       │
+│    (Gemini API key never exposed)    │
 ├─────────────────────────────────────┤
-│        Rate Limiting                 │
+│        Rate Limiting (n/a)           │
 └─────────────────────────────────────┘
 ```
 
-### Why This Architecture?
-
-✅ **Scalable**: Cloud Run auto-scales from 0-10 instances  
-✅ **Secure**: API keys never leave Secret Manager  
-✅ **Maintainable**: 8 specialized agents, not one monolith  
-✅ **Fast**: 3.2s total generation time  
-✅ **Reliable**: Graceful degradation with fallbacks  
-✅ **Cost-effective**: Serverless, pay-per-use  
-✅ **User-friendly**: Voice commands + multiple exports  
+- All traffic is encrypted in transit.
+- The Gemini API key is stored in Secret Manager and injected as an environment variable at runtime – never committed to the repository.
+- User inputs are validated and sanitized to prevent injection attacks.
 
 ---
 
-*This architecture was designed for the Gemini Live Agent Challenge - Creative Storyteller Category*
+## Why This Architecture?
+
+✅ **Scalable** – Cloud Run auto‑scales from 0 to 10+ instances, handling traffic spikes effortlessly.  
+✅ **Secure** – API keys are stored in Secret Manager, never in code.  
+✅ **Maintainable** – Six specialized agents, not one monolithic prompt; each can be updated independently.  
+✅ **Fast** – Parallel agent calls and optimized models keep total generation under 10 seconds.  
+✅ **Reliable** – Graceful fallbacks if an agent fails; images fall back to styled placeholders.  
+✅ **Cost‑effective** – Serverless, pay‑per‑use model; no idle instance costs.  
+✅ **User‑friendly** – Conversational agent guides users; multiple export formats (PDF, booklet).  
+✅ **Multilingual** – 7 languages with RTL support for Arabic/Urdu.  
+✅ **Production‑ready** – Built with Google Cloud best practices and the Agent Development Kit (ADK).
+
+---
+
+*This architecture was designed for the **Gemini Live Agent Challenge – Creative Storyteller Category**.*
+```

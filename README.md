@@ -464,11 +464,46 @@ For detailed steps, see the [Deployment Guide](docs/deployment.md).
 
 ## 🧪 Testing
 
-### Run Unit Tests
+The project includes a simple test suite to verify core functionality, such as the story generation endpoint.
+
+### Prerequisites
+
+- Ensure your virtual environment is activated and dependencies are installed (`pip install -r requirements.txt`).
+- You need a valid `GEMINI_API_KEY` set in your environment (or a dummy key; the test will attempt to call the API).
+
+### Running the Tests
 
 ```bash
+# Install pytest (if not already installed)
+pip install pytest
+
+# Run all tests
 pytest tests/
 ```
+
+### Example Test
+
+The test `test_generate_story` in `tests/test_story_generation.py` checks that the `/generate-story` endpoint returns a 200 status and that the response contains the expected fields (`title`, `characters`, `plot`) with the correct number of panels.
+
+```python
+def test_generate_story():
+    response = client.post("/generate-story", json={
+        "topic": "test",
+        "language": "en",
+        "panels": 4
+    })
+    assert response.status_code == 200
+    story = response.json().get("story", {})
+    assert "title" in story
+    assert "characters" in story
+    assert "plot" in story
+    assert len(story["plot"]) == 4
+```
+
+### Notes
+
+- The test will make a real API call if a valid `GEMINI_API_KEY` is set; otherwise, it may fail with an authentication error. This is expected – the test is designed to verify integration with a live API.
+- If you wish to run the test without incurring costs, you can mock the API call or skip the test locally.
 
 ---
 
@@ -523,19 +558,6 @@ pytest tests/
 ## 📄 License
 
 Distributed under the Apache 2.0 License. See `LICENSE` for more information.
-
----
-
-## 🧪 Testing
-
-The project includes a simple test suite to verify core functionality. To run the tests:
-
-```bash
-# Install pytest (if not already installed)
-pip install pytest
-
-# Run all tests
-pytest tests/
 
 ---
 
@@ -599,3 +621,4 @@ pytest tests/
 **🐛 Found an issue? [Report it here](https://github.com/RobinaMirbahar/Comic-Studio-Ai/issues)**
 
 </div>
+```

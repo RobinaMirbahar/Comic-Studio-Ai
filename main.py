@@ -15,14 +15,21 @@ from reportlab.lib.utils import ImageReader
 from io import BytesIO
 from PIL import Image as PILImage
 
+<<<<<<< HEAD
 
+=======
+# Configure Gemini – API key must be set in environment variable
+>>>>>>> b5a680c18f350d61d856dc464552880242d2aeab
 api_key = os.getenv("GEMINI_API_KEY")
 if not api_key:
     raise ValueError("GEMINI_API_KEY environment variable not set")
 genai.configure(api_key=api_key)
+<<<<<<< HEAD
 print("Using API key starting with:", api_key[:10] if api_key else "None")
 
 
+=======
+>>>>>>> b5a680c18f350d61d856dc464552880242d2aeab
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -377,4 +384,5 @@ async def download_booklet(request: dict):
 
 if __name__ == "__main__":
     print("🚀 Multi-Agent Comic Studio with image upload running on http://localhost:8080")
+    print("⚠️ Make sure GEMINI_API_KEY is set in environment")
     uvicorn.run(app, host="0.0.0.0", port=8080)

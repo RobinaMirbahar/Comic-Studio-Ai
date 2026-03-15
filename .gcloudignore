@@ -1,14 +1,67 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Version control
 .git
 .gitignore
+
+# Documentation and development
 README.md
-.env
-.env.example
-.vscode
-.idea
-__pycache__
-*.pyc
-venv
-env
-tests/
 docs/
+tests/
 .github/
+
+# IDE settings
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Python package files
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Cloud and deployment
+.gcloudignore
+cloudbuild.yaml.local
+.DS_Store
+
+# Logs and databases
+*.log
+*.sqlite3
+*.db
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+*.orig

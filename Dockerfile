@@ -17,5 +17,4 @@ RUN mkdir -p static/comics static/uploads
 
 
 # Corrected CMD – point to main:app
- b5a680c18f350d61d856dc464552880242d2aeab
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]

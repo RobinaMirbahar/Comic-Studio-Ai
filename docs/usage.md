@@ -530,9 +530,3 @@ For more help, check:
 - [Deployment Guide](deployment.md)
 - [GitHub Issues](https://github.com/RobinaMirbahar/Comic-Studio-Ai/issues)
 
-![Footer](images/footer.jpg) 
-
----
-
-*Last updated: March 2026 • Version 2.0.0*
-```

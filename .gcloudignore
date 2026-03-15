@@ -1,4 +1,3 @@
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -16,6 +15,16 @@ venv.bak/
 .env.local
 .env.*.local
 
+# Version control
+.git
+.gitignore
+
+# Documentation and development
+README.md
+docs/
+tests/
+.github/
+
 # IDE settings
 .vscode/
 .idea/
@@ -29,9 +38,19 @@ dist/
 build/
 .eggs/
 
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
 # Cloud and deployment
 .gcloudignore
-cloudbuild.yaml.local  # if you have local versions, but keep cloudbuild.yaml tracked
+cloudbuild.yaml.local
 .DS_Store
 
 # Logs and databases
@@ -46,16 +65,3 @@ cloudbuild.yaml.local  # if you have local versions, but keep cloudbuild.yaml tr
 *.backup
 *.old
 *.orig
-
-# OS generated files
-Thumbs.db
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Desktop.ini
-
-# Cloud Shell cache
-.cache/

@@ -95,7 +95,7 @@ You can upload a character image to make the comic feature a specific person or 
 
 ![Upload preview](images/upload-image.jpg)
 
-![Story with own image](images/storyownimage.jpg)
+![Story with own image](images/storyownimagewithcharacters.jpg)
 ![Story with own image](https://github.com/RobinaMirbahar/Comic-Studio-Ai/raw/main/docs/images/storyownimagewithcharacters.jpg)
 ![Final comic with own character](images/own-imagecomic.jpg)
 ![Own image step 1](https://raw.githubusercontent.com/RobinaMirbahar/Comic-Studio-Ai/main/docs/images/01-ownimage.png)
@@ -416,7 +416,7 @@ curl -X POST http://localhost:8080/generate-images \
     "language": "en"
   }'
 ```
-![Panel 4 example](images/page_4%20(1).png) 
+![Panel 4 example](images/page_4(1).png) 
 ![Generated image](https://raw.githubusercontent.com/RobinaMirbahar/Comic-Studio-Ai/main/docs/images/genimg.jpg)
 ![001](https://raw.githubusercontent.com/RobinaMirbahar/Comic-Studio-Ai/main/docs/images/001.png)
 ![03](https://raw.githubusercontent.com/RobinaMirbahar/Comic-Studio-Ai/main/docs/images/03.png)
@@ -529,4 +529,4 @@ For more help, check:
 - [Architecture Guide](architecture.md)
 - [Deployment Guide](deployment.md)
 - [GitHub Issues](https://github.com/RobinaMirbahar/Comic-Studio-Ai/issues)
-
+```

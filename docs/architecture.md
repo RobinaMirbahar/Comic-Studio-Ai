@@ -1,6 +1,4 @@
-Here is the complete updated `architecture.md` file with the image upload feature fully integrated into all diagrams and descriptions. You can replace your existing file with this.
 
-```markdown
 # 🏗️ System Architecture
 
 ## High-Level Architecture Overview

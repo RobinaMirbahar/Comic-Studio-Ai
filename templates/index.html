@@ -620,21 +620,31 @@
         }
 
         function randomPrompt() {
-            const prompts = [
-                "a ninja cat in a pizza restaurant",
-                "a robot exploring an underwater city",
-                "a detective duck solving a mystery in Paris",
-                "a dragon who loves baking cookies",
-                "an alien trying to understand Earth's internet",
-                "a clumsy wizard in a magic school",
-                "a penguin on a tropical island",
-                "a superhero without powers at a gym",
-                "a ghost haunting a coffee shop",
-                "a time-traveling hamster"
-            ];
-            const random = prompts[Math.floor(Math.random() * prompts.length)];
-            document.getElementById('prompt').value = random;
-        }
+    const prompts = [
+        "a ninja cat in a pizza restaurant",
+        "a robot exploring an underwater city",
+        "a detective duck solving a mystery in Paris",
+        "a dragon who loves baking cookies",
+        "an alien trying to understand Earth's internet",
+        "a clumsy wizard in a magic school",
+        "a penguin on a tropical island",
+        "a superhero without powers at a gym",
+        "a ghost haunting a coffee shop",
+        "a time-traveling hamster",
+        "a wizard in a coffee shop",
+        "a zombie at a yoga class",
+        "a vampire applying for a library card",
+        "a unicorn stuck in traffic",
+        "a mermaid in a bathtub",
+        "a ghost trying to use a smartphone",
+        "a dragon learning to knit",
+        "a robot at a pet adoption event",
+        "a cat running for president",
+        "a dog operating a food truck"
+    ];
+    const random = prompts[Math.floor(Math.random() * prompts.length)];
+    document.getElementById('prompt').value = random;
+}
 
         function previewImage() {
             const fileInput = document.getElementById('characterImage');

@@ -96,7 +96,7 @@ You can upload a character image to make the comic feature a specific person or 
 ![Upload preview](images/upload-image.jpg)
 
 ![Story with own image](images/storyownimage.jpg)
-
+![Story with own image](https://github.com/RobinaMirbahar/Comic-Studio-Ai/raw/main/docs/images/storyownimagewithcharacters.jpg)
 ![Final comic with own character](images/own-imagecomic.jpg)
 ![Own image step 1](https://raw.githubusercontent.com/RobinaMirbahar/Comic-Studio-Ai/main/docs/images/01-ownimage.png)
 ![Own image step 2](https://raw.githubusercontent.com/RobinaMirbahar/Comic-Studio-Ai/main/docs/images/o2-ownimage.png)

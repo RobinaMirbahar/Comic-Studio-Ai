@@ -15,7 +15,14 @@ from reportlab.lib.utils import ImageReader
 from io import BytesIO
 from PIL import Image as PILImage
 
-genai.configure(api_key="AIzaSyCpJ8doFG0r82Qpb1XxMn3bcwje85qsy_Q")
+
+api_key = os.getenv("GEMINI_API_KEY")
+if not api_key:
+    raise ValueError("GEMINI_API_KEY environment variable not set")
+genai.configure(api_key=api_key)
+print("Using API key starting with:", api_key[:10] if api_key else "None")
+
+
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")

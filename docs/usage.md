@@ -433,6 +433,7 @@ curl -X POST http://localhost:8080/download-pdf \
   }' \
   --output comic.pdf
 ```
+![Download PDF button](images/dpdf.jpg)
 
 ### 7. **Download Booklet**
 ```bash
@@ -445,6 +446,7 @@ curl -X POST http://localhost:8080/download-booklet \
   }' \
   --output booklet.pdf
 ```
+![Download PDF button](images/dpdf.jpg)
 
 ---
 
@@ -460,7 +462,7 @@ curl -X POST http://localhost:8080/download-booklet \
 | 📰 **Vintage** | 1950s style, muted colors, halftone dots |
 | 🎭 **Cartoon** | Looney Tunes style, exaggerated expressions |
 
-![Art styles collage](images/art-styles.jpg) *(replace with actual screenshot if available)*
+![Style selection](images/style.jpg)
 
 ---
 
@@ -478,8 +480,7 @@ curl -X POST http://localhost:8080/download-booklet \
 
 RTL layout is automatically applied for Arabic and Urdu.
 
-![Language dropdown](images/language-dropdown.jpg) *(replace with actual screenshot if available)*
-![RTL interface](images/rtl-arabic.jpg) *(replace with actual screenshot if available)*
+![Language dropdown](images/languagedrop.jpg)
 
 ---
 
@@ -518,22 +519,6 @@ RTL layout is automatically applied for Arabic and Urdu.
 | **Conversational agent not adding characters** | Use precise requests like "add a dog character". The agent preserves existing ones. |
 | **Slow performance** | First request may be slow due to cold start. Subsequent requests are faster. |
 | **Arabic/Urdu text not RTL** | Ensure language is set correctly; the UI will switch automatically. |
-
-![Error message](images/error.jpg) 
-
----
-
-## 📷 Adding Images to this Guide
-
-To insert images in this Markdown file, follow these steps:
-
-1. **Create an `images` folder** inside `docs/`:
-   ```bash
-   mkdir -p docs/images
-   ```
-2. **Take screenshots** of your app.
-3. **Save them** in `docs/images/` with descriptive names.
-4. **Insert** using `![Alt text](images/filename.jpg)`.
 
 ---
 

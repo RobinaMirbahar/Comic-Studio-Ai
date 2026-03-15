@@ -3,6 +3,64 @@
 
 ## High-Level Architecture Overview
 
+### Mermaid Diagram (Export as PNG for Devpost)
+
+```mermaid
+flowchart TB
+    subgraph Client["CLIENT SIDE"]
+        UI["Browser UI (HTML/CSS/JS)"]
+        CA["Conversational Agent (Story Refinement)"]
+    end
+
+    subgraph CloudRun["GOOGLE CLOUD RUN"]
+        subgraph Backend["FASTAPI BACKEND"]
+            direction LR
+            GS["/generate-story"]
+            RS["/refine-story"]
+            GP["/generate-panels"]
+            GI["/generate-images"]
+            DP["/download-pdf"]
+            DB["/download-booklet"]
+        end
+    end
+
+    subgraph Agents["AI AGENTS"]
+        direction TB
+        RA["Researcher Agent (Gemini 2.0 Flash)"]
+        SA["Script Director (Gemini 2.0 Flash)"]
+        PGA["Panel Generator (nano-banana)"]
+        DDA["Dialogue Doctor (nano-banana)"]
+        STA["Style Advisor (Gemini 2.0 Flash)"]
+        IMA["Imagen (gemini-3.1-flash-image-preview)"]
+    end
+
+    Client -->|HTTPS| CloudRun
+    CloudRun -->|API Calls| Agents
+    
+    RA -->|Story| SA
+    SA -->|Approved Story| PGA
+    PGA -->|Panel Descriptions| DDA
+    DDA -->|Panels + Dialogue| STA
+    STA -->|Style Advice + Panels| IMA
+    IMA -->|Generated Images| Backend
+    Backend -->|PDF/Booklet| Client
+
+    style Client fill:#e1f5fe,stroke:#01579b
+    style CloudRun fill:#fff3e0,stroke:#bf360c
+    style Agents fill:#e8f5e8,stroke:#1b5e20
+    style Backend fill:#f3e5f5,stroke:#4a148c
+    style UI fill:#b3e5fc
+    style CA fill:#b3e5fc
+    style RA fill:#a5d6a7
+    style SA fill:#a5d6a7
+    style PGA fill:#a5d6a7
+    style DDA fill:#a5d6a7
+    style STA fill:#a5d6a7
+    style IMA fill:#a5d6a7
+```
+
+### ASCII Diagram (Alternative Text Representation)
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                         CLIENT SIDE                          │

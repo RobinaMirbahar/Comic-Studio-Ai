@@ -3,7 +3,7 @@
 
 ## High-Level Architecture Overview
 
-### Mermaid Diagram (Export as PNG for Devpost)
+### Mermaid Diagram 
 
 ```mermaid
 flowchart TB

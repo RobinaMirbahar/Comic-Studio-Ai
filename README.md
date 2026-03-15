@@ -526,6 +526,22 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 
 ---
 
+## 🧪 Testing
+
+The project includes a simple test suite to verify core functionality. To run the tests:
+
+```bash
+# Install pytest (if not already installed)
+pip install pytest
+
+# Run all tests
+pytest tests/
+
+
+
+
+
+
 ## 🎨 Made with Love & AI
 
 <div align="center">

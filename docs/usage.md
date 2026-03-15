@@ -67,6 +67,7 @@ Type your idea in the text area, choose language, and select number of panels (1
 - Your browser will ask for microphone permission – allow it.
 - Speak your comic idea clearly (e.g., "a cat in a spaceship").
 - The spoken text will automatically fill the prompt box.
+- Click the **🎲 dice button** to get a random creative idea.
 - Works best in Chrome, Edge, or Safari.
 
 ![Voice input button](images/audio.jpg)

@@ -1,1 +1,1274 @@
-[Paste the full index.html content here – the one with the beautiful story display and 20 prompts]
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>🎨 Comic Studio AI · by Robina Mirbahar</title>
+    <style>
+        /* Base mobile-first styles – same color palette */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            background: rgba(0,0,0,0.2);
+            backdrop-filter: blur(5px);
+            padding: 15px 20px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        .header h1 {
+            font-size: 1.6rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .header h1 span {
+            background: rgba(255,255,255,0.15);
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: normal;
+        }
+        .creator-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.1);
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+        }
+        .creator-badge i {
+            font-style: normal;
+            color: #ffd700;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            background: rgba(255,255,255,0.95);
+            color: #2d3748;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            flex: 1;
+        }
+        h2 {
+            color: #4a5568;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 8px;
+            margin-top: 20px;
+        }
+        .agents-showcase {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f7fafc;
+            border-radius: 20px;
+        }
+        .agent-card {
+            background: white;
+            border-radius: 30px;
+            padding: 8px 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid #e9eef2;
+            transition: transform 0.1s;
+            cursor: help;
+            position: relative;
+        }
+        .agent-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 12px rgba(102,126,234,0.2);
+        }
+        .agent-card .tooltip-text {
+            visibility: hidden;
+            width: 160px;
+            background-color: #2d3748;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -80px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+            pointer-events: none;
+        }
+        .agent-card:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        .agent-icon {
+            font-size: 1.5rem;
+        }
+        .agent-name {
+            font-weight: 600;
+            color: #2d3748;
+        }
+        .agent-role {
+            font-size: 0.75rem;
+            color: #718096;
+            margin-left: 4px;
+        }
+        .input-group {
+            display: flex;
+            gap: 10px;
+            align-items: stretch;
+            flex-wrap: wrap;
+        }
+        .input-group textarea {
+            flex: 1;
+        }
+        .input-group button {
+            width: auto;
+            min-width: 60px;
+            border-radius: 50%;
+            aspect-ratio: 1 / 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+        textarea, select, input[type="text"], input[type="range"] {
+            width: 100%;
+            padding: 14px;
+            margin: 8px 0;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border 0.2s;
+        }
+        textarea:focus, select:focus, input:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 40px;
+            padding: 14px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            box-shadow: 0 4px 10px rgba(102,126,234,0.3);
+        }
+        button:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        button:disabled {
+            background: #cbd5e0;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 15px 0;
+        }
+        .agent-message {
+            background: #e6edff;
+            padding: 14px;
+            border-radius: 20px 20px 20px 5px;
+            margin: 12px 0;
+            border-left: 5px solid #667eea;
+        }
+        .user-message {
+            background: #edf2f7;
+            padding: 14px;
+            border-radius: 20px 20px 5px 20px;
+            margin: 12px 0;
+            text-align: right;
+            border-right: 5px solid #9f7aea;
+        }
+        .chat-box {
+            max-height: 350px;
+            overflow-y: auto;
+            padding: 15px;
+            background: #ffffff;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+        }
+        .panel {
+            background: #f8faff;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 18px;
+            border-left: 6px solid #667eea;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+        .dialogue {
+            background: #fef9e7;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 16px;
+            border-left: 4px solid #fbbf24;
+        }
+        .bubble-type {
+            font-size: 0.75rem;
+            color: #64748b;
+            background: #eef2f6;
+            padding: 2px 10px;
+            border-radius: 30px;
+            display: inline-block;
+            margin-left: 8px;
+        }
+        .style-box {
+            background: #e0e7ff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 18px;
+            border-left: 6px solid #4ade80;
+        }
+        .comic-panel {
+            border: 2px solid #e2e8f0;
+            border-radius: 20px;
+            margin: 20px 0;
+            padding: 18px;
+            background: white;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+        .comic-panel img {
+            max-width: 100%;
+            border-radius: 16px;
+            margin-bottom: 12px;
+            border: 1px solid #e2e8f0;
+        }
+        .placeholder-note {
+            color: #718096;
+            font-style: italic;
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 8px;
+        }
+        .style-row {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .language-selector {
+            margin: 20px 0;
+        }
+        .footer {
+            background: rgba(0,0,0,0.2);
+            backdrop-filter: blur(5px);
+            padding: 20px;
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            font-size: 0.95rem;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.15);
+        }
+        .footer a {
+            color: #ffd700;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+        .footer a:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+        .social-links {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 15px 0 10px;
+            flex-wrap: wrap;
+        }
+        .social-links a {
+            color: white;
+            background: rgba(255,255,255,0.1);
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .social-links a:hover {
+            background: rgba(255,255,255,0.2);
+            text-decoration: none;
+        }
+        .gde-gradient {
+            background: linear-gradient(135deg, #4285f4, #ea4335, #fbbc05, #34a853);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+        }
+        /* Loading spinner */
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: white;
+        }
+        .loading-overlay.active {
+            display: flex;
+        }
+        .loading-message {
+            background: white;
+            color: #2d3748;
+            padding: 20px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 300px;
+        }
+        .panel-count-slider {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .panel-count-slider input {
+            flex: 1;
+        }
+        .panel-count-slider span {
+            min-width: 40px;
+            text-align: center;
+            font-weight: bold;
+        }
+        /* Image upload styles */
+        .upload-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f0f4ff;
+            border-radius: 15px;
+            border: 2px dashed #667eea;
+        }
+        .upload-section label {
+            font-weight: bold;
+            color: #4a5568;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .file-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .file-input input[type="file"] {
+            flex: 1;
+            padding: 10px;
+            background: white;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+        }
+        .image-preview {
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 8px;
+            border: 2px solid #667eea;
+            object-fit: cover;
+        }
+        .upload-hint {
+            font-size: 0.9rem;
+            color: #718096;
+            margin-top: 8px;
+        }
+        /* RTL support */
+        .rtl {
+            direction: rtl;
+            text-align: right;
+        }
+        .rtl textarea, .rtl input, .rtl select {
+            direction: rtl;
+        }
+        /* Tablet and up */
+        @media (min-width: 768px) {
+            body { padding: 0; }
+            .container { padding: 30px; }
+            .button-group { flex-direction: row; }
+            button { width: auto; }
+            .style-row { flex-direction: row; }
+            .agents-showcase { justify-content: center; }
+            .input-group { flex-wrap: nowrap; }
+        }
+
+        /* ===== Beautiful Story Display ===== */
+        .story-display {
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 28px 24px;
+            margin: 25px 0;
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.12);
+            border: 1px solid rgba(102, 126, 234, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .story-title {
+            font-size: 2.4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1A1F3D, #2D1B45);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            margin: 0 0 25px 0;
+            letter-spacing: -0.02em;
+            position: relative;
+        }
+
+        .story-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #9f7aea);
+            border-radius: 4px;
+            margin: 15px auto 0;
+        }
+
+        .characters-section {
+            margin: 25px 0 30px;
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2D3748;
+            margin-bottom: 18px;
+        }
+
+        .section-heading i {
+            font-size: 1.5rem;
+            color: #667eea;
+        }
+
+        .character-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        .character-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px 16px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.03);
+            border: 1px solid #edf2f7;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-align: center;
+        }
+
+        .character-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(102, 126, 234, 0.1);
+            border-color: #667eea20;
+        }
+
+        .character-emoji {
+            font-size: 3rem;
+            margin-bottom: 8px;
+        }
+
+        .character-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 4px;
+        }
+
+        .character-desc {
+            font-size: 0.85rem;
+            color: #718096;
+            line-height: 1.4;
+        }
+
+        .plot-section {
+            margin-top: 30px;
+        }
+
+        .plot-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .plot-item {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            border: 1px solid #e2e8f0;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .plot-item:hover {
+            background: white;
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .plot-number {
+            background: linear-gradient(135deg, #667eea, #9f7aea);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .plot-text {
+            font-size: 1rem;
+            color: #2d3748;
+            line-height: 1.5;
+            flex: 1;
+        }
+
+        @media (max-width: 640px) {
+            .story-title {
+                font-size: 1.8rem;
+            }
+            .character-grid {
+                grid-template-columns: 1fr;
+            }
+            .plot-item {
+                padding: 12px 16px;
+            }
+            .plot-number {
+                width: 28px;
+                height: 28px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-message">
+            <div class="spinner"></div>
+            <p id="loadingText">Processing... please wait</p>
+        </div>
+    </div>
+
+    <div class="header">
+        <h1>🎨 Comic Studio AI <span>multi‑agent</span></h1>
+        <div class="creator-badge">
+            <span>👩‍💻</span>
+            <span>by <i>Robina Mirbahar</i></span>
+        </div>
+    </div>
+
+    <div class="container" id="mainContainer">
+        <div class="agents-showcase">
+            <div class="agent-card">
+                <span class="agent-icon">📝</span><span class="agent-name">Researcher</span><span class="agent-role">story</span>
+                <span class="tooltip-text">Creates the initial story from your prompt</span>
+            </div>
+            <div class="agent-card">
+                <span class="agent-icon">🎯</span><span class="agent-name">Script Director</span><span class="agent-role">quality</span>
+                <span class="tooltip-text">Ensures story quality and consistency</span>
+            </div>
+            <div class="agent-card">
+                <span class="agent-icon">🖼️</span><span class="agent-name">Panel Generator</span><span class="agent-role">nano‑banana</span>
+                <span class="tooltip-text">Describes each panel visually</span>
+            </div>
+            <div class="agent-card">
+                <span class="agent-icon">💬</span><span class="agent-name">Dialogue Doctor</span><span class="agent-role">bubbles</span>
+                <span class="tooltip-text">Adds speech bubbles and dialogue</span>
+            </div>
+            <div class="agent-card">
+                <span class="agent-icon">🎨</span><span class="agent-name">Style Advisor</span><span class="agent-role">palette</span>
+                <span class="tooltip-text">Recommends art style and colors</span>
+            </div>
+            <div class="agent-card">
+                <span class="agent-icon">✨</span><span class="agent-name">Imagen</span><span class="agent-role">images</span>
+                <span class="tooltip-text">Generates the actual comic panels</span>
+            </div>
+        </div>
+
+        <div class="language-selector">
+            <label for="language">Choose Language:</label>
+            <select id="language" onchange="setLanguage(this.value)">
+                <option value="English">English</option>
+                <option value="French">Français</option>
+                <option value="Spanish">Español</option>
+                <option value="German">Deutsch</option>
+                <option value="Japanese">日本語</option>
+                <option value="Arabic">العربية</option>
+                <option value="Urdu">اردو</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <textarea id="prompt" placeholder="e.g., a curious cat lost in the desert">penguin in a fridge</textarea>
+            <button onclick="startVoiceInput()" id="voiceBtn" style="background: #4a90e2;" title="Voice input">🎤</button>
+            <button onclick="randomPrompt()" id="randomBtn" style="background: #9f7aea;" title="Get a random prompt">🎲</button>
+        </div>
+
+        <!-- Image upload section -->
+        <div class="upload-section">
+            <label>📸 Upload a character image (optional):</label>
+            <div class="file-input">
+                <input type="file" id="characterImage" accept="image/*" onchange="previewImage()">
+                <img id="imagePreview" class="image-preview" style="display:none;">
+            </div>
+            <div class="upload-hint">Upload a picture to base the main character on. The AI will create a story featuring this character.</div>
+        </div>
+
+        <div class="panel-count-slider">
+            <label for="panelCount">Number of panels:</label>
+            <input type="range" id="panelCount" min="1" max="6" value="4" oninput="updatePanelCount(this.value)">
+            <span id="panelCountValue">4</span>
+        </div>
+
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <button onclick="generateStory()" id="storyBtn">1. Generate Story</button>
+            <button onclick="generateStoryWithImage()" id="imageStoryBtn" style="background: #9f7aea;">📷 Generate Story with Image</button>
+        </div>
+        
+        <div id="storyOutput" style="margin-top:20px;"></div>
+        
+        <div id="chatSection" style="display:none; margin-top:20px;">
+            <h3>🎬 Conversational Agent</h3>
+            <div id="chatMessages" class="chat-box"></div>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <input type="text" id="chatInput" placeholder="Type your feedback or 'yes' to approve...">
+                <button onclick="sendChat()">Send</button>
+            </div>
+        </div>
+        
+        <div id="styleSection" style="display:none; margin-top:20px;">
+            <h3>🎨 Choose Your Style</h3>
+            <div class="style-row">
+                <div>
+                    <label>Art Style:</label>
+                    <select id="artStyle">
+                        <option value="">Let AI decide</option>
+                        <option value="Manga">Manga (Japanese comic)</option>
+                        <option value="Western">Western (American comic)</option>
+                        <option value="Anime">Anime (Japanese animation)</option>
+                        <option value="Watercolor">Watercolor</option>
+                        <option value="Sketch">Sketch</option>
+                        <option value="Vintage">Vintage 1950s</option>
+                        <option value="Cartoon">Cartoon (Looney Tunes style)</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Language Tone:</label>
+                    <select id="languageTone">
+                        <option value="">Let AI decide</option>
+                        <option value="Humorous">Humorous</option>
+                        <option value="Dramatic">Dramatic</option>
+                        <option value="Sarcastic">Sarcastic</option>
+                        <option value="Heartwarming">Heartwarming</option>
+                        <option value="Adventurous">Adventurous</option>
+                        <option value="Mysterious">Mysterious</option>
+                    </select>
+                </div>
+            </div>
+            <div class="style-row">
+                <div>
+                    <label>Color Palette (optional):</label>
+                    <input type="text" id="colorPalette" placeholder="e.g., warm, vibrant, dark, pastel">
+                </div>
+            </div>
+            <button onclick="generatePanels()" id="panelsBtn">2. Generate Panels</button>
+        </div>
+        
+        <div id="comicOutput" style="margin-top:20px;"></div>
+        
+        <div id="imageSection" style="display:none; margin-top:20px;">
+            <div class="button-group">
+                <button onclick="generateImages()" id="imageBtn">3. Generate Images</button>
+                <button onclick="downloadPDF()" id="pdfBtn" style="background: #27ae60;">📄 PDF</button>
+                <button onclick="downloadBooklet()" id="bookletBtn" style="background: #e67e22;">📚 Booklet</button>
+            </div>
+            <div id="imageOutput"></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>✨ Created by <strong>Robina Mirbahar</strong> · <span class="gde-gradient">Google Developer Expert</span> in Cloud & AI</p>
+        <div class="social-links">
+            <a href="https://linkedin.com/in/robinamirbahar" target="_blank" rel="noopener">🔗 LinkedIn</a>
+            <a href="https://github.com/robinamirbahar" target="_blank" rel="noopener">🐙 GitHub</a>
+            <a href="https://instagram.com/robinamirbahar" target="_blank" rel="noopener">📷 Instagram</a>
+            <a href="https://twitter.com/robinamirbahar" target="_blank" rel="noopener">🐦 X (Twitter)</a>
+        </div>
+        <p style="font-size:0.8rem; opacity:0.7; margin-top:8px;">6 specialized agents · 7 languages · Imagen · PDF/Booklet export</p>
+    </div>
+
+    <script>
+        let currentStory = null;
+        let currentPanels = null;
+        let currentDialogues = null;
+        let currentStyle = null;
+        let currentImages = null;
+        let selectedStyle = {};
+        let currentLanguage = 'English';
+        let currentPanelCount = 4;
+        let uploadedImage = null; // base64 image data
+
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            const container = document.getElementById('mainContainer');
+            if (lang === 'Arabic' || lang === 'Urdu') {
+                container.classList.add('rtl');
+            } else {
+                container.classList.remove('rtl');
+            }
+        }
+
+        function updatePanelCount(val) {
+            currentPanelCount = val;
+            document.getElementById('panelCountValue').innerText = val;
+        }
+
+        function randomPrompt() {
+            const prompts = [
+                "a ninja cat in a pizza restaurant",
+                "a robot exploring an underwater city",
+                "a detective duck solving a mystery in Paris",
+                "a dragon who loves baking cookies",
+                "an alien trying to understand Earth's internet",
+                "a clumsy wizard in a magic school",
+                "a penguin on a tropical island",
+                "a superhero without powers at a gym",
+                "a ghost haunting a coffee shop",
+                "a time-traveling hamster",
+                "a wizard in a coffee shop",
+                "a zombie at a yoga class",
+                "a vampire applying for a library card",
+                "a unicorn stuck in traffic",
+                "a mermaid in a bathtub",
+                "a ghost trying to use a smartphone",
+                "a dragon learning to knit",
+                "a robot at a pet adoption event",
+                "a cat running for president",
+                "a dog operating a food truck"
+            ];
+            const random = prompts[Math.floor(Math.random() * prompts.length)];
+            document.getElementById('prompt').value = random;
+        }
+
+        function previewImage() {
+            const fileInput = document.getElementById('characterImage');
+            const preview = document.getElementById('imagePreview');
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedImage = e.target.result; // base64 with data:image prefix
+                    preview.src = uploadedImage;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                uploadedImage = null;
+                preview.style.display = 'none';
+            }
+        }
+
+        function startVoiceInput() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                alert('Voice input is not supported in your browser. Please use Chrome, Edge, or Safari.');
+                return;
+            }
+
+            const recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+
+            const voiceBtn = document.getElementById('voiceBtn');
+            const originalHTML = voiceBtn.innerHTML;
+            const originalBg = voiceBtn.style.background;
+
+            voiceBtn.innerHTML = '⏺️';
+            voiceBtn.style.background = '#ff4444';
+            voiceBtn.disabled = true;
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById('prompt').value = transcript;
+                resetButton();
+            };
+
+            recognition.onerror = (event) => {
+                console.error('Voice error:', event.error);
+                let message = 'Voice recognition error: ';
+                switch (event.error) {
+                    case 'audio-capture':
+                        message += 'No microphone found or microphone access denied. Please check your microphone and permissions.';
+                        break;
+                    case 'not-allowed':
+                        message += 'Microphone access was denied. Please allow microphone access and try again.';
+                        break;
+                    case 'no-speech':
+                        message += 'No speech detected. Please try again.';
+                        break;
+                    default:
+                        message += event.error;
+                }
+                alert(message);
+                resetButton();
+            };
+
+            recognition.onend = () => {
+                resetButton();
+            };
+
+            function resetButton() {
+                voiceBtn.innerHTML = originalHTML;
+                voiceBtn.style.background = originalBg;
+                voiceBtn.disabled = false;
+            }
+
+            recognition.start();
+        }
+
+        function showLoading(message) {
+            document.getElementById('loadingText').innerText = message;
+            document.getElementById('loadingOverlay').classList.add('active');
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingOverlay').classList.remove('active');
+        }
+
+        async function generateStory() {
+            const prompt = document.getElementById('prompt').value;
+            if (!prompt.trim()) {
+                alert('Please enter a prompt');
+                return;
+            }
+            showLoading('Generating story...');
+            try {
+                const response = await fetch('/generate-story', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        topic: prompt,
+                        language: currentLanguage,
+                        panels: currentPanelCount
+                    })
+                });
+                const data = await response.json();
+                currentStory = data.story;
+                displayStory(currentStory);
+                
+                document.getElementById('chatSection').style.display = 'block';
+                addAgentMessage("I've created a story for you. You can ask me to change it in many ways! For example:\n- 'add a dog character'\n- 'make the plot more adventurous'\n- 'change the main character's personality to be braver'\n- 'add a twist at the end'\nJust tell me what you'd like, or say 'yes' to proceed.");
+                document.getElementById('styleSection').style.display = 'none';
+                document.getElementById('imageSection').style.display = 'none';
+                hideLoading();
+            } catch (error) {
+                hideLoading();
+                document.getElementById('storyOutput').innerHTML = 'Error: ' + error;
+            }
+        }
+
+        async function generateStoryWithImage() {
+            const prompt = document.getElementById('prompt').value;
+            if (!prompt.trim()) {
+                alert('Please enter a prompt');
+                return;
+            }
+            if (!uploadedImage) {
+                alert('Please upload an image first.');
+                return;
+            }
+            showLoading('Generating story with image...');
+            try {
+                const response = await fetch('/generate-story-with-image', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        topic: prompt,
+                        language: currentLanguage,
+                        panels: currentPanelCount,
+                        image: uploadedImage
+                    })
+                });
+                const data = await response.json();
+                if (data.error) throw new Error(data.error);
+                currentStory = data.story;
+                displayStory(currentStory);
+                
+                document.getElementById('chatSection').style.display = 'block';
+                addAgentMessage("I've created a story based on your image. You can ask me to change it, or say 'yes' to proceed.");
+                document.getElementById('styleSection').style.display = 'none';
+                document.getElementById('imageSection').style.display = 'none';
+                hideLoading();
+            } catch (error) {
+                hideLoading();
+                document.getElementById('storyOutput').innerHTML = 'Error: ' + error;
+            }
+        }
+
+        // Updated displayStory with beautiful cards
+        function displayStory(story) {
+            if (!story) return;
+
+            // Helper function to get emoji based on character description
+            function getCharacterEmoji(name, description) {
+                const text = (name + ' ' + description).toLowerCase();
+                if (text.includes('cat') || text.includes('neko')) return '🐱';
+                if (text.includes('dog')) return '🐶';
+                if (text.includes('penguin')) return '🐧';
+                if (text.includes('bear')) return '🐻';
+                if (text.includes('rabbit') || text.includes('bunny')) return '🐰';
+                if (text.includes('fox')) return '🦊';
+                if (text.includes('owl')) return '🦉';
+                if (text.includes('dragon')) return '🐲';
+                if (text.includes('robot')) return '🤖';
+                if (text.includes('alien')) return '👽';
+                if (text.includes('ghost')) return '👻';
+                if (text.includes('ninja')) return '🥷';
+                if (text.includes('chef') || text.includes('papa tony')) return '👨‍🍳';
+                if (text.includes('wizard')) return '🧙';
+                if (text.includes('vampire')) return '🧛';
+                if (text.includes('zombie')) return '🧟';
+                if (text.includes('unicorn')) return '🦄';
+                if (text.includes('mermaid')) return '🧜‍♀️';
+                return '🎭'; // Default
+            }
+
+            let html = '<div class="story-display">';
+
+            // Title
+            html += `<div class="story-title">${story.title || 'Adventure Awaits!'}</div>`;
+
+            // Characters section
+            if (story.characters && story.characters.length > 0) {
+                html += '<div class="characters-section">';
+                html += '<div class="section-heading"><i>🎭</i> Characters</div>';
+                html += '<div class="character-grid">';
+
+                story.characters.forEach(character => {
+                    // Parse character name and description
+                    let name = character;
+                    let description = '';
+                    if (character.includes(' - ')) {
+                        const parts = character.split(' - ');
+                        name = parts[0];
+                        description = parts[1];
+                    } else if (character.includes('–')) {
+                        const parts = character.split('–');
+                        name = parts[0];
+                        description = parts[1];
+                    }
+
+                    const emoji = getCharacterEmoji(name, description);
+
+                    html += `
+                        <div class="character-card">
+                            <div class="character-emoji">${emoji}</div>
+                            <div class="character-name">${name.trim()}</div>
+                            <div class="character-desc">${description.trim()}</div>
+                        </div>
+                    `;
+                });
+
+                html += '</div></div>';
+            }
+
+            // Plot section
+            if (story.plot && story.plot.length > 0) {
+                html += '<div class="plot-section">';
+                html += '<div class="section-heading"><i>📖</i> Story Timeline</div>';
+                html += '<div class="plot-timeline">';
+
+                story.plot.forEach((plotPoint, index) => {
+                    html += `
+                        <div class="plot-item">
+                            <div class="plot-number">${index + 1}</div>
+                            <div class="plot-text">${plotPoint}</div>
+                        </div>
+                    `;
+                });
+
+                html += '</div></div>';
+            }
+
+            html += '</div>';
+            document.getElementById('storyOutput').innerHTML = html;
+        }
+
+        function addAgentMessage(text) {
+            const chat = document.getElementById('chatMessages');
+            chat.innerHTML += '<div class="agent-message">🎬 ' + text.replace(/\n/g, '<br>') + '</div>';
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function addUserMessage(text) {
+            const chat = document.getElementById('chatMessages');
+            chat.innerHTML += '<div class="user-message">👤 ' + text + '</div>';
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        async function sendChat() {
+            const input = document.getElementById('chatInput');
+            const msg = input.value.trim();
+            if (!msg) return;
+            addUserMessage(msg);
+            input.value = '';
+
+            if (msg.toLowerCase() === 'yes') {
+                addAgentMessage('Great! Now choose your style preferences and click "Generate Panels".');
+                document.getElementById('chatSection').style.display = 'none';
+                document.getElementById('styleSection').style.display = 'block';
+                return;
+            }
+
+            addAgentMessage('⏳ Modifying story... (this may take a few seconds)');
+            showLoading('Refining story...');
+            try {
+                const response = await fetch('/refine-story', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        story: currentStory,
+                        modification: msg,
+                        language: currentLanguage
+                    })
+                });
+                const data = await response.json();
+                currentStory = data.story;
+                displayStory(currentStory);
+                addAgentMessage('Story updated! You can keep refining (e.g., "add another character", "make it funnier") or say "yes" to continue.');
+                hideLoading();
+            } catch (error) {
+                hideLoading();
+                addAgentMessage('Sorry, I encountered an error. Please try again with a different request.');
+            }
+        }
+
+        async function generatePanels() {
+            selectedStyle = {
+                overall_style: document.getElementById('artStyle').value || undefined,
+                language_tone: document.getElementById('languageTone').value || undefined,
+                color_palette: document.getElementById('colorPalette').value || undefined
+            };
+
+            document.getElementById('comicOutput').innerHTML = '⏳ Generating comic panels and dialogue...';
+            showLoading('Generating panels and dialogue...');
+            try {
+                const response = await fetch('/generate-panels', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        story: currentStory,
+                        style: selectedStyle,
+                        language: currentLanguage
+                    })
+                });
+                const data = await response.json();
+                currentPanels = data.panels;
+                currentDialogues = data.dialogues;
+                currentStyle = data.style_advice;
+                displayComic(data);
+                document.getElementById('imageSection').style.display = 'block';
+                hideLoading();
+            } catch (error) {
+                hideLoading();
+                document.getElementById('comicOutput').innerHTML = 'Error: ' + error;
+            }
+        }
+
+        function displayComic(data) {
+            let html = '<h2>Final Comic</h2>';
+            html += '<h4>Panels & Dialogue:</h4>';
+            (data.panels || []).forEach((panel, i) => {
+                html += '<div class="panel">';
+                html += '<strong>Panel ' + panel.panel_number + '</strong><br>';
+                html += '<p>' + panel.description + '</p>';
+                html += '<p><em>Characters: ' + (panel.characters_present || []).join(', ') + '</em></p>';
+                
+                const dialogue = (data.dialogues || []).find(d => d.panel_number === panel.panel_number);
+                if (dialogue) {
+                    html += '<div class="dialogue"><strong>Dialogue:</strong><br>';
+                    (dialogue.dialogues || []).forEach(d => {
+                        html += `"${d.text}" – ${d.character} <span class="bubble-type">(${d.bubble_type})</span><br>`;
+                    });
+                    html += '</div>';
+                }
+                html += '</div>';
+            });
+
+            if (data.style_advice && Object.keys(data.style_advice).length) {
+                html += '<div class="style-box">';
+                html += '<h4>🎨 Style Advice</h4>';
+                if (data.style_advice.overall_style) html += '<p><strong>Overall Style:</strong> ' + data.style_advice.overall_style + '</p>';
+                if (data.style_advice.language_tone) html += '<p><strong>Language Tone:</strong> ' + data.style_advice.language_tone + '</p>';
+                if (data.style_advice.color_palette) html += '<p><strong>Color Palette:</strong> ' + data.style_advice.color_palette + '</p>';
+                html += '</div>';
+            }
+            
+            document.getElementById('comicOutput').innerHTML = html;
+        }
+
+        async function generateImages() {
+            document.getElementById('imageOutput').innerHTML = '⏳ Generating images with Imagen... (this may take 10-20 seconds)';
+            showLoading('Generating images with Imagen... (may take 10-20 seconds)');
+            try {
+                const response = await fetch('/generate-images', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        panels: currentPanels,
+                        style: currentStyle,
+                        dialogues: currentDialogues,
+                        language: currentLanguage
+                    })
+                });
+                const data = await response.json();
+                currentImages = data.images;
+                displayImages(data.images);
+                hideLoading();
+            } catch (error) {
+                hideLoading();
+                document.getElementById('imageOutput').innerHTML = 'Error: ' + error;
+            }
+        }
+
+        function displayImages(images) {
+            let html = '<h3>🎨 Generated Comic Panels (Imagen)</h3>';
+            
+            images.sort((a,b) => a.panel_number - b.panel_number);
+            
+            images.forEach(img => {
+                html += '<div class="comic-panel">';
+                html += '<h4>Panel ' + img.panel_number + '</h4>';
+                
+                if (img.image) {
+                    html += `<img src="data:image/png;base64,${img.image}" alt="Panel ${img.panel_number}">`;
+                    html += '<div class="placeholder-note">✓ Real Imagen generation with speech bubbles</div>';
+                } else {
+                    const colors = ['#667eea', '#764ba2', '#ff6b6b', '#4ecdc4'];
+                    const color = colors[(img.panel_number - 1) % colors.length];
+                    html += `<div style="height:200px; background:linear-gradient(135deg, ${color}, ${color}dd); border-radius:8px; display:flex; align-items:center; justify-content:center; color:white;">`;
+                    html += '⚠️ Imagen unavailable - showing placeholder';
+                    html += '<br><small>' + (img.description || '') + '</small>';
+                    html += '</div>';
+                }
+                html += '</div>';
+            });
+            
+            document.getElementById('imageOutput').innerHTML = html;
+        }
+
+        async function downloadPDF() {
+            if (!currentImages || currentImages.length === 0) {
+                alert('Please generate images first.');
+                return;
+            }
+            try {
+                const response = await fetch('/download-pdf', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        images: currentImages,
+                        style_advice: currentStyle,
+                        story_title: currentStory ? currentStory.title : 'Comic'
+                    })
+                });
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'comic.pdf';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            } catch (error) {
+                alert('PDF download failed: ' + error);
+            }
+        }
+
+        async function downloadBooklet() {
+            if (!currentImages || currentImages.length === 0) {
+                alert('Please generate images first.');
+                return;
+            }
+            try {
+                const response = await fetch('/download-booklet', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        images: currentImages,
+                        style_advice: currentStyle,
+                        story_title: currentStory ? currentStory.title : 'Comic'
+                    })
+                });
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'comic_booklet.pdf';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            } catch (error) {
+                alert('Booklet download failed: ' + error);
+            }
+        }
+    </script>
+</body>
+</html>

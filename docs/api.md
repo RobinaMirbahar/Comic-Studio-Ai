@@ -21,18 +21,19 @@ This API uses a Gemini API key configured via environment variable (`GEMINI_API_
 
 ## 📋 Endpoints Overview
 
-| Method | Endpoint             | Description |
-|--------|----------------------|-------------|
-| POST   | `/generate-story`    | Creates a comic story from a text prompt |
-| POST   | `/refine-story`      | Modifies an existing story based on user feedback |
-| POST   | `/generate-panels`   | Generates panel descriptions and dialogue from a story |
-| POST   | `/generate-images`   | Creates actual comic panel images using Imagen |
-| POST   | `/download-pdf`      | Downloads all panels as a PDF document |
-| POST   | `/download-booklet`  | Downloads panels as a booklet‑style PDF (two per page) |
+| Method | Endpoint                     | Description |
+|--------|------------------------------|-------------|
+| POST   | `/generate-story`            | Creates a comic story from a text prompt |
+| POST   | `/generate-story-with-image` | Creates a story using a character image as reference |
+| POST   | `/refine-story`              | Modifies an existing story based on user feedback |
+| POST   | `/generate-panels`           | Generates panel descriptions and dialogue from a story |
+| POST   | `/generate-images`           | Creates actual comic panel images using Imagen |
+| POST   | `/download-pdf`              | Downloads all panels as a PDF document |
+| POST   | `/download-booklet`          | Downloads panels as a booklet‑style PDF (two per page) |
 
 ---
 
-## 🎯 Story Generation
+## 🎯 Story Generation (Text Only)
 
 ### `POST /generate-story`
 
@@ -102,6 +103,49 @@ curl -X POST http://localhost:8080/generate-story \
 
 ---
 
+## 🖼️ Story Generation with Image
+
+### `POST /generate-story-with-image`
+
+Generates a comic story where the **main character is based on a provided image**. The AI will describe the character and feature it in the story across all panels.
+
+**Request Body:**
+
+```json
+{
+    "topic": "a day at the beach",
+    "language": "en",
+    "panels": 4,
+    "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD..."
+}
+```
+
+| Field    | Type   | Required | Description |
+|----------|--------|----------|-------------|
+| `topic`  | string | ✅ Yes   | The story idea/prompt |
+| `language` | string | ❌ No   | Language code |
+| `panels` | integer| ❌ No   | Number of panels (1‑6) |
+| `image`  | string | ✅ Yes   | Base64‑encoded image (JPEG/PNG, max 5MB) |
+
+**Success Response (200 OK):**
+
+Same format as `/generate-story`, but the main character description will match the uploaded image.
+
+**Example using `curl`:**
+
+```bash
+curl -X POST http://localhost:8080/generate-story-with-image \
+  -H "Content-Type: application/json" \
+  -d '{
+    "topic": "a day at the beach",
+    "language": "en",
+    "panels": 4,
+    "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD..."
+  }'
+```
+
+---
+
 ## 💬 Story Refinement (Conversational Agent)
 
 ### `POST /refine-story`
@@ -124,13 +168,13 @@ Modifies an existing story according to natural language feedback. Preserves exi
 
 | Field          | Type   | Required | Description |
 |----------------|--------|----------|-------------|
-| `story`        | object | ✅ Yes   | The story object from `/generate-story` |
+| `story`        | object | ✅ Yes   | The story object from `/generate-story` or `/generate-story-with-image` |
 | `modification` | string | ✅ Yes   | Natural language change request |
 | `language`     | string | ❌ No   | Language code (must match original) |
 
 **Success Response (200 OK):**
 
-Returns the modified story in the same format as `/generate-story`.
+Returns the modified story in the same format.
 
 **Example using `curl`:**
 
@@ -322,27 +366,37 @@ Verifies the API is running.
 ## 📚 Example Workflow
 
 ```bash
-# 1. Generate a story
+# 1. Generate a story from text
 curl -X POST http://localhost:8080/generate-story \
   -H "Content-Type: application/json" \
   -d '{"topic": "mouse on road", "language": "en", "panels": 4}' > story.json
 
-# 2. (Optional) Refine the story
+# 2. (Optional) Generate a story from an image
+curl -X POST http://localhost:8080/generate-story-with-image \
+  -H "Content-Type: application/json" \
+  -d '{
+    "topic": "a day at the beach",
+    "language": "en",
+    "panels": 4,
+    "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD..."
+  }' > image-story.json
+
+# 3. Refine the story
 curl -X POST http://localhost:8080/refine-story \
   -H "Content-Type: application/json" \
   -d '{"story": '"$(cat story.json)"', "modification": "add a dog character"}' > refined.json
 
-# 3. Generate panels
+# 4. Generate panels
 curl -X POST http://localhost:8080/generate-panels \
   -H "Content-Type: application/json" \
   -d '{"story": '"$(cat refined.json)"', "style": {"overall_style": "manga"}, "language": "en"}' > panels.json
 
-# 4. Generate images
+# 5. Generate images
 curl -X POST http://localhost:8080/generate-images \
   -H "Content-Type: application/json" \
   -d @panels.json > images.json
 
-# 5. Download PDF
+# 6. Download PDF
 curl -X POST http://localhost:8080/download-pdf \
   -H "Content-Type: application/json" \
   -d '{"images": '"$(jq '.images' images.json)"', "style_advice": '"$(jq '.style_advice' panels.json)"', "story_title": "Mouse Adventure"}' \
@@ -359,4 +413,3 @@ curl -X POST http://localhost:8080/download-pdf \
 
 Happy creating! 🎨
 ```
-

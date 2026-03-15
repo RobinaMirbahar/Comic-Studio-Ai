@@ -1,13 +1,53 @@
-__pycache__
-*.pyc
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Environment variables
 .env
+.env.local
+.env.*.local
+
+# Version control
 .git
 .gitignore
-README.md
-.vscode
-.idea
-venv
-env
+.gitattributes
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Virtual environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Development and documentation
 tests/
 docs/
 .github/
+README.md
+LICENSE
+
+# Cloud CI/CD (not needed in runtime image)
+cloudbuild.yaml
+.gcloudignore
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Docker files (not needed inside the image)
+Dockerfile
+.dockerignore

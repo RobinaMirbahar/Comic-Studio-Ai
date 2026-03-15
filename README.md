@@ -15,8 +15,7 @@
 
 **Turn simple prompts into professional comics with AI-powered storytelling, automatic speech bubbles, and a conversational agent.**
 
-[🚀 Live Demo](https://github.com/RobinaMirbahar/Comic-Studio-Ai/blob/main/cloudbuild.yaml) • [📹 Video Demo](#) • [📝 Devpost Submission](#) • [📚 Usage Guide](docs/usage.md) • [📡 API Docs](docs/api.md) • [🏗️ Architecture](docs/architecture.md) • [🌐 Deployment](docs/deployment.md)
-
+[🚀 Live Demo](https://comic-studio-ai-810328212248.us-central1.run.app) • [📹 Video Demo](https://youtu.be/SLJ4K5hf4Ec) • [📝 Devpost Submission](https://devpost.com/software/multi-agent-comic-generator-with-voice-image) • [📚 Usage Guide](docs/usage.md) • [📡 API Docs](docs/api.md) • [🏗️ Architecture](docs/architecture.md) • [🌐 Deployment](docs/deployment.md)
 </div>
 
 ---

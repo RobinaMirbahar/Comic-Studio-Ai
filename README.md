@@ -15,7 +15,7 @@
 
 **Turn simple prompts into professional comics with AI-powered storytelling, automatic speech bubbles, and a conversational agent.**
 
-[🚀 Live Demo](https://youtu.be/SLJ4K5hf4Ec) • [📹 Video Demo](https://youtu.be/SLJ4K5hf4Ec) • [📝 Devpost Submission](https://devpost.com/software/comiccrafter-ai) • [📚 Usage Guide](docs/usage.md) • [📡 API Docs](docs/api.md) • [🏗️ Architecture](docs/architecture.md) • [🌐 Deployment](docs/deployment.md)
+[🚀 Live Demo](https://github.com/RobinaMirbahar/Comic-Studio-Ai/blob/main/cloudbuild.yaml) • [📹 Video Demo](https://youtu.be/SLJ4K5hf4Ec) • [📝 Devpost Submission](https://devpost.com/software/comiccrafter-ai) • [📚 Usage Guide](docs/usage.md) • [📡 API Docs](docs/api.md) • [🏗️ Architecture](docs/architecture.md) • [🌐 Deployment](docs/deployment.md)
 </div>
 
 ---
@@ -416,24 +416,7 @@ jinja2>=3.1.0
 
 ## 🎨 Usage Guide
 
-### 1. **Generate a Story**
-Enter a prompt (or click 🎤 to speak, or 🎲 for a random one), choose panel count, select language, and click "Generate Story".  
-For a **custom character**, upload an image first, then click **📷 Generate Story with Image**.
-
-### 2. **Refine with Conversational Agent**
-Chat with the agent to modify characters, plot, or tone. Say "yes" when satisfied.
-
-### 3. **Choose Style**
-Select art style, language tone, and color palette (optional).
-
-### 4. **Generate Panels**
-Click "Generate Panels" to get panel descriptions and dialogue with bubble types.
-
-### 5. **Generate Images**
-Click "Generate Images" to create actual comic panels using Imagen (may take 10-20 seconds).
-
-### 6. **Download**
-Save your comic as a standard PDF or booklet PDF.
+For a complete walkthrough with screenshots and detailed steps, please refer to the **[Usage Guide](docs/usage.md)**. It covers everything from voice input to PDF export.
 
 ---
 
@@ -603,7 +586,7 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 ### 🏆 **Gemini Live Agent Challenge**
 **Category: Creative Storyteller**
 
-[![Devpost](https://img.shields.io/badge/Devpost-Submission-003E54?style=for-the-badge&logo=devpost&logoColor=white)](https://devpost.com/software/comic-studio-ai)
+[![Devpost](https://img.shields.io/badge/Devpost-Submission-003E54?style=for-the-badge&logo=devpost&logoColor=white)](https://devpost.com/software/multi-agent-comic-generator-with-voice-image)
 [![GitHub stars](https://img.shields.io/github/stars/RobinaMirbahar/Comic-Studio-Ai?style=social)](https://github.com/RobinaMirbahar/Comic-Studio-Ai)
 
 *March 2026 • Version 2.0.0*
@@ -621,3 +604,10 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 
 </div>
 ```
+
+### ✅ Key Changes
+- **Live Demo** now points to `https://comic-studio-ai-810328212248.us-central1.run.app`
+- **Video Demo** points to `https://youtu.be/SLJ4K5hf4Ec`
+- **Devpost Submission** uses the correct URL `https://devpost.com/software/multi-agent-comic-generator-with-voice-image`
+- **Usage Guide** section simplified to a link to `docs/usage.md` (the detailed guide)
+- All other sections remain intact.

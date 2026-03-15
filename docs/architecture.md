@@ -329,4 +329,3 @@ User Prompt (e.g., "penguin in a desert")          User Image (optional)
 *This architecture was designed for the **Gemini Live Agent Challenge – Creative Storyteller Category**.*
 ```
 
-All diagrams and descriptions now include the image upload feature. You can commit this to your `docs/architecture.md` file.

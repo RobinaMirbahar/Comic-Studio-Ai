@@ -1,14 +1,60 @@
-.git
-.gitignore
-README.md
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Environment variables
 .env
-.env.example
-.vscode
-.idea
-__pycache__
-*.pyc
-venv
-env
-tests/
-docs/
-.github/
+.env.local
+.env.*.local
+
+# IDE settings
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Python package files
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Cloud and deployment
+.gcloudignore
+cloudbuild.yaml.local  # if you have local versions, but keep cloudbuild.yaml tracked
+.DS_Store
+
+# Logs and databases
+*.log
+*.sqlite3
+*.db
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+*.orig
+
+# OS generated files
+Thumbs.db
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Desktop.ini
+
+# Cloud Shell cache
+.cache/

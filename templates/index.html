@@ -378,6 +378,45 @@
             text-align: center;
             font-weight: bold;
         }
+        /* Image upload styles */
+        .upload-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f0f4ff;
+            border-radius: 15px;
+            border: 2px dashed #667eea;
+        }
+        .upload-section label {
+            font-weight: bold;
+            color: #4a5568;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .file-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .file-input input[type="file"] {
+            flex: 1;
+            padding: 10px;
+            background: white;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+        }
+        .image-preview {
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 8px;
+            border: 2px solid #667eea;
+            object-fit: cover;
+        }
+        .upload-hint {
+            font-size: 0.9rem;
+            color: #718096;
+            margin-top: 8px;
+        }
         /* RTL support */
         .rtl {
             direction: rtl;
@@ -461,13 +500,26 @@
             <button onclick="randomPrompt()" id="randomBtn" style="background: #9f7aea;" title="Get a random prompt">🎲</button>
         </div>
 
+        <!-- Image upload section -->
+        <div class="upload-section">
+            <label>📸 Upload a character image (optional):</label>
+            <div class="file-input">
+                <input type="file" id="characterImage" accept="image/*" onchange="previewImage()">
+                <img id="imagePreview" class="image-preview" style="display:none;">
+            </div>
+            <div class="upload-hint">Upload a picture to base the main character on. The AI will create a story featuring this character.</div>
+        </div>
+
         <div class="panel-count-slider">
             <label for="panelCount">Number of panels:</label>
             <input type="range" id="panelCount" min="1" max="6" value="4" oninput="updatePanelCount(this.value)">
             <span id="panelCountValue">4</span>
         </div>
 
-        <button onclick="generateStory()" id="storyBtn">1. Generate Story</button>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <button onclick="generateStory()" id="storyBtn">1. Generate Story</button>
+            <button onclick="generateStoryWithImage()" id="imageStoryBtn" style="background: #9f7aea;">📷 Generate Story with Image</button>
+        </div>
         
         <div id="storyOutput" style="margin-top:20px;"></div>
         
@@ -550,6 +602,7 @@
         let selectedStyle = {};
         let currentLanguage = 'English';
         let currentPanelCount = 4;
+        let uploadedImage = null; // base64 image data
 
         function setLanguage(lang) {
             currentLanguage = lang;
@@ -583,17 +636,35 @@
             document.getElementById('prompt').value = random;
         }
 
+        function previewImage() {
+            const fileInput = document.getElementById('characterImage');
+            const preview = document.getElementById('imagePreview');
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedImage = e.target.result; // base64 with data:image prefix
+                    preview.src = uploadedImage;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                uploadedImage = null;
+                preview.style.display = 'none';
+            }
+        }
+
         function startVoiceInput() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) {
-                alert('Voice input is not supported in your browser. Try Chrome or Edge.');
+                alert('Voice input is not supported in your browser. Please use Chrome, Edge, or Safari.');
                 return;
             }
 
             const recognition = new SpeechRecognition();
             recognition.continuous = false;
             recognition.interimResults = false;
-            recognition.lang = 'en-US'; // could be set to currentLanguage
+            recognition.lang = 'en-US';
 
             const voiceBtn = document.getElementById('voiceBtn');
             const originalHTML = voiceBtn.innerHTML;
@@ -606,24 +677,38 @@
             recognition.onresult = (event) => {
                 const transcript = event.results[0][0].transcript;
                 document.getElementById('prompt').value = transcript;
-                voiceBtn.innerHTML = originalHTML;
-                voiceBtn.style.background = originalBg;
-                voiceBtn.disabled = false;
+                resetButton();
             };
 
             recognition.onerror = (event) => {
                 console.error('Voice error:', event.error);
-                alert('Voice recognition error: ' + event.error);
-                voiceBtn.innerHTML = originalHTML;
-                voiceBtn.style.background = originalBg;
-                voiceBtn.disabled = false;
+                let message = 'Voice recognition error: ';
+                switch (event.error) {
+                    case 'audio-capture':
+                        message += 'No microphone found or microphone access denied. Please check your microphone and permissions.';
+                        break;
+                    case 'not-allowed':
+                        message += 'Microphone access was denied. Please allow microphone access and try again.';
+                        break;
+                    case 'no-speech':
+                        message += 'No speech detected. Please try again.';
+                        break;
+                    default:
+                        message += event.error;
+                }
+                alert(message);
+                resetButton();
             };
 
             recognition.onend = () => {
+                resetButton();
+            };
+
+            function resetButton() {
                 voiceBtn.innerHTML = originalHTML;
                 voiceBtn.style.background = originalBg;
                 voiceBtn.disabled = false;
-            };
+            }
 
             recognition.start();
         }
@@ -660,6 +745,44 @@
                 
                 document.getElementById('chatSection').style.display = 'block';
                 addAgentMessage("I've created a story for you. You can ask me to change it in many ways! For example:\n- 'add a dog character'\n- 'make the plot more adventurous'\n- 'change the main character's personality to be braver'\n- 'add a twist at the end'\nJust tell me what you'd like, or say 'yes' to proceed.");
+                document.getElementById('styleSection').style.display = 'none';
+                document.getElementById('imageSection').style.display = 'none';
+                hideLoading();
+            } catch (error) {
+                hideLoading();
+                document.getElementById('storyOutput').innerHTML = 'Error: ' + error;
+            }
+        }
+
+        async function generateStoryWithImage() {
+            const prompt = document.getElementById('prompt').value;
+            if (!prompt.trim()) {
+                alert('Please enter a prompt');
+                return;
+            }
+            if (!uploadedImage) {
+                alert('Please upload an image first.');
+                return;
+            }
+            showLoading('Generating story with image...');
+            try {
+                const response = await fetch('/generate-story-with-image', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        topic: prompt,
+                        language: currentLanguage,
+                        panels: currentPanelCount,
+                        image: uploadedImage
+                    })
+                });
+                const data = await response.json();
+                if (data.error) throw new Error(data.error);
+                currentStory = data.story;
+                displayStory(currentStory);
+                
+                document.getElementById('chatSection').style.display = 'block';
+                addAgentMessage("I've created a story based on your image. You can ask me to change it, or say 'yes' to proceed.");
                 document.getElementById('styleSection').style.display = 'none';
                 document.getElementById('imageSection').style.display = 'none';
                 hideLoading();

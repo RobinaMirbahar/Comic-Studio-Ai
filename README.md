@@ -537,10 +537,7 @@ pip install pytest
 # Run all tests
 pytest tests/
 
-
-
-
-
+---
 
 ## 🎨 Made with Love & AI
 

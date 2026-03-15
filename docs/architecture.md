@@ -3,19 +3,21 @@
 
 ## High-Level Architecture Overview
 
-### Mermaid Diagram (Export as PNG for Devpost)
+### Mermaid Diagram 
 
 ```mermaid
 flowchart TB
     subgraph Client["CLIENT SIDE"]
         UI["Browser UI (HTML/CSS/JS)"]
         CA["Conversational Agent (Story Refinement)"]
+        IMG["Image Upload (File Input + Preview)"]
     end
 
     subgraph CloudRun["GOOGLE CLOUD RUN"]
         subgraph Backend["FASTAPI BACKEND"]
             direction LR
             GS["/generate-story"]
+            GSI["/generate-story-with-image"]
             RS["/refine-story"]
             GP["/generate-panels"]
             GI["/generate-images"]
@@ -51,6 +53,7 @@ flowchart TB
     style Backend fill:#f3e5f5,stroke:#4a148c
     style UI fill:#b3e5fc
     style CA fill:#b3e5fc
+    style IMG fill:#b3e5fc
     style RA fill:#a5d6a7
     style SA fill:#a5d6a7
     style PGA fill:#a5d6a7
@@ -68,6 +71,11 @@ flowchart TB
 │  │   Browser UI        │  │  Conversational Agent       │  │
 │  │   (HTML/CSS/JS)     │  │  (Story refinement)         │  │
 │  └─────────────────────┘  └─────────────────────────────┘  │
+│  ┌─────────────────────┐                                   │
+│  │   Image Upload      │                                   │
+│  │   (File input +     │                                   │
+│  │    preview)         │                                   │
+│  └─────────────────────┘                                   │
 └───────────────────────────┬─────────────────────────────────┘
                             │ HTTPS
 ┌───────────────────────────▼─────────────────────────────────┐
@@ -75,13 +83,18 @@ flowchart TB
 │  ┌───────────────────────────────────────────────────────┐  │
 │  │                    FASTAPI BACKEND                     │  │
 │  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐ │  │
-│  │  │ /generate-   │  │ /refine-     │  │ /generate-   │ │  │
-│  │  │   story      │  │   story      │  │   panels     │ │  │
+│  │  │ /generate-   │  │ /generate-   │  │ /refine-     │ │  │
+│  │  │   story      │  │   story-     │  │   story      │ │  │
+│  │  │              │  │   with-image │  │              │ │  │
 │  │  └──────────────┘  └──────────────┘  └──────────────┘ │  │
 │  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐ │  │
 │  │  │ /generate-   │  │ /download-   │  │ /download-   │ │  │
-│  │  │   images     │  │   pdf        │  │   booklet    │ │  │
+│  │  │   panels     │  │   pdf        │  │   booklet    │ │  │
 │  │  └──────────────┘  └──────────────┘  └──────────────┘ │  │
+│  │  ┌──────────────┐                                      │  │
+│  │  │ /generate-   │                                      │  │
+│  │  │   images     │                                      │  │
+│  │  └──────────────┘                                      │  │
 │  └───────────────────────────────────────────────────────┘  │
 └───────────┬──────────────────┬──────────────────┬────────────┘
             │                  │                  │
@@ -116,9 +129,14 @@ sequenceDiagram
     participant StyleAdvisor
     participant Imagen
 
-    User->>Frontend: Enter prompt
-    Frontend->>Backend: POST /generate-story
-    Backend->>Researcher: generate story
+    User->>Frontend: Enter prompt (text or voice)
+    User->>Frontend: (Optional) Upload image
+    Frontend->>Backend: POST /generate-story or /generate-story-with-image
+    alt with image
+        Backend->>Researcher: generate story with image reference
+    else without image
+        Backend->>Researcher: generate story from text only
+    end
     Researcher-->>Backend: story JSON
     Backend-->>Frontend: story
 
@@ -192,7 +210,7 @@ sequenceDiagram
 
 | Agent               | Responsibility                                      | Technology                       | Performance            |
 |---------------------|-----------------------------------------------------|----------------------------------|------------------------|
-| 📖 **Researcher**   | Generates story from user prompt                    | Gemini 2.0 Flash                 | 1.2s per story         |
+| 📖 **Researcher**   | Generates story from user prompt (with or without image reference) | Gemini 2.0 Flash | 1.2s per story         |
 | 🎯 **Script Director** | Quality control & story refinement (optional)     | Gemini 2.0 Flash                 | < 0.5s                 |
 | 🖼️ **Panel Generator** | Creates 4 panel descriptions from story           | **nano-banana-pro-preview**      | 3.2s for 4 panels      |
 | 💬 **Dialogue Doctor** | Adds dialogue with bubble types to each panel      | **nano-banana-pro-preview**      | 0.3s per panel         |
@@ -207,6 +225,7 @@ sequenceDiagram
 |---------------------------------------|----------------------------------------------------------------|----------------------------------------------|
 | **Multi-Agent Architecture**          | Each agent has a single, focused responsibility               | 94% character consistency; easy debugging    |
 | **Conversational Agent**              | Users can refine stories naturally without technical knowledge | High user satisfaction; intuitive workflow   |
+| **Image Upload**                       | Allows users to feature themselves or custom characters       | True multimodal input; personalization       |
 | **nano-banana-pro-preview for panels**| Model optimized for comic generation                           | 2x faster than standard Gemini; better style adherence |
 | **Imagen for image generation**       | State‑of‑the‑art text‑to‑image with speech‑bubble integration | Professional comic panel quality              |
 | **FastAPI Backend**                   | Async support for parallel agent calls                         | 3.2s total panel generation time              |
@@ -219,23 +238,27 @@ sequenceDiagram
 ## Data Flow Pipeline
 
 ```
-User Prompt (e.g., "penguin in a desert")
-       ↓
-[ Researcher Agent ] → Generates story (title, characters, plot)
-       ↓
-[ Conversational Agent ] ← User may refine story (optional)
-       ↓
-[ Style Selection ] → User chooses art style, tone, color palette
-       ↓
-[ Panel Generator (nano-banana) ] → Creates 4 panel descriptions
-       ↓
-[ Dialogue Doctor (nano-banana) ] → Adds speech bubbles with types
-       ↓
-[ Style Advisor ] → Merges user choices with AI suggestions
-       ↓
-[ Imagen (gemini-3.1-flash-image-preview) ] → Generates images
-       ↓
-[ PDF/Booklet Export ] → Download as standard or booklet PDF
+User Prompt (e.g., "penguin in a desert")          User Image (optional)
+                ↓                                             ↓
+    ┌─────────────────────────────────────────────────────────┐
+    │          [ Image Upload + Prompt ]                      │
+    └─────────────────────────────────────────────────────────┘
+                               ↓
+              [ Researcher Agent ] → Generates story (with or without image reference)
+                               ↓
+              [ Conversational Agent ] ← User may refine story (optional)
+                               ↓
+              [ Style Selection ] → User chooses art style, tone, color palette
+                               ↓
+              [ Panel Generator (nano-banana) ] → Creates 4 panel descriptions
+                               ↓
+              [ Dialogue Doctor (nano-banana) ] → Adds speech bubbles with types
+                               ↓
+              [ Style Advisor ] → Merges user choices with AI suggestions
+                               ↓
+              [ Imagen (gemini-3.1-flash-image-preview) ] → Generates images
+                               ↓
+              [ PDF/Booklet Export ] → Download as standard or booklet PDF
 ```
 
 ---
@@ -285,7 +308,7 @@ User Prompt (e.g., "penguin in a desert")
 
 - All traffic is encrypted in transit.
 - The Gemini API key is stored in Secret Manager and injected as an environment variable at runtime – never committed to the repository.
-- User inputs are validated and sanitized to prevent injection attacks.
+- User inputs (including uploaded images) are validated and sanitized to prevent injection attacks.
 
 ---
 
@@ -297,7 +320,7 @@ User Prompt (e.g., "penguin in a desert")
 ✅ **Fast** – Parallel agent calls and optimized models keep total generation under 10 seconds.  
 ✅ **Reliable** – Graceful fallbacks if an agent fails; images fall back to styled placeholders.  
 ✅ **Cost‑effective** – Serverless, pay‑per‑use model; no idle instance costs.  
-✅ **User‑friendly** – Conversational agent guides users; multiple export formats (PDF, booklet).  
+✅ **User‑friendly** – Conversational agent guides users; image upload enables personalization.  
 ✅ **Multilingual** – 7 languages with RTL support for Arabic/Urdu.  
 ✅ **Production‑ready** – Built with Google Cloud best practices and the Agent Development Kit (ADK).
 
@@ -305,3 +328,4 @@ User Prompt (e.g., "penguin in a desert")
 
 *This architecture was designed for the **Gemini Live Agent Challenge – Creative Storyteller Category**.*
 ```
+

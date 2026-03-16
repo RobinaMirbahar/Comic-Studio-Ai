@@ -604,10 +604,3 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 
 </div>
 ```
-
-### ✅ Key Changes
-- **Live Demo** now points to `https://comic-studio-ai-810328212248.us-central1.run.app`
-- **Video Demo** points to `https://youtu.be/SLJ4K5hf4Ec`
-- **Devpost Submission** uses the correct URL `https://devpost.com/software/multi-agent-comic-generator-with-voice-image`
-- **Usage Guide** section simplified to a link to `docs/usage.md` (the detailed guide)
-- All other sections remain intact.

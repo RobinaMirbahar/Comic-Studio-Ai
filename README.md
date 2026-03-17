@@ -569,7 +569,6 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 | **🖼️ ReportLab** | For PDF generation |
 | **👥 Beta Testers** | For squishing bugs & sending love |
 
----
 
 ## 🧁 A Sweet Treat
 
@@ -592,8 +591,6 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 *March 2026 • Version 2.0.0*
 
 </div>
-
----
 
 ## 🚀 **Ready to Create?**
 

@@ -569,6 +569,7 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 | **🖼️ ReportLab** | For PDF generation |
 | **👥 Beta Testers** | For squishing bugs & sending love |
 
+---
 
 ## 🧁 A Sweet Treat
 
@@ -585,12 +586,14 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 ### 🏆 **Gemini Live Agent Challenge**
 **Category: Creative Storyteller**
 
-[![Devpost](https://img.shields.io/badge/Devpost-Submission-003E54?style=for-the-badge&logo=devpost&logoColor=white)](https://devpost.com/software/multi-agent-comic-generator-with-voice-image)
+[![Devpost](https://img.shields.io/badge/Devpost-Submission-003E54?style=for-the-badge&logo=devpost&logoColor=white)](https://devpost.com/software/comiccrafter-ai)
 [![GitHub stars](https://img.shields.io/github/stars/RobinaMirbahar/Comic-Studio-Ai?style=social)](https://github.com/RobinaMirbahar/Comic-Studio-Ai)
 
 *March 2026 • Version 2.0.0*
 
 </div>
+
+---
 
 ## 🚀 **Ready to Create?**
 
@@ -601,3 +604,5 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 
 </div>
 ```
+
+This is now correct with the Devpost link `https://devpost.com/software/comiccrafter-ai` in both the header and the footer.

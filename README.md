@@ -252,7 +252,7 @@ This is Panel {i+1} of {panels}. Maintain consistency with all other panels.
 ┌──────────────────┐  ┌──────────────┐  ┌──────────────┐
 │   Researcher     │  │   Panel      │  │   Dialogue   │
 │   Agent          │  │   Generator  │  │   Doctor     │
-│  (Gemini Flash)  │  │(nano-banana) │  │(nano-banana) │
+│  (Gemini 3.1 Flash)  │  │(nano-banana) │  │(nano-banana) │
 └──────────────────┘  └──────────────┘  └──────────────┘
             │                  │                  │
             └──────────────────┼──────────────────┘

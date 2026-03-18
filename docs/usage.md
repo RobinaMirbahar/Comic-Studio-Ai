@@ -1,20 +1,19 @@
-
 # 📖 Comic Studio AI - Usage Guide
 
 ## 📋 Table of Contents
-- [Quick Start](#quick-start)
+- [🚀 Quick Start](#-quick-start)
 - [🎨 Your First Comic - Visual Guide](#-your-first-comic---visual-guide)
-- [Web Interface Guide](#web-interface-guide)
-- [Conversational Agent](#conversational-agent)
-- [Style Selection](#style-selection)
-- [Panel Count & Random Prompt](#panel-count--random-prompt)
-- [Image Generation](#image-generation)
-- [Download Options](#download-options)
-- [API Usage Guide](#api-usage-guide)
-- [Art Styles](#art-styles)
-- [Languages](#languages)
-- [Examples](#examples)
-- [Troubleshooting](#troubleshooting)
+- [🖥️ Web Interface Guide](#️-web-interface-guide)
+- [💬 Conversational Agent](#-conversational-agent)
+- [🎨 Style Selection](#-style-selection)
+- [🔢 Panel Count & Random Prompt](#-panel-count--random-prompt)
+- [✨ Image Generation](#-image-generation)
+- [📥 Download Options](#-download-options)
+- [📡 API Usage Guide](#-api-usage-guide)
+- [🎨 Art Styles](#-art-styles-1)
+- [🌐 Languages](#-languages)
+- [🎯 Examples](#-examples)
+- [🔧 Troubleshooting](#-troubleshooting)
 - [📷 Adding Images to this Guide](#-adding-images-to-this-guide)
 
 ---
@@ -493,13 +492,11 @@ RTL layout is automatically applied for Arabic and Urdu.
 **Style:** Cartoon, Heartwarming  
 **Output:** A story about a lost cat who brings joy to patients.
 
-
 ### Example 2: "robot on Mars" (French)
 **Language:** French  
 **Panels:** 6  
 **Style:** Manga, Adventurous  
 **Output:** A 6-panel comic about a robot exploring Mars.
-
 
 ### Example 3: "penguin in a desert" (Urdu)
 **Language:** Urdu  
@@ -523,11 +520,20 @@ RTL layout is automatically applied for Arabic and Urdu.
 
 ---
 
+## 📚 Additional Documentation
+
+For more details on Comic Studio AI, refer to the following internal documentation:
+
+- [**API Documentation**](api.md) – Complete API reference for programmatic access.
+- [**Architecture Overview**](architecture.md) – Detailed explanation of the multi‑agent system and data flow.
+- [**Deployment Guide**](deployment.md) – Instructions for deploying to Google Cloud Run.
+- [**Performance Metrics**](performance.md) – Benchmarking and accuracy details.
+
+---
+
 ## 🎨 **Happy Comic Creating!**
 
 For more help, check:
-- [API Documentation](api.md)
-- [Architecture Guide](architecture.md)
-- [Deployment Guide](deployment.md)
 - [GitHub Issues](https://github.com/RobinaMirbahar/Comic-Studio-Ai/issues)
-```
+
+---

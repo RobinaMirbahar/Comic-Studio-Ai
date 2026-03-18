@@ -509,10 +509,6 @@ def test_generate_story():
 
 ---
 
-Here's the consolidated final README section, combining all the provided elements into a clean, well‑structured format:
-
----
-
 ## 👩‍💻 Project Creator & Lead Developer
 
 <div align="center">

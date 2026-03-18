@@ -605,4 +605,3 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 </div>
 ```
 
-This is now correct with the Devpost link `https://devpost.com/software/comiccrafter-ai` in both the header and the footer.

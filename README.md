@@ -559,14 +559,14 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 
 ---
 
-## 🌟 Big Thank Yous
+## 🙏 Acknowledgments
 
 | | |
 |---|---|
-| **🤖 Google Gemini Team** | For the magical **nano-banana-pro-preview** |
-| **☁️ Google Cloud Platform** | For Cloud Run |
-| **⚡ FastAPI Team** | For the super speedy framework |
-| **🖼️ ReportLab** | For PDF generation |
+| **🤖 [Gemini API](https://ai.google.dev/)** | For powering the multi-agent system with **nano-banana-pro-preview** and image generation |
+| **☁️ [Google Cloud Run](https://cloud.google.com/run)** | For seamless serverless deployment and auto-scaling |
+| **⚡ [FastAPI](https://fastapi.tiangolo.com/)** | For the super speedy Python framework |
+| **🖼️ [ReportLab](https://www.reportlab.com/)** | For PDF generation and booklet exports |
 | **👥 Beta Testers** | For squishing bugs & sending love |
 
 ---

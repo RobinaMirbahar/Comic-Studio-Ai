@@ -28,11 +28,11 @@ flowchart TB
 
     subgraph Agents["AI AGENTS"]
         direction TB
-        RA["Researcher Agent (Gemini 2.0 Flash)"]
-        SA["Script Director (Gemini 2.0 Flash)"]
+        RA["Researcher Agent (Gemini 3.1 Flash)"]
+        SA["Script Director (Gemini 3.1 Flash)"]
         PGA["Panel Generator (nano-banana)"]
         DDA["Dialogue Doctor (nano-banana)"]
-        STA["Style Advisor (Gemini 2.0 Flash)"]
+        STA["Style Advisor (Gemini 3.1 Flash)"]
         IMA["Imagen (gemini-3.1-flash-image-preview)"]
     end
 
@@ -197,7 +197,7 @@ sequenceDiagram
 │                                                             │
 │  ┌───────────────────────────────────────────────────────┐ │
 │  │           Gemini API (via Google GenAI SDK)           │ │
-│  │  • gemini-2.0-flash (Researcher, Director, Advisor)   │ │
+│  │  • gemini-3.1-flash (Researcher, Director, Advisor)   │ │
 │  │  • nano-banana-pro-preview (Panel, Dialogue)          │ │
 │  │  • gemini-3.1-flash-image-preview (Imagen)            │ │
 │  └───────────────────────────────────────────────────────┘ │
@@ -210,11 +210,11 @@ sequenceDiagram
 
 | Agent               | Responsibility                                      | Technology                       | Performance            |
 |---------------------|-----------------------------------------------------|----------------------------------|------------------------|
-| 📖 **Researcher**   | Generates story from user prompt (with or without image reference) | Gemini 2.0 Flash | 1.2s per story         |
-| 🎯 **Script Director** | Quality control & story refinement (optional)     | Gemini 2.0 Flash                 | < 0.5s                 |
+| 📖 **Researcher**   | Generates story from user prompt (with or without image reference) | Gemini 3.1 Flash | 1.2s per story         |
+| 🎯 **Script Director** | Quality control & story refinement (optional)     | Gemini 3.1 Flash                 | < 0.5s                 |
 | 🖼️ **Panel Generator** | Creates 4 panel descriptions from story           | **nano-banana-pro-preview**      | 3.2s for 4 panels      |
 | 💬 **Dialogue Doctor** | Adds dialogue with bubble types to each panel      | **nano-banana-pro-preview**      | 0.3s per panel         |
-| 🎨 **Style Advisor** | Suggests art style, tone, color palette            | Gemini 2.0 Flash                 | 0.2s                   |
+| 🎨 **Style Advisor** | Suggests art style, tone, color palette            | Gemini 3.1 Flash                 | 0.2s                   |
 | ✨ **Imagen**        | Generates actual comic panel images                 | **gemini-3.1-flash-image-preview** | 5–8s per image         |
 
 ---

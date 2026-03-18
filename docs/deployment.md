@@ -31,7 +31,7 @@ Before deploying, ensure you have:
 | **Google Cloud SDK** | Latest version (`gcloud --version`) |
 | **Git** | 2.x or higher |
 | **Python** | 3.9 or higher |
-| **Gemini API Key** | From [Google AI Studio](https://makersuite.google.com/app/apikey) (must have access to `gemini-2.0-flash`, `nano-banana-pro-preview`, and `gemini-3.1-flash-image-preview`) |
+| **Gemini API Key** | From [Google AI Studio](https://makersuite.google.com/app/apikey) (must have access to `gemini-3.1-flash`, `nano-banana-pro-preview`, and `gemini-3.1-flash-image-preview`) |
 | **Project ID** | Your Google Cloud Project ID |
 
 ---

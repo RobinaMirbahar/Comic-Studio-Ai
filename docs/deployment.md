@@ -32,7 +32,7 @@ Before deploying, ensure you have:
 | **Google Cloud SDK** | Latest version (`gcloud --version`) |
 | **Git** | 2.x or higher |
 | **Python** | 3.9 or higher |
-| **Gemini API Key** | From [Google AI Studio](https://makersuite.google.com/app/apikey) (must have access to `gemini-3.1-flash`, `nano-banana-pro-preview`, and `gemini-3.1-flash-image-preview`) |
+| **Gemini API Key** | From [Google AI Studio](https://aistudio.google.com/apikey) (must have access to `gemini-3.1-flash`, `nano-banana-pro-preview`, and `gemini-3.1-flash-image-preview`) |
 | **Project ID** | Your Google Cloud Project ID |
 
 ---
@@ -253,7 +253,7 @@ gcloud run services update comic-studio-ai \
 |-------|----------|
 | **Deployment fails** | Check quota: `gcloud quotas list` |
 | **Secret not found** | Verify secret exists and permissions |
-| **API key invalid** | Regenerate API key in Google AI Studio |
+| **API key invalid** | Regenerate API key in [Google AI Studio](https://aistudio.google.com/apikey) |
 | **Memory limit exceeded** | Increase memory: `--memory 4Gi` |
 | **Cold start slow** | Set `--min-instances=1` |
 

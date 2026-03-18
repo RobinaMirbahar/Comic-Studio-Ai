@@ -1,4 +1,3 @@
-
 # 🎨 Comic Studio AI - Multi-Agent Comic Generator
 
 <div align="center">
@@ -64,13 +63,13 @@
 
 | Feature | Description | Technology |
 |---------|-------------|------------|
-| **🎤 Voice Input** | Speak your comic idea instead of typing | Web Speech API |
+| **🎤 Voice Input** | Speak your comic idea instead of typing | [Web Speech API](https://github.com/w3c/speech-api) |
 | **📷 Image Upload** | Upload a character image – the story will feature that character | Gemini multimodal |
 | **📝 Story Generation** | AI crafts complete narratives with characters | Gemini API + **nano-banana-pro-preview** |
 | **🖼️ 1–6 Panel Comics** | Generates sequential panels with consistent characters | **nano-banana-pro-preview** + Prompt Engineering |
 | **💬 Speech Bubbles** | 6 bubble types with dialogue placement | Custom prompts |
 | **🌐 7 Languages** | English, French, Spanish, German, Japanese, Arabic, Urdu | Multi-lingual prompts with RTL support |
-| **📥 Multiple Exports** | PDF and Booklet (two panels per page) | ReportLab |
+| **📥 Multiple Exports** | PDF and Booklet (two panels per page) | [ReportLab](https://github.com/python-pillow/Pillow) |
 | **🎲 Random Prompt** | One-click random creative idea generator | Custom JavaScript |
 | **💡 Agent Tooltips** | Hover over agents to see their role | CSS tooltips |
 | **⏳ Loading Overlay** | Visual feedback during generation | CSS spinner + overlay |
@@ -231,6 +230,11 @@ This is Panel {i+1} of {panels}. Maintain consistency with all other panels.
 │  │   Browser UI        │  │  Conversational Agent       │  │
 │  │   (HTML/CSS/JS)     │  │  (Story refinement)         │  │
 │  └─────────────────────┘  └─────────────────────────────┘  │
+│  ┌─────────────────────┐                                   │
+│  │   Image Upload      │                                   │
+│  │   (File input +     │                                   │
+│  │    preview)         │                                   │
+│  └─────────────────────┘                                   │
 └───────────────────────────┬─────────────────────────────────┘
                             │ HTTPS
 ┌───────────────────────────▼─────────────────────────────────┐
@@ -238,13 +242,18 @@ This is Panel {i+1} of {panels}. Maintain consistency with all other panels.
 │  ┌───────────────────────────────────────────────────────┐  │
 │  │                    FASTAPI BACKEND                     │  │
 │  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐ │  │
-│  │  │ /generate-   │  │ /refine-     │  │ /generate-   │ │  │
-│  │  │   story      │  │   story      │  │   panels     │ │  │
+│  │  │ /generate-   │  │ /generate-   │  │ /refine-     │ │  │
+│  │  │   story      │  │   story-     │  │   story      │ │  │
+│  │  │              │  │   with-image │  │              │ │  │
 │  │  └──────────────┘  └──────────────┘  └──────────────┘ │  │
 │  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐ │  │
 │  │  │ /generate-   │  │ /download-   │  │ /download-   │ │  │
-│  │  │   images     │  │   pdf        │  │   booklet    │ │  │
+│  │  │   panels     │  │   pdf        │  │   booklet    │ │  │
 │  │  └──────────────┘  └──────────────┘  └──────────────┘ │  │
+│  │  ┌──────────────┐                                      │  │
+│  │  │ /generate-   │                                      │  │
+│  │  │   images     │                                      │  │
+│  │  └──────────────┘                                      │  │
 │  └───────────────────────────────────────────────────────┘  │
 └───────────┬──────────────────┬──────────────────┬────────────┘
             │                  │                  │
@@ -509,22 +518,6 @@ def test_generate_story():
 
 ---
 
-## 👩‍💻 Project Creator & Lead Developer
-
-<div align="center">
-
-### Robina Mirbahar
-**Google Developer Expert in Machine Learning** | **Cloud Engineer**
-
-[![Twitter](https://img.shields.io/badge/Twitter-@robinamirbahar-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/robinamirbahar)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-robinamirbahar-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/robinamirbahar)
-[![GitHub](https://img.shields.io/badge/GitHub-robinamirbahar-333?style=for-the-badge&logo=github&logoColor=white)](https://github.com/robinamirbahar)
-[![Instagram](https://img.shields.io/badge/Instagram-robinamirbahar-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://instagram.com/robinamirbahar)
-
-</div>
-
----
-
 ## 🤝 Contributing
 
 Contributions are what make the open‑source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
@@ -550,8 +543,16 @@ Distributed under the Apache 2.0 License. See [`LICENSE`](LICENSE) for more info
 | **🤖 [Gemini API](https://ai.google.dev/)** | For powering the multi‑agent system with **nano‑banana‑pro‑preview** and image generation |
 | **☁️ [Google Cloud Run](https://cloud.google.com/run)** | For seamless serverless deployment and auto‑scaling |
 | **⚡ [FastAPI](https://fastapi.tiangolo.com/)** | For the super speedy Python framework |
-| **🖼️ [ReportLab](https://www.reportlab.com/)** | For PDF generation and booklet exports |
+| **🖼️ [ReportLab](https://github.com/python-pillow/Pillow)** | For PDF generation and booklet exports |
 | **👥 Beta Testers** | For squishing bugs & sending love |
+
+### 🛠️ Built With
+
+- **[Web Speech API](https://github.com/w3c/speech-api)** – Voice input
+- **[Google Generative AI SDK](https://github.com/googleapis/python-genai)** – Gemini model integration
+- **[Jinja2](https://github.com/pallets/jinja)** – HTML templating
+- **[Pillow](https://github.com/python-pillow/Pillow)** – Image processing
+- **[Uvicorn](https://github.com/encode/uvicorn)** – ASGI server
 
 ---
 
@@ -587,4 +588,3 @@ Distributed under the Apache 2.0 License. See [`LICENSE`](LICENSE) for more info
 **🐛 Found an issue? [Report it here](https://github.com/RobinaMirbahar/Comic-Studio-Ai/issues)**
 
 </div>
-

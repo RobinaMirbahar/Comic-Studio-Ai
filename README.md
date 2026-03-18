@@ -509,13 +509,15 @@ def test_generate_story():
 
 ---
 
-## 🙏 Acknowledgments
+Here's the consolidated final README section, combining all the provided elements into a clean, well‑structured format:
 
-### 👩‍💻 **Project Creator & Lead Developer**
+---
+
+## 👩‍💻 Project Creator & Lead Developer
 
 <div align="center">
-  
-## Robina Mirbahar
+
+### Robina Mirbahar
 **Google Developer Expert in Machine Learning** | **Cloud Engineer**
 
 [![Twitter](https://img.shields.io/badge/Twitter-@robinamirbahar-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/robinamirbahar)
@@ -529,33 +531,19 @@ def test_generate_story():
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
+Contributions are what make the open‑source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
 ---
 
 ## 📄 License
 
-Distributed under the Apache 2.0 License. See `LICENSE` for more information.
-
----
-
-## 🎨 Made with Love & AI
-
-<div align="center">
-
-### 💖 **Robina Mirbahar** 💖
-*Google Developer Expert in Machine Learning* • *Cloud Engineer*
-
-[![Email](https://img.shields.io/badge/Email-mallah.robina@gmail.com-D14836?style=flat-square&logo=gmail&logoColor=white)](mailto:mallah.robina@gmail.com)
-[![Twitter](https://img.shields.io/badge/Twitter-@robinamirbahar-1DA1F2?style=flat-square&logo=twitter&logoColor=white)](https://twitter.com/robinamirbahar)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-robinamirbahar-0077B5?style=flat-square&logo=linkedin&logoColor=white)](https://linkedin.com/in/robinamirbahar)
-[![GitHub](https://img.shields.io/badge/GitHub-robinamirbahar-333?style=flat-square&logo=github&logoColor=white)](https://github.com/robinamirbahar)
-
-</div>
+Distributed under the Apache 2.0 License. See [`LICENSE`](LICENSE) for more information.
 
 ---
 
@@ -563,8 +551,8 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 
 | | |
 |---|---|
-| **🤖 [Gemini API](https://ai.google.dev/)** | For powering the multi-agent system with **nano-banana-pro-preview** and image generation |
-| **☁️ [Google Cloud Run](https://cloud.google.com/run)** | For seamless serverless deployment and auto-scaling |
+| **🤖 [Gemini API](https://ai.google.dev/)** | For powering the multi‑agent system with **nano‑banana‑pro‑preview** and image generation |
+| **☁️ [Google Cloud Run](https://cloud.google.com/run)** | For seamless serverless deployment and auto‑scaling |
 | **⚡ [FastAPI](https://fastapi.tiangolo.com/)** | For the super speedy Python framework |
 | **🖼️ [ReportLab](https://www.reportlab.com/)** | For PDF generation and booklet exports |
 | **👥 Beta Testers** | For squishing bugs & sending love |
@@ -575,7 +563,7 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 
 <div align="center">
 
-### 🍌 **Powered by nano-banana-pro-preview**
+### 🍌 Powered by nano‑banana‑pro‑preview
 *The secret sauce behind fast comics*
 
 **Built with 💖 by [Robina Mirbahar](https://github.com/robinamirbahar)**  
@@ -583,7 +571,7 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 
 > *"Turning 🐭 mouse on road into 🎨 comic magic!"*
 
-### 🏆 **Gemini Live Agent Challenge**
+### 🏆 Gemini Live Agent Challenge
 **Category: Creative Storyteller**
 
 [![Devpost](https://img.shields.io/badge/Devpost-Submission-003E54?style=for-the-badge&logo=devpost&logoColor=white)](https://devpost.com/software/comiccrafter-ai)
@@ -595,7 +583,7 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 
 ---
 
-## 🚀 **Ready to Create?**
+## 🚀 Ready to Create?
 
 <div align="center">
 
@@ -603,5 +591,4 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 **🐛 Found an issue? [Report it here](https://github.com/RobinaMirbahar/Comic-Studio-Ai/issues)**
 
 </div>
-
 

@@ -1,99 +1,93 @@
-
 # 📡 API Documentation
 
 ## Base URL
 
-When running locally:
 ```
+# Local
 http://localhost:8080
-```
 
-When deployed on Google Cloud Run:
-```
+# Google Cloud Run
 https://comic-studio-ai-xyz-uc.a.run.app
 ```
 
 ## 🔐 Authentication
 
-This API uses a Gemini API key configured via environment variable (`GEMINI_API_KEY`). No additional authentication is required for the public demo endpoints.
+Configure your Gemini API key via the `GEMINI_API_KEY` environment variable. No additional authentication is required for public demo endpoints.
 
 ---
 
 ## 📋 Endpoints Overview
 
-| Method | Endpoint                     | Description |
-|--------|------------------------------|-------------|
-| POST   | `/generate-story`            | Creates a comic story from a text prompt |
-| POST   | `/generate-story-with-image` | Creates a story using a character image as reference |
-| POST   | `/refine-story`              | Modifies an existing story based on user feedback |
-| POST   | `/generate-panels`           | Generates panel descriptions and dialogue from a story |
-| POST   | `/generate-images`           | Creates actual comic panel images using Imagen |
-| POST   | `/download-pdf`              | Downloads all panels as a PDF document |
-| POST   | `/download-booklet`          | Downloads panels as a booklet‑style PDF (two per page) |
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/generate-story` | Generate a comic story from a text prompt |
+| POST | `/generate-story-with-image` | Generate a story using a character image as reference |
+| POST | `/refine-story` | Modify an existing story based on natural language feedback |
+| POST | `/generate-panels` | Generate panel descriptions and dialogue from a story |
+| POST | `/generate-images` | Render comic panel images using Imagen |
+| POST | `/download-pdf` | Download all panels as a PDF (one per page) |
+| POST | `/download-booklet` | Download panels as a booklet PDF (two per page, landscape) |
+| GET | `/health` | Verify the API is running |
 
 ---
 
-## 🎯 Story Generation (Text Only)
+## POST `/generate-story`
 
-### `POST /generate-story`
+Generate a complete comic story — title, characters, and plot — from a text prompt.
 
-Generates a complete comic story with characters and plot from a user prompt.
-
-**Request Body:**
+**Request**
 
 ```json
 {
-    "topic": "mouse on road",
-    "language": "en",
-    "panels": 4
+  "topic": "mouse on road",
+  "language": "en",
+  "panels": 4
 }
 ```
 
-| Field    | Type   | Required | Description |
-|----------|--------|----------|-------------|
-| `topic`  | string | ✅ Yes   | The story idea/prompt (min. 3 characters) |
-| `language` | string | ❌ No   | Language code (default: `"en"`) |
-| `panels` | integer| ❌ No   | Number of panels (1‑6, default: 4) |
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `topic` | string | ✅ | Story idea or prompt (min. 3 characters) |
+| `language` | string | — | Language code (default: `"en"`) |
+| `panels` | integer | — | Number of panels, 1–6 (default: 4) |
 
-**Supported Languages:**
+**Supported Languages**
 
-| Code | Language   | RTL |
-|------|------------|-----|
-| en   | English    | no  |
-| fr   | French     | no  |
-| es   | Spanish    | no  |
-| de   | German     | no  |
-| ja   | Japanese   | no  |
-| ar   | Arabic     | yes |
-| ur   | Urdu       | yes |
+| Code | Language | RTL |
+|---|---|---|
+| `en` | English | — |
+| `fr` | French | — |
+| `es` | Spanish | — |
+| `de` | German | — |
+| `ja` | Japanese | — |
+| `ar` | Arabic | ✓ |
+| `ur` | Urdu | ✓ |
 
-**Success Response (200 OK):**
+**Response — 200 OK**
 
 ```json
 {
-    "title": "Mouse on Road: A Cheese-Lover's Crosswalk Catastrophe",
-    "characters": [
-        "Montgomery – A small, adventurous mouse with a weakness for sharp cheddar",
-        "Bertha – A grumpy, overly cautious snail"
-    ],
-    "plot": [
-        "Montgomery spots a giant block of cheddar on the other side of a busy road.",
-        "He excitedly rushes forward, ignoring traffic, dreaming of cheesy paradise.",
-        "A tiny car miraculously avoids him, but he grabs a cheddar crumb.",
-        "Bertha scolds him as he blissfully nibbles his reward, declaring it 'totally worth it!'"
-    ]
+  "title": "Mouse on Road: A Cheese-Lover's Crosswalk Catastrophe",
+  "characters": [
+    "Montgomery – A small, adventurous mouse with a weakness for sharp cheddar",
+    "Bertha – A grumpy, overly cautious snail"
+  ],
+  "plot": [
+    "Montgomery spots a giant block of cheddar on the other side of a busy road.",
+    "He rushes forward ignoring traffic, dreaming of cheesy paradise.",
+    "A tiny car barely avoids him, but he grabs a cheddar crumb.",
+    "Bertha scolds him as he blissfully nibbles his reward — 'totally worth it!'"
+  ]
 }
 ```
 
-**Error Response (400 Bad Request):**
+**Response — 400 Bad Request**
 
 ```json
-{
-    "error": "Topic required"
-}
+{ "error": "Topic required" }
 ```
 
-**Example using `curl`:**
+**Example**
 
 ```bash
 curl -X POST http://localhost:8080/generate-story \
@@ -103,35 +97,33 @@ curl -X POST http://localhost:8080/generate-story \
 
 ---
 
-## 🖼️ Story Generation with Image
+## POST `/generate-story-with-image`
 
-### `POST /generate-story-with-image`
+Generate a story where the main character is based on an uploaded image. The AI describes the character from the image and features them consistently across all panels.
 
-Generates a comic story where the **main character is based on a provided image**. The AI will describe the character and feature it in the story across all panels.
-
-**Request Body:**
+**Request**
 
 ```json
 {
-    "topic": "a day at the beach",
-    "language": "en",
-    "panels": 4,
-    "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD..."
+  "topic": "a day at the beach",
+  "language": "en",
+  "panels": 4,
+  "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD..."
 }
 ```
 
-| Field    | Type   | Required | Description |
-|----------|--------|----------|-------------|
-| `topic`  | string | ✅ Yes   | The story idea/prompt |
-| `language` | string | ❌ No   | Language code |
-| `panels` | integer| ❌ No   | Number of panels (1‑6) |
-| `image`  | string | ✅ Yes   | Base64‑encoded image (JPEG/PNG, max 5MB) |
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `topic` | string | ✅ | Story idea or prompt |
+| `language` | string | — | Language code |
+| `panels` | integer | — | Number of panels, 1–6 |
+| `image` | string | ✅ | Base64-encoded image (JPEG or PNG, max 5 MB) |
 
-**Success Response (200 OK):**
+**Response — 200 OK**
 
-Same format as `/generate-story`, but the main character description will match the uploaded image.
+Same format as `/generate-story`. The main character description will reflect the uploaded image.
 
-**Example using `curl`:**
+**Example**
 
 ```bash
 curl -X POST http://localhost:8080/generate-story-with-image \
@@ -146,37 +138,35 @@ curl -X POST http://localhost:8080/generate-story-with-image \
 
 ---
 
-## 💬 Story Refinement (Conversational Agent)
+## POST `/refine-story`
 
-### `POST /refine-story`
+Modify an existing story with a natural language instruction. Existing characters are preserved; only the requested changes are applied.
 
-Modifies an existing story according to natural language feedback. Preserves existing characters and only adds/removes as requested.
-
-**Request Body:**
+**Request**
 
 ```json
 {
-    "story": {
-        "title": "Mouse Adventure",
-        "characters": ["Montgomery – ...", "Bertha – ..."],
-        "plot": ["Panel 1...", "Panel 2...", "Panel 3...", "Panel 4..."]
-    },
-    "modification": "add a dog character",
-    "language": "en"
+  "story": {
+    "title": "Mouse Adventure",
+    "characters": ["Montgomery – ...", "Bertha – ..."],
+    "plot": ["Panel 1...", "Panel 2...", "Panel 3...", "Panel 4..."]
+  },
+  "modification": "add a dog character",
+  "language": "en"
 }
 ```
 
-| Field          | Type   | Required | Description |
-|----------------|--------|----------|-------------|
-| `story`        | object | ✅ Yes   | The story object from `/generate-story` or `/generate-story-with-image` |
-| `modification` | string | ✅ Yes   | Natural language change request |
-| `language`     | string | ❌ No   | Language code (must match original) |
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `story` | object | ✅ | Story object from `/generate-story` or `/generate-story-with-image` |
+| `modification` | string | ✅ | Natural language change request |
+| `language` | string | — | Language code — should match the original |
 
-**Success Response (200 OK):**
+**Response — 200 OK**
 
-Returns the modified story in the same format.
+Returns the modified story in the same format as `/generate-story`.
 
-**Example using `curl`:**
+**Example**
 
 ```bash
 curl -X POST http://localhost:8080/refine-story \
@@ -190,216 +180,194 @@ curl -X POST http://localhost:8080/refine-story \
 
 ---
 
-## 🖼️ Panel & Dialogue Generation
+## POST `/generate-panels`
 
-### `POST /generate-panels`
+Generate detailed panel descriptions and dialogue — including bubble types — from an approved story and style preferences.
 
-Creates detailed panel descriptions and dialogue (with bubble types) from an approved story, incorporating user‑selected style preferences.
-
-**Request Body:**
+**Request**
 
 ```json
 {
-    "story": { ... },
-    "style": {
-        "overall_style": "manga",
-        "language_tone": "humorous",
-        "color_palette": "vibrant"
-    },
-    "language": "en"
+  "story": { ... },
+  "style": {
+    "overall_style": "manga",
+    "language_tone": "humorous",
+    "color_palette": "vibrant"
+  },
+  "language": "en"
 }
 ```
 
-| Field            | Type   | Required | Description |
-|------------------|--------|----------|-------------|
-| `story`          | object | ✅ Yes   | The story object |
-| `style`          | object | ❌ No   | Style preferences (see below) |
-| `language`       | string | ❌ No   | Language code |
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `story` | object | ✅ | Story object |
+| `style` | object | — | Style preferences (see below) |
+| `language` | string | — | Language code |
 
-**Style object fields:**
+**Style object**
 
-| Field           | Type   | Description |
-|-----------------|--------|-------------|
-| `overall_style` | string | Art style (manga, western, anime, watercolor, sketch, vintage, cartoon) |
-| `language_tone` | string | Tone of dialogue (humorous, dramatic, sarcastic, heartwarming, adventurous, mysterious) |
-| `color_palette` | string | Optional color hint (e.g., "warm", "pastel", "dark") |
+| Field | Type | Options |
+|---|---|---|
+| `overall_style` | string | `manga`, `western`, `anime`, `watercolor`, `sketch`, `vintage`, `cartoon` |
+| `language_tone` | string | `humorous`, `dramatic`, `sarcastic`, `heartwarming`, `adventurous`, `mysterious` |
+| `color_palette` | string | Optional hint — e.g., `"warm"`, `"pastel"`, `"dark"` |
 
-**Success Response (200 OK):**
+All style fields are optional; the AI will decide if omitted.
+
+**Response — 200 OK**
 
 ```json
 {
-    "panels": [
-        {
-            "panel_number": 1,
-            "description": "A wide shot of a desert...",
-            "characters_present": ["Montgomery"],
-            "suggested_art_style": "manga"
-        },
-        ...
-    ],
-    "dialogues": [
-        {
-            "panel_number": 1,
-            "dialogues": [
-                { "character": "Montgomery", "text": "I must cross!", "bubble_type": "speech" }
-            ]
-        },
-        ...
-    ],
-    "style_advice": {
-        "overall_style": "manga",
-        "language_tone": "humorous",
-        "color_palette": "vibrant"
+  "panels": [
+    {
+      "panel_number": 1,
+      "description": "A wide shot of a desert...",
+      "characters_present": ["Montgomery"],
+      "suggested_art_style": "manga"
     }
+  ],
+  "dialogues": [
+    {
+      "panel_number": 1,
+      "dialogues": [
+        { "character": "Montgomery", "text": "I must cross!", "bubble_type": "speech" }
+      ]
+    }
+  ],
+  "style_advice": {
+    "overall_style": "manga",
+    "language_tone": "humorous",
+    "color_palette": "vibrant"
+  }
 }
 ```
 
 ---
 
-## 🎨 Image Generation (Imagen)
+## POST `/generate-images`
 
-### `POST /generate-images`
+Render actual comic panel images using `gemini-3.1-flash-image-preview` (Imagen). Images are returned as base64-encoded PNGs. Four panels typically take 10–20 seconds.
 
-Uses the `gemini-3.1-flash-image-preview` model to generate actual comic panel images based on the descriptions and dialogues. Images are returned as base64‑encoded PNGs.
-
-**Request Body:**
+**Request**
 
 ```json
 {
-    "panels": [...],
-    "style": { ... },
-    "dialogues": [...],
-    "language": "en"
+  "panels": [...],
+  "style": { ... },
+  "dialogues": [...],
+  "language": "en"
 }
 ```
 
-**Success Response (200 OK):**
+**Response — 200 OK**
 
 ```json
 {
-    "images": [
-        {
-            "panel_number": 1,
-            "image": "base64_encoded_image_data...",
-            "description": "A wide shot of a desert..."
-        },
-        ...
-    ]
+  "images": [
+    {
+      "panel_number": 1,
+      "image": "base64_encoded_image_data...",
+      "description": "A wide shot of a desert..."
+    }
+  ]
 }
 ```
 
-If image generation fails, the `image` field will be `null`.
+If generation fails for a panel, its `image` field will be `null` and a styled placeholder is shown in the UI.
 
 ---
 
-## 📥 PDF Download
+## POST `/download-pdf`
 
-### `POST /download-pdf`
+Generate a portrait PDF with one panel per page, including a title page with style advice.
 
-Generates a PDF containing all comic panels (one per page) with a title page showing style advice.
-
-**Request Body:**
+**Request**
 
 ```json
 {
-    "images": [...],
-    "style_advice": { ... },
-    "story_title": "Mouse Adventure"
+  "images": [...],
+  "style_advice": { ... },
+  "story_title": "Mouse Adventure"
 }
 ```
 
-| Field          | Type    | Required | Description |
-|----------------|---------|----------|-------------|
-| `images`       | array   | ✅ Yes   | Array of image objects from `/generate-images` |
-| `style_advice` | object  | ✅ Yes   | Style advice object |
-| `story_title`  | string  | ✅ Yes   | Title of the comic |
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `images` | array | ✅ | Image objects from `/generate-images` |
+| `style_advice` | object | ✅ | Style advice from `/generate-panels` |
+| `story_title` | string | ✅ | Title used in the filename and title page |
 
-**Response:** PDF file download with filename `comic.pdf`.
-
----
-
-### `POST /download-booklet`
-
-Generates a booklet‑style PDF with two panels per page (landscape orientation), suitable for printing.
-
-**Request Body:** Same as `/download-pdf`.
-
-**Response:** PDF file download with filename `comic_booklet.pdf`.
+**Response:** PDF file — `comic.pdf`
 
 ---
 
-## 🏥 Health Check
+## POST `/download-booklet`
 
-### `GET /health`
+Generate a landscape booklet PDF with two panels per page, suitable for printing.
 
-Verifies the API is running.
+**Request:** Same as `/download-pdf`.
 
-**Success Response (200 OK):**
+**Response:** PDF file — `comic_booklet.pdf`
+
+---
+
+## GET `/health`
+
+Verify the API is running.
+
+**Response — 200 OK**
 
 ```json
-{
-    "status": "healthy"
-}
+{ "status": "healthy" }
 ```
 
 ---
 
-## ⚠️ Common Error Codes
+## ⚠️ Error Codes
 
-| Status Code | Description |
-|-------------|-------------|
-| 200 OK      | Request successful |
-| 400 Bad Request | Invalid input (missing fields, wrong format) |
-| 500 Internal Server Error | Server‑side error (check logs for details) |
-
----
-
-## 💡 Tips for Developers
-
-- Use the conversational agent (`/refine-story`) to iterate on the story – the agent understands natural language and preserves existing characters.
-- Style preferences are optional; the AI will decide if left empty.
-- Image generation may take 10‑20 seconds for four panels.
-- PDF and booklet downloads include the story title and a timestamp in the filename for uniqueness.
+| Code | Meaning |
+|---|---|
+| `200 OK` | Request successful |
+| `400 Bad Request` | Invalid input — missing fields or wrong format |
+| `500 Internal Server Error` | Server-side error — check logs for details |
 
 ---
 
-## 📚 Example Workflow
+## 📚 Full Workflow Example
 
 ```bash
-# 1. Generate a story from text
+# 1. Generate story
 curl -X POST http://localhost:8080/generate-story \
   -H "Content-Type: application/json" \
-  -d '{"topic": "mouse on road", "language": "en", "panels": 4}' > story.json
+  -d '{"topic": "mouse on road", "language": "en", "panels": 4}' \
+  > story.json
 
-# 2. (Optional) Generate a story from an image
-curl -X POST http://localhost:8080/generate-story-with-image \
-  -H "Content-Type: application/json" \
-  -d '{
-    "topic": "a day at the beach",
-    "language": "en",
-    "panels": 4,
-    "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD..."
-  }' > image-story.json
-
-# 3. Refine the story
+# 2. Refine the story
 curl -X POST http://localhost:8080/refine-story \
   -H "Content-Type: application/json" \
-  -d '{"story": '"$(cat story.json)"', "modification": "add a dog character"}' > refined.json
+  -d '{"story": '"$(cat story.json)"', "modification": "add a dog character"}' \
+  > refined.json
 
-# 4. Generate panels
+# 3. Generate panels
 curl -X POST http://localhost:8080/generate-panels \
   -H "Content-Type: application/json" \
-  -d '{"story": '"$(cat refined.json)"', "style": {"overall_style": "manga"}, "language": "en"}' > panels.json
+  -d '{"story": '"$(cat refined.json)"', "style": {"overall_style": "manga"}, "language": "en"}' \
+  > panels.json
 
-# 5. Generate images
+# 4. Generate images
 curl -X POST http://localhost:8080/generate-images \
   -H "Content-Type: application/json" \
-  -d @panels.json > images.json
+  -d @panels.json \
+  > images.json
 
-# 6. Download PDF
+# 5. Download PDF
 curl -X POST http://localhost:8080/download-pdf \
   -H "Content-Type: application/json" \
-  -d '{"images": '"$(jq '.images' images.json)"', "style_advice": '"$(jq '.style_advice' panels.json)"', "story_title": "Mouse Adventure"}' \
+  -d '{
+    "images": '"$(jq '.images' images.json)"',
+    "style_advice": '"$(jq '.style_advice' panels.json)"',
+    "story_title": "Mouse Adventure"
+  }' \
   --output comic.pdf
 ```
 
@@ -407,9 +375,9 @@ curl -X POST http://localhost:8080/download-pdf \
 
 ## 📝 Notes
 
-- All timestamps in responses are Unix epoch format.
-- Image URLs are relative to the server root when stored locally; for generated images, they are returned as base64 data.
-- Maximum request size is limited by the server configuration (default 10 MB).
-
-Happy creating! 🎨
-```
+- All style fields are optional — the AI will make sensible decisions when omitted.
+- The conversational agent (`/refine-story`) understands natural language and preserves existing characters — iterate freely before generating panels.
+- Image generation is the slowest step (~10–20s for 4 panels); plan accordingly in any integration.
+- PDF filenames include the story title and a Unix timestamp for uniqueness.
+- Maximum request size is 10 MB (server default).
+- Base64 image data is returned directly in the response body; no separate asset hosting is required.

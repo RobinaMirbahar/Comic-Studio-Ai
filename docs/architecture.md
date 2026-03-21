@@ -2,7 +2,7 @@
 
 ## Overview
 
-Comic Studio AI is built as a multi-agent pipeline deployed on Google Cloud Run. Each agent has a single focused responsibility — from story research through image generation to PDF export — communicating sequentially via a FastAPI backend.
+Comic Studio AI is built as a multi-agent pipeline deployed on Google Cloud Run. Each agent has a single focused responsibility from story research through image generation to PDF export  communicating sequentially via a FastAPI backend.
 
 ---
 

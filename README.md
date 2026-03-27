@@ -492,34 +492,6 @@ If Comic Studio AI helps you create something amazing, the best way to support i
 
 Every star genuinely helps — thank you! 🙏
 
----
-
-## 🛣️ Roadmap
-
-### ✅ Completed
-- [x] Multi-agent architecture with 6 specialized agents
-- [x] Voice input & image upload
-- [x] 7 languages with RTL support
-- [x] PDF and booklet export
-- [x] 94% character consistency
-- [x] Conversational story refinement
-- [x] **Reached 1.2k GitHub Stars** 🎉
-
-### 🚧 In Progress
-- [ ] **Multiple character uploads** — feature yourself, your friends, and your pets in the same comic
-- [ ] **Comic series & longer stories** — from 4-panel jokes to 8-page comics
-- [ ] **Improved bubble positioning** — automatic placement that never overlaps
-- [ ] **Template gallery** — pre-made story structures (hero's journey, funny mishap, etc.)
-
-### 📅 Planned
-- [ ] **Personalized style training** — fine-tune on your own art style
-- [ ] **Community gallery** — share and remix others' comics
-- [ ] **Mobile app** — create on the go with offline support
-
-*Have a feature idea?* [Open an issue](https://github.com/RobinaMirbahar/Comic-Studio-Ai/issues) or start a [discussion](https://github.com/RobinaMirbahar/Comic-Studio-Ai/discussions)!
-
----
-
 ## 🤝 Contributing
 
 Contributions are welcome and appreciated!

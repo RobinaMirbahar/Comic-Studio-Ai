@@ -11,7 +11,6 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/RobinaMirbahar/Comic-Studio-Ai)](https://github.com/RobinaMirbahar/Comic-Studio-Ai)
 [![GitHub stars](https://img.shields.io/github/stars/RobinaMirbahar/Comic-Studio-Ai?style=social)](https://github.com/RobinaMirbahar/Comic-Studio-Ai/stargazers)
 
-⭐ **1.2k Stars** — Thank you for the incredible support! Keep it coming!
 
 **Turn simple prompts into professional comics — with AI-powered storytelling, automatic speech bubbles, and a conversational refinement agent.**
 
@@ -53,7 +52,6 @@
 - [🧪 Testing](#-testing)
 - [📊 Performance Metrics](#-performance-metrics)
 - [🤝 Community & Support](#-community--support)
-- [🛣️ Roadmap](#️-roadmap)
 - [🤝 Contributing](#-contributing)
 - [📄 License](#-license)
 - [🙏 Acknowledgments](#-acknowledgments)

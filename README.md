@@ -11,6 +11,8 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/RobinaMirbahar/Comic-Studio-Ai)](https://github.com/RobinaMirbahar/Comic-Studio-Ai)
 [![GitHub stars](https://img.shields.io/github/stars/RobinaMirbahar/Comic-Studio-Ai?style=social)](https://github.com/RobinaMirbahar/Comic-Studio-Ai/stargazers)
 
+⭐ **1.2k Stars** — Thank you for the incredible support! Keep it coming!
+
 **Turn simple prompts into professional comics — with AI-powered storytelling, automatic speech bubbles, and a conversational refinement agent.**
 
 [🚀 Live Demo](https://github.com/RobinaMirbahar/Comic-Studio-Ai/blob/main/cloudbuild.yaml) · [📹 Video Demo](https://youtu.be/SLJ4K5hf4Ec) · [📝 Devpost](https://devpost.com/software/comiccrafter-ai) · [📚 Usage Guide](docs/usage.md) · [📡 API Docs](docs/api.md) · [🏗️ Architecture](docs/architecture.md)
@@ -47,9 +49,11 @@
 - [🚀 Quick Start](#-quick-start)
 - [🎮 Button Guide](#-button-guide)
 - [⚙️ Configuration](#️-configuration)
-- [🌐 Deployment to Cloud Run](#-deployment-to-cloud-run)
+- [🌐 Deployment Options](#-deployment-options)
 - [🧪 Testing](#-testing)
 - [📊 Performance Metrics](#-performance-metrics)
+- [🤝 Community & Support](#-community--support)
+- [🛣️ Roadmap](#️-roadmap)
 - [🤝 Contributing](#-contributing)
 - [📄 License](#-license)
 - [🙏 Acknowledgments](#-acknowledgments)
@@ -386,7 +390,15 @@ jinja2>=3.1.0
 
 ---
 
-## 🌐 Deployment to Cloud Run
+## 🌐 Deployment Options
+
+### ☁️ Google Cloud Run (Recommended)
+
+Deploy your own instance of Comic Studio AI on Google Cloud Run with a single click:
+
+[![Run on Google Cloud](https://deploy.cloud.run/button.svg)](https://deploy.cloud.run)
+
+Or manually:
 
 ```bash
 # 1. Configure project
@@ -403,7 +415,14 @@ gcloud run deploy comic-studio \
   --set-env-vars GEMINI_API_KEY=your_api_key_here
 ```
 
-See the [Deployment Guide](docs/deployment.md) for full details.
+### 🐳 Docker
+
+```bash
+docker build -t comic-studio-ai .
+docker run -p 8080:8080 -e GEMINI_API_KEY=your_key_here comic-studio-ai
+```
+
+For detailed steps, see the [Deployment Guide](docs/deployment.md).
 
 ---
 
@@ -455,6 +474,52 @@ def test_generate_story():
 
 ---
 
+## 🤝 Community & Support
+
+### 💬 Get Involved
+
+- **GitHub Discussions**: [Start a discussion](https://github.com/RobinaMirbahar/Comic-Studio-Ai/discussions) — share your comics, ask questions, or suggest features.
+- **Twitter/X**: Follow [@robinamirbahar](https://twitter.com/robinamirbahar) for updates, tips, and showcase posts.
+- **Issues**: [Report a bug or request a feature](https://github.com/RobinaMirbahar/Comic-Studio-Ai/issues).
+
+### 💖 Support the Project
+
+If Comic Studio AI helps you create something amazing, the best way to support it is simple:
+
+- ⭐ **Star** the repo — it helps others discover the project
+- 🔄 **Fork & build** your own version
+- 📣 **Share** it with friends, colleagues, or on social media
+
+Every star genuinely helps — thank you! 🙏
+
+---
+
+## 🛣️ Roadmap
+
+### ✅ Completed
+- [x] Multi-agent architecture with 6 specialized agents
+- [x] Voice input & image upload
+- [x] 7 languages with RTL support
+- [x] PDF and booklet export
+- [x] 94% character consistency
+- [x] Conversational story refinement
+- [x] **Reached 1.2k GitHub Stars** 🎉
+
+### 🚧 In Progress
+- [ ] **Multiple character uploads** — feature yourself, your friends, and your pets in the same comic
+- [ ] **Comic series & longer stories** — from 4-panel jokes to 8-page comics
+- [ ] **Improved bubble positioning** — automatic placement that never overlaps
+- [ ] **Template gallery** — pre-made story structures (hero's journey, funny mishap, etc.)
+
+### 📅 Planned
+- [ ] **Personalized style training** — fine-tune on your own art style
+- [ ] **Community gallery** — share and remix others' comics
+- [ ] **Mobile app** — create on the go with offline support
+
+*Have a feature idea?* [Open an issue](https://github.com/RobinaMirbahar/Comic-Studio-Ai/issues) or start a [discussion](https://github.com/RobinaMirbahar/Comic-Studio-Ai/discussions)!
+
+---
+
 ## 🤝 Contributing
 
 Contributions are welcome and appreciated!
@@ -500,7 +565,7 @@ Distributed under the **Apache 2.0 License**. See [`LICENSE`](LICENSE) for detai
 ### 🏆 Gemini Live Agent Challenge — Category: Creative Storyteller
 
 [![Devpost](https://img.shields.io/badge/Devpost-Submission-003E54?style=for-the-badge&logo=devpost&logoColor=white)](https://devpost.com/software/comiccrafter-ai)
-[![GitHub stars](https://img.shields.io/github/stars/RobinaMirbahar/Comic-Studio-Ai?style=social)](https://github.com/RobinaMirbahar/Comic-Studio-Ai)
+[![GitHub stars](https://img.shields.io/github/stars/RobinaMirbahar/Comic-Studio-Ai?style=social)](https://github.com/RobinaMirbahar/Comic-Studio-Ai/stargazers)
 
 *March 2026 · Version 2.0.0*
 

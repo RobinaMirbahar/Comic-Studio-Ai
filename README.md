@@ -1,5 +1,23 @@
 # 🎨 Comic Studio AI — Multi-Agent Comic Generator
 
+> **Author & Architect:** [Robina Mirbahar](https://github.com/RobinaMirbahar) (Google Developer Expert in Cloud & AI)  
+> **Focus:** Multi-Agent Comic Generator with Consistent Character Identity & 7-Language Localization on Google Cloud Run
+
+---
+
+## 🎯 Why I Built Comic Studio AI (Engineering Purpose & Real-World Value)
+
+### 1. 🎨 Solving Character Consistency Across Multi-Panel Comics
+Naive image prompts produce a different character face in every panel. I architected a multi-agent pipeline (Scriptwriter ➔ Character Sheet Designer ➔ Panel Director ➔ Typesetter) that locks canonical character descriptors across every frame.
+
+### 2. 🌍 Native 7-Language Visual Storytelling
+I built the dialogue and layout engine to support 7 languages so educators, creators, and students worldwide can turn complex technical or creative concepts into localized comic strips.
+
+### 3. ☁️ Stateless FastAPI Microservice on Google Cloud Run
+The entire multi-agent orchestration runs as a containerized FastAPI service on Google Cloud Run with automatic scaling.
+
+---
+
 <div align="center">
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
@@ -566,3 +584,22 @@ Distributed under the **Apache 2.0 License**. See [`LICENSE`](LICENSE) for detai
 <div align="center">
   <img src="https://raw.githubusercontent.com/RobinaMirbahar/RobinaMirbahar/main/ProfileImages/GithubBanner.svg" alt="Robina Mirbahar Banner" width="100%" />
 </div>
+
+<!-- AUTHOR_SIGNATURE_START -->
+---
+
+## 👩‍💻 About the Author
+
+**Robina Mirbahar — Google Cloud & AI Architect**  
+*Google Developer Expert (GDE) in Cloud & AI • Published Author • Multi-Agent Systems & Serverless GPU Builder*
+
+[![GitHub](https://img.shields.io/badge/GitHub-RobinaMirbahar-181717?style=for-the-badge&logo=github)](https://github.com/RobinaMirbahar)
+[![Medium](https://img.shields.io/badge/Medium-@robinamirbahar-000000?style=for-the-badge&logo=medium)](https://medium.com/@robinamirbahar)
+[![DEV.to](https://img.shields.io/badge/DEV.to-robinamirbahar-0A0A0A?style=for-the-badge&logo=devdotto)](https://dev.to/robinamirbahar)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Robina_Mirbahar-0A66C2?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/robina-mirbahar)
+[![GDE Profile](https://img.shields.io/badge/Google_Developer_Expert-Profile-4285F4?style=for-the-badge&logo=google)](https://g.dev/RobinaMirbahar)
+[![YouTube](https://img.shields.io/badge/YouTube-@RobinaMirbahar-FF0000?style=for-the-badge&logo=youtube)](https://www.youtube.com/@RobinaMirbahar)
+[![X](https://img.shields.io/badge/X-@RobinaMirbahar-000000?style=for-the-badge&logo=x)](https://x.com/RobinaMirbahar)
+[![Amazon Author](https://img.shields.io/badge/Amazon_Book-Cloud_Computing_Voyage-FF9900?style=for-the-badge&logo=amazon)](https://www.amazon.com/dp/B0D146249R)
+
+<!-- AUTHOR_SIGNATURE_END -->

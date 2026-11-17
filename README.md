@@ -23,9 +23,9 @@ The entire multi-agent orchestration runs as a containerized FastAPI service on 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.9%2B-blue)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115.0-green)](https://fastapi.tiangolo.com)
-[![Google Gemini](https://img.shields.io/badge/Google%20Gemini-nano--banana--pro--preview-orange)](https://deepmind.google/technologies/gemini/)
-[![Cloud Run](https://img.shields.io/badge/Cloud%20Run-Deployed-blue)](https://cloud.google.com/run)
-[![GDE](https://img.shields.io/badge/GDE-Machine%20Learning-4285F4)](https://developers.google.com/community/experts)
+[![Google Gemini](https://img.shields.io/badge/Google%20Gemini-nano--banana--pro--preview-orange)](https://deepmind.google/technologies/gemini/?utm_campaign=deveco_gdemembers&utm_source=deveco)
+[![Cloud Run](https://img.shields.io/badge/Cloud%20Run-Deployed-blue)](https://cloud.google.com/run?utm_campaign=deveco_gdemembers&utm_source=deveco)
+[![GDE](https://img.shields.io/badge/GDE-Machine%20Learning-4285F4)](https://developers.google.com/community/experts?utm_campaign=deveco_gdemembers&utm_source=deveco)
 [![GitHub last commit](https://img.shields.io/github/last-commit/RobinaMirbahar/Comic-Studio-Ai)](https://github.com/RobinaMirbahar/Comic-Studio-Ai)
 [![GitHub stars](https://img.shields.io/github/stars/RobinaMirbahar/Comic-Studio-Ai?style=social)](https://github.com/RobinaMirbahar/Comic-Studio-Ai/stargazers)
 
@@ -530,8 +530,8 @@ Distributed under the **Apache 2.0 License**. See [`LICENSE`](LICENSE) for detai
 
 | | |
 |---|---|
-| 🤖 **[Gemini API](https://ai.google.dev/)** | Multi-agent system, nano-banana-pro-preview, image generation |
-| ☁️ **[Google Cloud Run](https://cloud.google.com/run)** | Serverless deployment and auto-scaling |
+| 🤖 **[Gemini API](https://ai.google.dev/?utm_campaign=deveco_gdemembers&utm_source=deveco)** | Multi-agent system, nano-banana-pro-preview, image generation |
+| ☁️ **[Google Cloud Run](https://cloud.google.com/run?utm_campaign=deveco_gdemembers&utm_source=deveco)** | Serverless deployment and auto-scaling |
 | ⚡ **[FastAPI](https://fastapi.tiangolo.com/)** | High-performance Python backend |
 | 🖼️ **[ReportLab](https://www.reportlab.com/)** | PDF and booklet exports |
 | 🗣️ **[Web Speech API](https://github.com/w3c/speech-api)** | Voice input |

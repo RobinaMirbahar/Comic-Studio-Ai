@@ -133,15 +133,6 @@ graph LR
     E --> F["Style Advisor"]
     F --> G["Imagen\nImage Generation"]
     G --> H["PDF / Booklet Export"]
-
-    style A fill:#667eea,color:white
-    style B fill:#764ba2,color:white
-    style C fill:#ff6b6b,color:white
-    style D fill:#4ecdc4,color:white
-    style E fill:#45b7d1,color:white
-    style F fill:#96ceb4,color:white
-    style G fill:#f9ca7f,color:white
-    style H fill:#b5a7ff,color:white
 ```
 
 Each request passes through a chain of specialized agents — from story research and script direction, through panel description and dialogue polish, to final image rendering and export.

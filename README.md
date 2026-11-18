@@ -2,7 +2,7 @@
 
 > **Author & Architect:** [Robina Mirbahar](https://github.com/RobinaMirbahar) ([Google Developer Expert in Cloud & AI](https://developers.google.com/profile/u/106918534005910641104?utm_campaign=deveco_gdemembers&utm_source=deveco) · Google Cloud Champion Innovator · Co-Author of [*AI Engineering*](https://www.amazon.com/dp/B0GWCZWCF4))  
 > 📚 **Companion Publications:** [DEV.to (@gde) Featured Article](https://dev.to/gde/comic-studio-ai-turning-voice-text-prompts-into-4-panel-comics-with-google-ai-studio-gemini--2npc) · [YouTube 60s Live Demo](https://www.youtube.com/watch?v=SLJ4K5hf4Ec)  
-> **Focus:** Multi-Agent Comic Generator with Consistent Character Identity & 7-Language Localization on Google Cloud Run
+> **Core Stack:** [Google Gemini API](https://ai.google.dev/gemini-api/docs?utm_campaign=deveco_gdemembers&utm_source=deveco), [Google AI Studio](https://aistudio.google.com/?utm_campaign=deveco_gdemembers&utm_source=deveco), [Google Cloud Vertex AI Imagen](https://cloud.google.com/vertex-ai/docs?utm_campaign=deveco_gdemembers&utm_source=deveco), FastAPI, and [Google Cloud Run](https://cloud.google.com/run/docs?utm_campaign=deveco_gdemembers&utm_source=deveco).
 
 ---
 
